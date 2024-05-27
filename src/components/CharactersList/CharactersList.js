@@ -3,6 +3,7 @@ import { Component } from "react";
 import styled from "styled-components";
 
 import { CharacterCard } from "../CharacterCard/CharacterCard";
+import { WideButton } from "../style/WideButton";
 
 export class CharactersList extends Component {
     render() {
@@ -18,8 +19,15 @@ export class CharactersList extends Component {
 
         const charactersListItems = characters.map(({name, image}, i) => ( <CharacterCard key={i} name={ name } image={ image }></CharacterCard> ));
         return (
-        <List>
-            {[...charactersListItems]}
-        </List>)
+        <section>
+            <List>
+                {[...charactersListItems]}
+            </List>
+            <WideButton margin={'45px auto 0'}>LOAD MORE</WideButton>
+        </section>
+
+        );
+
+
     }
 }

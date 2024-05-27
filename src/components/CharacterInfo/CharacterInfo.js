@@ -3,6 +3,7 @@ import styled from "styled-components"
 
 import { vars } from "../style/Vars";
 import { Button } from "../style/Button";
+import { Aside } from "../style/Aside";
 
 export class CharacterInfo extends Component {
     constructor(props) {
@@ -15,11 +16,7 @@ export class CharacterInfo extends Component {
         const { character } = this.props;
         const comicsesItems = character ? character.comics.map((item, i) => ( <li key={i}>{ item }</li> )) : null;
 
-        const InfoWrapper = styled.aside`
-            flex-grow: 0;
-            width: 425px;
-            padding: 25px;
-            box-shadow: 0px 3px 15px 5px rgba(0, 0, 0, 0.3);
+        const InfoWrapper = styled(Aside)`
             h2 {
                 display: ${({active}) => ( active ? 'none' : 'block' )};
                 font-size: 18px;
@@ -27,6 +24,7 @@ export class CharacterInfo extends Component {
                 text-align: center;
             }
             p {
+                line-height: 18px;
                 font-size: 14px;
                 font-weight: 400;
                 margin: 15px 0 0 0;
@@ -38,16 +36,22 @@ export class CharacterInfo extends Component {
             }
             ul {
                 margin: 10px 0 0 0;
+                display: flex;
+                flex-direction: column;
                 padding: 0;
                 list-style: none;
-                display: block;
                 li {
+                    flex: 1;
+                    min-height: 24px;
+                    max-width: 100%;
+                    word-wrap: break-word;
                     font-size: 14px;
+                    line-height: 24px;
                     font-weight: 400;
                     box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.1);
                     cursor: pointer;
                     margin: 0 0 10px 0;
-                    padding: 0 5px;
+                    padding: 0 10px;
                     &:last-child {
                         margin: 0;
                     }
@@ -57,7 +61,6 @@ export class CharacterInfo extends Component {
         `,
         HeadInfo = styled.div`
             display: flex;
-            justify-content: space-between;
             column-gap: 25px;
         `,
         SideHead = styled.div`
@@ -74,7 +77,7 @@ export class CharacterInfo extends Component {
 
         const content = character ? ( <>
             <HeadInfo>
-                <img src={character.image} alt={"character" + character.name}/>
+                <img height={150} width={150} src={character.image} alt={"character" + character.name}/>
                 <SideHead>
                     <h2>{character.name}</h2>
                     <div>

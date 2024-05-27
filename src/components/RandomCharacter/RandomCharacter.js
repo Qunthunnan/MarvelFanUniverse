@@ -56,6 +56,10 @@ export class RandomCharacter extends Component {
                 }
             }
         `;
+
+        const ButtonsWrapper = styled.div`
+            display: flex;
+        `;
         return(
             <Wrapper>
                 <RandomCharacterInfo>
@@ -65,10 +69,10 @@ export class RandomCharacter extends Component {
                             <h2>Character Name</h2>
                             <p>As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he's quite smart and compassionate...</p>
                         </div>
-                        <div>
+                        <ButtonsWrapper>
                             <Button margin={'0 35px 0 0'}>HOMEPAGE</Button>
                             <Button color={vars.marvelGray}>WIKI</Button>
-                        </div>
+                        </ButtonsWrapper>
                     </InfoWrapper>
                 </RandomCharacterInfo>
                 <RandomBaner>

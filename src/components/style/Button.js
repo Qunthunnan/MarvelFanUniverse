@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { vars } from "./Vars";
 
 const Button = styled.button`
+    display: block;
     color: white;
     position: relative;
     border: none;
