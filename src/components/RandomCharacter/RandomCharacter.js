@@ -14,7 +14,7 @@ export class RandomCharacter extends Component {
             margin: 19px 0 0 0;
             display: grid;
             grid-template: 1fr / 1fr 1fr;
-            box-shadow: 0px 2px 15px -3px rgba(0,0,0,0.1);
+            box-shadow: 0px 3px 15px 1px rgba(0, 0, 0, 0.3);
         `
         const RandomCharacterInfo = styled.div`
             display: flex;
