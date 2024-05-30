@@ -62,6 +62,9 @@ export class CharacterInfo extends Component {
         HeadInfo = styled.div`
             display: flex;
             column-gap: 25px;
+            img {
+                object-fit: cover;
+            }
         `,
         SideHead = styled.div`
             display: flex;

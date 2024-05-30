@@ -7,40 +7,95 @@ export class ComicsDetailed extends Component {
         const { name, description, image, pages, lang, price, margin } = this.props;
 
         const DetailedWrapper = styled.section`
-            display: flex;
-            column-gap: 53px;
-            margin: ${({margin}) => ( margin ? margin : '')};
-            align-items: flex-start;
-            a {
-                color: #000;
-                font-size: 18px;
-                font-weight: 700;
-                text-decoration: none;
-                &:hover {
-                    color: ${ vars.marvelRed }
+            @media( min-width: 320px) {
+                margin: 30px 0 0 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                img {
+                    object-fit: cover;
+                }
+                a {
+                    margin: 20px 0 0 0;
+                    color: #000;
+                    font-size: 18px;
+                    font-weight: 700;
+                    text-decoration: none;
+                }
+            }
+
+            @media(min-width: 576px) {
+                margin: 40px 0 0 0;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                img { 
+                    height: 330.20px;
+                    width: 215px;
+                }
+                a {
+                    font-size: 20px;
+                }
+            }
+
+            @media(min-width: 768px) {
+                a {
+                    font-size: 20px;
+                    &:hover {
+                        color: ${ vars.marvelRed }
+                    }
+                }
+                img {
+                    height: unset;
+                    width: unset;
+                }
+            }
+
+            @media  (min-width: 992px) {
+                a {
+                    margin: 0 0 0 auto;
                 }
             }
         `;
     
         const TextWrapper = styled.div`
-            max-width: 550px;
-            h2 {
-                font-size: 22px;
-                font-weight: 700;
-                margin: 0;
+            @media( min-width: 320px) {
+                max-width: 90%;
+                margin: 20px 0 0 0;
+
+                h2 {
+                    font-size: 22px;
+                    font-weight: 700;
+                    margin: 0;
+                }
+                p {
+                    line-height: 22px;
+                    margin: 26px 0 0 0;
+                    font-size: 18px;
+                    font-weight: 400;
+                }
+                span {
+                    display: block;
+                    color: ${vars.marvelRed};
+                    font-size: 24px;
+                    font-weight: 700;
+                    margin: 26px 0 0 0;
+                }
             }
-            p {
-                line-height: 22px;
-                margin: 26px 0 0 0;
-                font-size: 18px;
-                font-weight: 400;
+
+            @media(min-width: 576px) {
+                max-width: 300px;
+                margin: 0 0 0 20px;
             }
-            span {
-                display: block;
-                color: ${vars.marvelRed};
-                font-size: 24px;
-                font-weight: 700;
-                margin: 26px 0 0 0;
+
+            
+            @media(min-width: 768px) {
+                max-width: 400px;
+            }
+
+            @media(min-width: 992px) {
+                max-width: 550px;
+                margin: 0 0 0 50px;
             }
         `;
         return (

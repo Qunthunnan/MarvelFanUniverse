@@ -16,6 +16,13 @@ export class Directory extends Component {
         &:last-child {
             margin: 0;
         }
+
+        @media (max-width: 576px) {
+            font-size: 18px;
+            &:last-child {
+                margin: 0 10px 0 0;
+            }
+        }
     `;
 
         const directories = list.map( (item, i) => {

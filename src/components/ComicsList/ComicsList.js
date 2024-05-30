@@ -10,12 +10,37 @@ export class ComicsList extends Component {
         const { comicses } = this.props;
         const List = styled.ul`
             margin: 49px 0 0 0;
-            padding: 0;
             display: grid;
-			grid-template: auto auto / auto auto auto auto;
             grid-auto-rows: auto;
-            row-gap: 55px;
-            column-gap: 67px;
+
+
+            @media (min-width: 320px) {
+                padding: 0;
+                
+			    grid-template: auto auto / auto auto;
+                row-gap: 30px;
+                justify-content: space-around;
+            }
+
+            @media (min-width: 576px) {
+                row-gap: 40px;
+                justify-content: space-between;
+            }
+
+            @media (min-width: 786px) {
+                grid-template: auto auto / auto auto auto;
+            }
+
+
+            @media (min-width: 992px) {
+                row-gap: 55px;
+            }
+
+            @media (min-width: 1200px) {
+			    grid-template: auto auto / auto auto auto auto;
+    
+            }
+
         `;
 
         const comicsesListItems = comicses.map(({name, image, price}, i) => ( <ComicsCard key={i} name={ name } image={ image } price={price}></ComicsCard> ));

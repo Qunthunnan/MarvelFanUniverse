@@ -3,34 +3,53 @@ import avengersBanerLogo from '../../resources/imgs/avengersBanerLogo.png';
 import avengersBaner from '../../resources/imgs/avengersBaner.png';
 import { vars } from "../style/Vars";
 
-const ComicsBaner = function({ margin }) {
+const ComicsBaner = function() {
     const Baner = styled.div`
-        margin: ${({margin}) => ( margin ? margin : '0 0 0 0' )};
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        background-color: ${vars.lightBlack};
-        justify-content: center;
-        height: 100px;
-        padding: 0 25px 0 45px;
-        img {
-            &:first-child {
-                align-self: start;
+        @media( min-width: 320px) {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: ${vars.lightBlack};
+            height: 100px;
+            img {
+                height: 65.79px;
+                width: 100px;
+                &:last-child {
+                    display: none;
+                }
             }
-            &:last-child {
-                align-self: end;
+            h2 {
+                color: #fff;
+                font-weight: 700;
+                font-size: 18px;
+                margin: 0;
             }
         }
-        h2 {
-            align-self: start;
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-            margin: 0;
+
+        @media (min-width: 576px) {
+            img {
+                height: unset;
+                width: unset;
+            }
+        }
+
+        @media (min-width: 768px) {
+            padding: 0 0 0 45px;
+            justify-content: flex-start;
+            img {
+                &:last-child {
+                    display: unset;
+                    margin: 0 25px 0 auto;
+                }
+            }
+            h2 {
+                margin: 0 0 0 83px;
+                font-size: 24px;
+            }
         }
     `;
     return(
-        <Baner margin={margin}>
+        <Baner>
             <img height={100} width={152}  src={avengersBaner} alt="Marvel characters" />
             <h2>New comics every week!<br/>Stay tuned!</h2>
             <img height={100} width={133} src={avengersBanerLogo} alt="Avangers logo" />

@@ -16,13 +16,30 @@ export class CharacterCard extends Component {
         const {name, image} = this.props,
         
         CharacterItem = styled.li`
-            cursor: pointer;
-            height: 318px;
-            width: 200px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: ${({active}) => ( active ? ('0px 3px 15px 5px' + vars.marvelRed + '90')  : '0px 3px 15px 5px rgba(0, 0, 0, 0.3)')};
-            transform: ${({active}) => ( active ? ('translateY(5px)')  : 'unset')};
+            @media (min-width: 320px) {
+                cursor: pointer;
+                display: flex;
+                height: 222.60px;
+                width: 140px;
+                flex-direction: column;
+                box-shadow: ${({active}) => ( active ? ('0px 3px 15px 5px' + vars.marvelRed + '90')  : '0px 3px 15px 5px rgba(0, 0, 0, 0.3)')};
+                transform: ${({active}) => ( active ? ('translateY(5px)')  : 'unset')};
+                img {
+                    height: 140px;
+                    width: 140px;
+                }
+            }
+
+            @media (min-width: 576px) {
+                height: 318px;
+                width: 200px;
+                img {
+                    object-fit: cover;
+                    height: 200px;
+                    width: 200px;
+                }
+            }
+
         `,
         CardBg = styled.div`
             background-color: ${vars.lightBlack};
