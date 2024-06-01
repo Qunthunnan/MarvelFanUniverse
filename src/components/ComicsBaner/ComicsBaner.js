@@ -1,7 +1,5 @@
-import styled from "styled-components";
 import avengersBanerLogo from '../../resources/imgs/avengersBanerLogo.png';
 import avengersBaner from '../../resources/imgs/avengersBaner.png';
-import { vars } from "../style/Vars";
 import { Baner } from "../style/Baner";
 
 const ComicsBaner = function() {

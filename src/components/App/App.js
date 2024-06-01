@@ -1,11 +1,10 @@
 import { Component } from "react";
 
-import styled from "styled-components";
-
-import { Directory } from '../Directory/Directory';
 import { H1 } from "../style/H1";
 import { Container } from "../style/Container";
-import mainBg from "../../resources/imgs/mainBg.png";
+import { MainDiv, CharactersContentWrapper, AsideWrapper, MobileMenuButtons } from "./stylesApp";
+
+import { Directory } from '../Directory/Directory';
 import refCharacter from "../../resources/imgs/characterRef.jpg";
 import refComics from "../../resources/imgs/comics.jpg";
 import { RandomCharacter } from "../RandomCharacter/RandomCharacter";
@@ -16,28 +15,19 @@ import { ComicsBaner } from "../ComicsBaner/ComicsBaner";
 import { CharacterDetailed } from "../CharacterDetailed/CharacterDetailed";
 import { ComicsList } from "../ComicsList/ComicsList";
 import { ComicsDetailed } from "../ComicsDetailed/ComicsDetailed";
-import { ApiService } from "../ApiService/ApiService";
+import { ApiService } from "../../services/ApiService/ApiService";
+
+const marvelApi = new ApiService();
 
 class App extends Component {
 	constructor(props) {
 		super(props);
-
-		// this.characters = {}
-		// this.service = new ApiService();
-		// const result = this.service.getCharacter(1010903);
-		// result.then( data => {this.characters = data; console.log(this.characters)} );
-
 		this.state = {
 			directories: {
 				list: ['Characters', 'Comics'],
 				active: 'Characters'
 			},
-			activeCharacter: {
-				name: 'Stark',
-				image: refCharacter,
-				description: 'In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.',
-				comics: ['comiscs 1', 'sfshlfshkjfshjskfhhf', 'slfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdn', 'sfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih']
-			},
+			activeCharacter: null,
 			mobileSearchShowed: false,
 			characters: [
 				{name: 'Abys', image: refCharacter},
@@ -64,79 +54,6 @@ class App extends Component {
 	}
 	render () {
 		const { directories, characters, comicses, mobileSearchShowed, activeCharacter } = this.state;
-		const MainDiv = styled.div`
-			background: ${({$bg}) => ( $bg ? 'url('+mainBg+')no-repeat right bottom' : '')};
-			padding: 0 0 45px;
-			header {
-				padding: 52px 0 25px;
-				display: flex;
-				justify-content: space-between;
-			}
-
-			@media (min-width: 576px) {
-				header {
-					padding: 20px 0;
-				}
-			}
-
-			@media (max-width: 576px) {
-				header {
-					padding: 15px 10px;
-				}
-				padding: 0 0 25px;
-			}
-		`;
-
-		const CharactersContentWrapper = styled.div`
-			@media (min-width: 320px) {
-				margin: 0;
-				position: relative;
-			}
-
-			@media (min-width: 768px) {
-				margin: 30px 0 0 0;
-				display: flex;
-				align-items: flex-start;
-				flex-direction: row;
-				justify-content: space-between;
-				margin: 53px 0 0 0;
-			}
-		`;
-
-		const AsideWrapper = styled.div`
-			@media (min-width: 320px) {
-				display: flex;
-				position: fixed;
-				height: 100%;
-				top: 50%;
-				left: 50%;
-				row-gap: 30px;
-				flex-direction: column;
-				transform: translate(-50%, -50%);
-			}
-
-			@media (min-width: 768px) {
-				position: static;
-				transform: none;
-			}
-		`;
-
-		const MobileMenuButtons = styled.nav`
-			@media (min-width: 320px) {
-				display: flex;
-				justify-content: flex-end;
-				column-gap: 30px;
-				padding: 15px;
-				svg {
-					height: 30px;
-					width: 30px;
-				}
-			}
-			@media (min-width: 768px) {
-				display: none;
-			}
-		`;
-
 		console.log('rendered main');
 
 	return (
