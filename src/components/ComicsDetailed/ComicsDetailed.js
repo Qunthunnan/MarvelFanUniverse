@@ -39,6 +39,7 @@ export class ComicsDetailed extends Component {
             }
 
             @media(min-width: 768px) {
+                margin: 50px 0 0 0;
                 a {
                     font-size: 20px;
                     &:hover {

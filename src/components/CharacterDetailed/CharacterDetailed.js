@@ -5,7 +5,7 @@ import { vars } from "../style/Vars";
 
 export class CharacterDetailed extends Component {
     render () {
-        const { name, description, image, margin } = this.props;
+        const { name, description, image } = this.props;
 
         const DetailedWrapper = styled.section`
             @media (min-width: 320px) {

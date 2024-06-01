@@ -13,7 +13,7 @@ const Container = styled.div`
         width: 720px;
     }
     @media (min-width: 992px) {
-        width: 992px;
+        width: 960px;
     }
     @media (min-width: 1200px) {
         width: 1000px;

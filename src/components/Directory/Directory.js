@@ -10,7 +10,7 @@ export class Directory extends Component {
         const DirectorySpan = styled.a`
         font-size: 24px;
         font-weight: 700;
-        color: ${ props => (props.active ? vars.marvelRed : '#000') };
+        color: ${ ({active}) => (active ? vars.marvelRed : '#000') };
         margin: 0 5px 0 0;
         text-decoration: none;
         &:last-child {
@@ -29,7 +29,7 @@ export class Directory extends Component {
         const slash = list[i + 1] ? <DirectorySpan key={i + 0.5}>/</DirectorySpan> : null;
         return (
             <Fragment key={i + 0.1}>
-                <DirectorySpan href="#" key={i} active={ item === active ? 'true' : null }>{item}</DirectorySpan>
+                <DirectorySpan href="#" key={i} $active={ item === active ? true : null }>{item}</DirectorySpan>
                 {slash}
             </Fragment>
         ) });

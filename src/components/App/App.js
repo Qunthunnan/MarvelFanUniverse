@@ -32,6 +32,13 @@ class App extends Component {
 				list: ['Characters', 'Comics'],
 				active: 'Characters'
 			},
+			activeCharacter: {
+				name: 'Stark',
+				image: refCharacter,
+				description: 'In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.',
+				comics: ['comiscs 1', 'sfshlfshkjfshjskfhhf', 'slfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdn', 'sfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih']
+			},
+			mobileSearchShowed: false,
 			characters: [
 				{name: 'Abys', image: refCharacter},
 				{name: 'Loki', image: refCharacter},
@@ -56,9 +63,9 @@ class App extends Component {
 		}
 	}
 	render () {
-		const { directories, characters, comicses } = this.state;
+		const { directories, characters, comicses, mobileSearchShowed, activeCharacter } = this.state;
 		const MainDiv = styled.div`
-			background: ${({bg}) => ( bg === 'false' ? '' : 'url('+mainBg+')no-repeat right bottom')};
+			background: ${({$bg}) => ( $bg ? 'url('+mainBg+')no-repeat right bottom' : '')};
 			padding: 0 0 45px;
 			header {
 				padding: 52px 0 25px;
@@ -81,83 +88,107 @@ class App extends Component {
 		`;
 
 		const CharactersContentWrapper = styled.div`
-
 			@media (min-width: 320px) {
-				margin: 30px 0 0 0;
+				margin: 0;
+				position: relative;
 			}
 
 			@media (min-width: 768px) {
+				margin: 30px 0 0 0;
 				display: flex;
 				align-items: flex-start;
 				flex-direction: row;
 				justify-content: space-between;
 				margin: 53px 0 0 0;
 			}
-
 		`;
 
 		const AsideWrapper = styled.div`
-
 			@media (min-width: 320px) {
-				display: none;
+				display: flex;
+				position: fixed;
+				height: 100%;
+				top: 50%;
+				left: 50%;
 				row-gap: 30px;
 				flex-direction: column;
+				transform: translate(-50%, -50%);
 			}
 
 			@media (min-width: 768px) {
-				display: flex;
+				position: static;
+				transform: none;
 			}
-
 		`;
 
 		const MobileMenuButtons = styled.nav`
-			display: flex;
-			justify-content: flex-end;
-			column-gap: 30px;
+			@media (min-width: 320px) {
+				display: flex;
+				justify-content: flex-end;
+				column-gap: 30px;
+				padding: 15px;
+				svg {
+					height: 30px;
+					width: 30px;
+				}
+			}
+			@media (min-width: 768px) {
+				display: none;
+			}
 		`;
 
-	return (
+		console.log('rendered main');
 
-		<MainDiv bg='false'>
+	return (
+		<MainDiv $bg={ true }>
 			<Container>
 				<header>
 					<H1><span>Marvel</span> Fan Universe</H1>
 					<Directory list={ directories.list } active={ directories.active }></Directory>
 				</header>
+
 				<RandomCharacter></RandomCharacter>
 
-				
 				<MobileMenuButtons>
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
-						<path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-					</svg>
-
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+					<svg onClick={ this.onSwichSearch } xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
 						<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
 					</svg>
 				</MobileMenuButtons>
 
 				<CharactersContentWrapper>
-					<CharactersList characters={characters}></CharactersList>
+					<CharactersList onOpenCharacter={this.onOpenCharacter} characters={characters}></CharactersList>
 					<AsideWrapper>
-						<CharacterInfo character={{
-												name: 'Stark',
-												image: refCharacter,
-												description: 'In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.',
-												comics: ['comiscs 1', 'sfshlfshkjfshjskfhhf', 'slfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdn', 'sfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih']
-						} }></CharacterInfo>
-						<SearchCharacter></SearchCharacter>
+						<CharacterInfo
+						character={ activeCharacter }
+						onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo}></CharacterInfo>
+						<SearchCharacter mobileSearchShowed={ mobileSearchShowed } onSwichSearch={this.onSwichSearch}></SearchCharacter>
 					</AsideWrapper>
-
 				</CharactersContentWrapper>
-				{/* <ComicsBaner></ComicsBaner> */}
-				{/* <CharacterDetailed name={'Loki'} description={'In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.'} image={refCharacter}></CharacterDetailed> */}
+				{/* <ComicsBaner></ComicsBaner>
+				<CharacterDetailed name={'Loki'} description={'In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.'} image={refCharacter}></CharacterDetailed> */}
 				{/* <ComicsDetailed name={'X-Men: Days of Future Past'} description={"Re-live the legendary first journey into the dystopian future of 2013 - where Sentinels stalk the Earth, and the X-Men are humanity's only hope...until they die! Also featuring the first appearance of Alpha Flight, the return of the Wendigo, the history of the X-Men from Cyclops himself...and a demon for Christmas!?"} pages={144} image={refComics} lang={'en-US'} price={9.99}></ComicsDetailed> */}
 				{/* <ComicsList comicses={comicses}></ComicsList> */}
 			</Container>
 		</MainDiv>
 	  );
   }
+
+	onSwichSearch = (e) => {
+		this.setState(({mobileSearchShowed}) => ({mobileSearchShowed: !mobileSearchShowed}) );
+	}
+	
+	onOpenCharacter = (character) => {
+		console.log('click');
+		this.setState({
+			activeCharacter: character
+		});
+ 	}
+
+	onCloseMobileCharacterInfo = () => {
+		this.setState({
+			activeCharacter: null
+		});
+	}
 }
 
 export default App;
