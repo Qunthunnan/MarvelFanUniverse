@@ -17,6 +17,7 @@ const Wrapper = styled.section`
 
 const RandomCharacterInfo = styled.div`
 @media (min-width: 320px) {
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -99,7 +100,6 @@ const RandomBaner = styled.div`
     @media (min-width: 320px) {
         display: flex;    
         flex-direction: column;
-        justify-content: space-between;
         background: url(${hammer}) no-repeat 110% 77%;
         padding: 20px;
         color: #fff;
@@ -112,8 +112,7 @@ const RandomBaner = styled.div`
                 margin: 10px 0 0 0;
             }
         }
-
-        button {
+        a {
             margin: 10px 0 0 0;
         }
     }
@@ -133,6 +132,14 @@ const RandomBaner = styled.div`
 
     @media (min-width: 992px) {
         padding: 35px 40px;
+        h2 {
+            &:nth-child(2) {
+                margin: 33px 0 0 0;
+            }
+        }
+        a {
+            margin: 23px 0 0 0;
+        }
     }
 `;
 

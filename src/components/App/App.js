@@ -18,33 +18,6 @@ import { ComicsDetailed } from "../ComicsDetailed/ComicsDetailed";
 import { ApiService } from "../../services/ApiService/ApiService";
 import { Loader } from "../Loader/Loader";
 
-// const results = [];
-// let ids = [];
-
-// let offset = 0;
-// for (let i = 0; i < 16; i++) {
-// 	results.push( marvelApi.getCharacters(100, offset).then(result => { result.data.results.map( character => ( { id: character.id, name: character.name } ) ).forEach(character => {
-// 			console.log(`${character.id} : ${character.name}`);
-// 			if(character.id) {
-// 				ids.push(character.id);
-// 			}
-// 		}); 
-// 	}));
-// 	offset+=100;
-// }
-
-// Promise.all(results).then( result => {
-// 	ids.sort(function(a, b) {
-// 		return a - b;
-// 	});
-// 	console.log('ids: ');
-// 	console.log(ids);
-// });
-
-// function getRandNum(min, max) {
-// 	return Math.round(Math.random() * (max - min) + min);
-// }
-
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -80,8 +53,6 @@ class App extends Component {
 	}
 	render () {
 		const { directories, characters, comicses, mobileSearchShowed, activeCharacter } = this.state;
-		console.log('rendered main');
-
 	return (
 		<MainDiv $bg={ true }>
 			<Container>
@@ -90,7 +61,7 @@ class App extends Component {
 					<Directory list={ directories.list } active={ directories.active }></Directory>
 				</header>
 
-				<RandomCharacter></RandomCharacter>
+				<RandomCharacter/>
 
 				<MobileMenuButtons>
 					<svg onClick={ this.onSwichSearch } xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
@@ -99,7 +70,7 @@ class App extends Component {
 				</MobileMenuButtons>
 
 				<CharactersContentWrapper>
-					<CharactersList onOpenCharacter={this.onOpenCharacter} characters={characters}></CharactersList>
+					<CharactersList onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo} onOpenCharacter={this.onOpenCharacter} characters={characters}></CharactersList>
 					<AsideWrapper>
 						<CharacterInfo
 						character={ activeCharacter }
@@ -121,7 +92,6 @@ class App extends Component {
 	}
 	
 	onOpenCharacter = (character) => {
-		console.log('click');
 		this.setState({
 			activeCharacter: character
 		});

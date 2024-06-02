@@ -42,6 +42,7 @@ export class RandomCharacter extends Component {
             loading: null,
             error: null
         }
+        this.charactersCount = 0;
     }
     render() {
         const { character, loading, error } = this.state;
@@ -49,6 +50,8 @@ export class RandomCharacter extends Component {
         const loader = loading ? <Loader/> : null;
         const errrorImage = error ? <Error/> : null;
         const content = !(error || loading) && character ? <View character={character}/> : null;
+
+        console.log('random render');
 
         return(
             <Wrapper>
@@ -67,25 +70,19 @@ export class RandomCharacter extends Component {
     }
 
     componentDidMount() {
-        console.log('did mount');
+        console.log('random did mount');
         this.updateCharacter();
+    }
+
+    componentDidUpdate( ) {
+        console.log('random did update');
     }
 
     updateCharacter = () => {
         function getRandNum(min, max) {
             return Math.round(Math.random() * (max - min) + min);
         }
-        const marverlApi = new ApiService();
-
-
-        this.setState({
-            loading: true,
-            error: null
-        });
-
-        marverlApi.getCharactersCount()
-        .then(count => ( marverlApi.getCharacters(1, getRandNum(1, count)) ))
-        .then(([{name, description, thumbnail, urls}]) => {
+        const update = ([{name, description, thumbnail, urls}]) => {
             this.setState({
                 loading: false,
                 character: {
@@ -95,13 +92,31 @@ export class RandomCharacter extends Component {
                     urls: urls
                 }
             });
-        })
-        .catch(() => {
+        }
+        const error = () => {
             this.setState({
                 loading: false,
                 error: true
             });
+        }
+
+        const marverlApi = new ApiService();
+
+        this.setState({
+            loading: true,
+            error: null
         });
+
+        if(this.charactersCount <= 0) {
+            marverlApi.getCharactersCount()
+            .then(count => { this.charactersCount = count; return marverlApi.getCharacters(1, getRandNum(1, this.charactersCount)) } )
+            .then(update)
+            .catch(error);
+        } else {
+            marverlApi.getCharacters(1, getRandNum(1, this.charactersCount))
+            .then(update)
+            .catch(error);
+        }
     }
 }
 
