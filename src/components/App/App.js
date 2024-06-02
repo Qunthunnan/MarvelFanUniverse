@@ -16,8 +16,34 @@ import { CharacterDetailed } from "../CharacterDetailed/CharacterDetailed";
 import { ComicsList } from "../ComicsList/ComicsList";
 import { ComicsDetailed } from "../ComicsDetailed/ComicsDetailed";
 import { ApiService } from "../../services/ApiService/ApiService";
+import { Loader } from "../Loader/Loader";
 
-const marvelApi = new ApiService();
+// const results = [];
+// let ids = [];
+
+// let offset = 0;
+// for (let i = 0; i < 16; i++) {
+// 	results.push( marvelApi.getCharacters(100, offset).then(result => { result.data.results.map( character => ( { id: character.id, name: character.name } ) ).forEach(character => {
+// 			console.log(`${character.id} : ${character.name}`);
+// 			if(character.id) {
+// 				ids.push(character.id);
+// 			}
+// 		}); 
+// 	}));
+// 	offset+=100;
+// }
+
+// Promise.all(results).then( result => {
+// 	ids.sort(function(a, b) {
+// 		return a - b;
+// 	});
+// 	console.log('ids: ');
+// 	console.log(ids);
+// });
+
+// function getRandNum(min, max) {
+// 	return Math.round(Math.random() * (max - min) + min);
+// }
 
 class App extends Component {
 	constructor(props) {

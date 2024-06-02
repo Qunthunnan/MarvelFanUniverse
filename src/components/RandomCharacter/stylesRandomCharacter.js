@@ -63,7 +63,10 @@ const RandomCharacterInfo = styled.div`
 }
 `,
 InfoWrapper = styled.div`
-
+@media (min-width: 320px) {
+    display: flex;
+    flex-direction: column;
+}
 `;
 
 const ButtonsWrapper = styled.div`
@@ -80,8 +83,9 @@ const ButtonsWrapper = styled.div`
 }
 
 @media (min-width: 992px) {
+    margin: auto 0 0 0;
     flex-direction: row;
-    row-gap: 0;
+    column-gap: 10px;
 }
 
 @media (min-width: 1200px) {

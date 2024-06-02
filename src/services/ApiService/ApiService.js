@@ -12,28 +12,57 @@ export class ApiService {
         return await result.json();
     }
 
-    getCharacters(count=9, offset=0) {
-        const characters = this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${count}&offset=${offset}`);
-        return characters;
+    async getCharacters(count=9, offset=0) {
+        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${count}&offset=${offset}`);
+        return result.data.results.map(this._transformCharacter);
     }
 
-    getCharacterById(id) {
-        const character = this.getResource(`${this._baseHttp}/characters/${id}?apikey=${this._apiKey}`);
-        return character;
+    async getCharacterById(id) {
+        const result = await this.getResource(`${this._baseHttp}/characters/${id}?apikey=${this._apiKey}`);
+        return this._transformCharacter(result.data.results[0]);
+    }
+
+    async getCharactersCount() {
+        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${1}&offset=${0}`);
+        return result.data.total;
     }
     
-    searchCharactersByName(name, count, offset) {
-        const characters = this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}`);
-        return characters;
+    async searchCharactersByName(name, count=9, offset=0) {
+        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}`);
+        return result.data.results.map(this._transformCharacter);
     }
 
-    getComicses(count=8, offset=this.curentComicsesOffset) {
-        const comicses = this.getResource(`${this._baseHttp}/comics?apikey=${this._apiKey}&limit=${count}&offset=${offset}`);
-        return comicses;
+    async getComicses(count=8, offset=0) {
+        const result = await this.getResource(`${this._baseHttp}/comics?apikey=${this._apiKey}&limit=${count}&offset=${offset}`);
+        return result.data.results.map(this._transformComics);
     }
 
-    getComicsById(id) {
-        const comics = this.getResource(`${this._baseHttp}/comics/${id}?apikey=${this._apiKey}`);
-        return comics;
+    async getComicsById(id) {
+        const result = await this.getResource(`${this._baseHttp}/comics/${id}?apikey=${this._apiKey}`);
+        return this._transformComics(result.data.results[0]);
+    }
+
+    _transformCharacter(data) {
+        return {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            thumbnail: data.thumbnail,
+            urls: data.urls,
+            comics: data.comics
+        }
+    }
+
+    _transformComics(data) {
+        return {
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            pageCount: data.pageCount,
+            prices: data.prices,
+            thumbnail: data.thumbnail,
+            textObjects: data.textObjects,
+            urls: data.urls,
+        }
     }
 }

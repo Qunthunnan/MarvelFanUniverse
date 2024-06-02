@@ -6,7 +6,14 @@ import refCharacter from '../../resources/imgs/characterRef.jpg';
 import { List, Section, WideButtonBottom } from "./stylesCharacterList";
 
 export class CharactersList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeCharacter: undefined
+        }
+    }
     render() {
+        const { activeCharacter } = this.state;
         const { characters, onOpenCharacter } = this.props;
 
         const character = {
@@ -16,7 +23,10 @@ export class CharactersList extends Component {
             comics: ['comiscs 1', 'sfshlfshkjfshjskfhhf', 'slfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdnslfhfifhkahsfkahjaksfdn', 'sfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwihsfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih', 'sfwihwihwwih']
         };
 
-        const charactersListItems = characters.map(({name, image}, i) => ( <CharacterCard onOpenCharacter={ () => { onOpenCharacter(character) } } key={i} name={ name } image={ image }></CharacterCard> ));
+        const charactersListItems = characters.map(({name, image}, i) => ( <CharacterCard onOpenCharacter={ () => { 
+            onOpenCharacter(character); 
+            this.onClickCharacter(i); 
+        } } key={i} name={ name } active={ activeCharacter === i ? true : false } image={ image }></CharacterCard> ));
         return (
         <Section>
             <List>
@@ -25,5 +35,11 @@ export class CharactersList extends Component {
             <WideButtonBottom>LOAD MORE</WideButtonBottom>
         </Section>
         );
+    }
+
+    onClickCharacter = (id) => {
+        this.setState({
+            activeCharacter: id
+        });
     }
 }

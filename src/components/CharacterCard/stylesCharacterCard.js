@@ -8,7 +8,7 @@ const CharacterItem = styled.li`
     display: flex;
     flex-direction: column;
     box-shadow: ${({$active}) => ( $active ? ('0px 3px 15px 5px' + vars.marvelRed + '90')  : '0px 3px 15px 5px rgba(0, 0, 0, 0.3)')};
-    transform: ${({$active}) => ( $active ? ('translateY(5px)')  : 'unset')};
+    transform: ${({$active}) => ( $active ? ('translateY(-5px)')  : 'unset')};
 `;
 const CardBg = styled.div`
     background-color: ${vars.lightBlack};

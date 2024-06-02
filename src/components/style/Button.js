@@ -1,9 +1,14 @@
 import styled from "styled-components";
 import { vars } from "./Vars";
 
-const Button = styled.button`
+const Button = styled.a`
+    cursor: pointer;
     display: block;
     color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     border: none;
     padding: 0 3px;
