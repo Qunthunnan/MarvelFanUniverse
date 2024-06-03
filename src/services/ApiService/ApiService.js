@@ -13,7 +13,7 @@ export class ApiService {
     }
 
     async getCharacters(count=9, offset=0) {
-        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${count}&offset=${offset}`);
+        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${count}&offset=${offset}&orderBy=-modified`);
         return result.data.results.map(this._transformCharacter);
     }
 

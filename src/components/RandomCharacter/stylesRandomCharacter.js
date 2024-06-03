@@ -79,8 +79,8 @@ const ButtonsWrapper = styled.div`
 }
 
 @media (min-width: 576px) {
-    flex-direction: column;
-    row-gap: 10px;
+    justify-content: flex-start;
+    column-gap: 20px;
 }
 
 @media (min-width: 992px) {

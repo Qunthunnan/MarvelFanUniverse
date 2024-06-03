@@ -25,7 +25,7 @@ export class CharactersList extends Component {
         const { characters, error, loading } = this.state;
         const errorImage = error ? <Error/> : null;
         const loader = loading ? <Loader/> : null;
-        const charactersListItems = characters && !(error || loading) ? <View characters={characters}/> : null;
+        const charactersListItems = characters && !(error || loading) ? <View onOpenCharacter={onOpenCharacter} characters={characters}/> : null;
 
         return (
         <Section>
@@ -74,19 +74,12 @@ export class CharactersList extends Component {
 
         return targetCount;
     }
-
-    onClickCharacter = (id) => {
-        this.setState({
-            activeCharacter: id
-        });
-    }
 }
 
 const View = ({characters, onOpenCharacter, onCloseMobileCharacterInfo}) => {
     return(
-        <>{characters.map(({name, thumbnail, id}) => ( <CharacterCard onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
-            onOpenCharacter(id); 
-            this.onClickCharacter(id); 
-        } } key={id} name={ name } thumbnail={ thumbnail }></CharacterCard> ))}</>
+        <>{characters.map((character) => ( <CharacterCard onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
+            onOpenCharacter(character); 
+        } } key={character.id} character={character}/> ))}</>
     )
 }

@@ -9,30 +9,32 @@ export class CharacterCard extends Component {
         }
     }
     render() {
-        const {name, thumbnail, onOpenCharacter} = this.props;
+        const { character: { name, thumbnail }, onOpenCharacter } = this.props;
         const { active } = this.state;
 
         return(
-            <CharacterItem onClick={ onOpenCharacter } $active={active}>
-                <img height={200} width={200} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
+            <CharacterItem onClick={ onOpenCharacter } title={name} $active={active}>
+                <img height={200} width={200} style={{objectFit: this.isFindThumbnail(thumbnail) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
                 <CardBg>
-                    <h2>{name}</h2>
+                    <h2>{this.cutName(name)}</h2>
                 </CardBg>
             </CharacterItem>
         )
     }
 
-    onClick = () => {
-        const { active } = this.state;
-        const { onOpenCharacter } = this.props;
-
-        if(!active) {
-            this.setState({
-                active: true,
-            });
-
-            onOpenCharacter();
+    cutName(name) {
+        if(name.length >= 15) {
+            return name.slice(0, 15) + '...';
         }
+        return name;
+    }
+
+    isFindThumbnail(thumbnail) {
+        let findThumbNail = true;
+        if(thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" || thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/f/60/4c002e0305708")
+            findThumbNail = false;
+
+        return findThumbNail;
     }
 
     onCloseMobileCharacterInfo = () => {

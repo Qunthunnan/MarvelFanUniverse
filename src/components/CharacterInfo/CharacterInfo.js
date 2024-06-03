@@ -8,34 +8,8 @@ import { InfoWrapper, HeadInfo, SideHead, SkeletonSvg } from "./stylesCharacterI
 export class CharacterInfo extends Component {
     render() {
         const { character, onCloseMobileCharacterInfo } = this.props;
-        const comicsesItems = character ? character.comics.map((item, i) => ( <li key={i}>{ item }</li> )) : null;
+        const content = character ? <ContentWithCharacter character={character}/> : <EmptyCharacter/>;
 
-        const content = character ? ( <>
-            <HeadInfo>
-                <img height={150} width={150} src={character.image} alt={"character" + character.name}/>
-                <SideHead>
-                    <h2>{character.name}</h2>
-                    <div>
-                        <Button>HOMEPAGE</Button>
-                        <Button color={vars.marvelGray}>WIKI</Button>
-                    </div>
-                </SideHead>
-            </HeadInfo>
-            <p>{ character.description }</p>
-            <div>
-                <h3>Comics:</h3>
-                <ul> {comicsesItems} </ul>
-            </div>
-        </> ) : ( <>
-            <h2 $active={ character }>Please select a character to see information</h2>
-            <SkeletonSvg style={{ display: character ? 'none' : 'block' }} width="375" height="190" viewBox="0 0 375 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="20" cy="20" r="20" fill="#C4C4C4"/>
-                <rect x="49" y="12" width="326" height="16" fill="#C4C4C4"/>
-                <rect y="55" width="375" height="35" fill="#C4C4C4"/>
-                <rect y="105" width="375" height="35" fill="#C4C4C4"/>
-                <rect y="155" width="375" height="35" fill="#C4C4C4"/>
-            </SkeletonSvg>
-        </> );
         return (
         <InfoWrapper $mobileActive={ character }>
             <CloseBtn onClick={ onCloseMobileCharacterInfo }>
@@ -47,4 +21,53 @@ export class CharacterInfo extends Component {
         </InfoWrapper>
         )
     }
+}
+
+const ContentWithCharacter = ({character: {name, thumbnail, description, urls, comics:{items}}}) => {
+    const comicsList = items.length ? <ul>{items.map( (comics, i) => ( <li key={i}>{comics.name}</li> ))}</ul> : <><p>The data source does not have detailed information about comicses with this character.</p><p>
+    Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p></> ;
+    const thumbnailPos = isFindThumbnail(thumbnail);
+    return (
+        <>
+            <HeadInfo>
+                <img height={150} width={150} style={{objectFit: thumbnailPos ? 'cover' : 'contain'}} src={thumbnail.path + '.' + thumbnail.extension} alt={"character" + name}/>
+                <SideHead>
+                    <h2>{name}</h2>
+                    <div>
+                        <Button href={urls[0].url}>HOMEPAGE</Button>
+                        <Button href={urls[1].url} color={vars.marvelGray}>WIKI</Button>
+                    </div>
+                </SideHead>
+            </HeadInfo>
+            <p>{ description }</p>
+            <div>
+                <h3>Comics:</h3>
+                {comicsList}
+            </div>
+        </>
+    )
+
+    function isFindThumbnail(thumbnail) {
+        let findThumbNail = true;
+        if(thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" || thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/f/60/4c002e0305708")
+            findThumbNail = false;
+
+        return findThumbNail;
+    }
+}
+
+
+const EmptyCharacter = () => {
+    return (
+        <>
+            <h2>Please select a character to see information</h2>
+            <SkeletonSvg width="375" height="190" viewBox="0 0 375 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#C4C4C4"/>
+                <rect x="49" y="12" width="326" height="16" fill="#C4C4C4"/>
+                <rect y="55" width="375" height="35" fill="#C4C4C4"/>
+                <rect y="105" width="375" height="35" fill="#C4C4C4"/>
+                <rect y="155" width="375" height="35" fill="#C4C4C4"/>
+            </SkeletonSvg>
+        </>
+    );
 }

@@ -70,7 +70,7 @@ class App extends Component {
 				</MobileMenuButtons>
 
 				<CharactersContentWrapper>
-					<CharactersList onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo} onOpenCharacter={this.onOpenCharacter} characters={characters}></CharactersList>
+					<CharactersList onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo} onOpenCharacter={this.onOpenCharacter}></CharactersList>
 					<AsideWrapper>
 						<CharacterInfo
 						character={ activeCharacter }
@@ -92,6 +92,7 @@ class App extends Component {
 	}
 	
 	onOpenCharacter = (character) => {
+		console.log('onOpenChar');
 		this.setState({
 			activeCharacter: character
 		});

@@ -15,6 +15,11 @@ const CharacterItem = styled.li`
                     height: 140px;
                     width: 140px;
                 }
+                h2 {
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    word-break: break-word;
+                }
             }
 
             @media (min-width: 576px) {
@@ -23,6 +28,9 @@ const CharacterItem = styled.li`
                 img {
                     height: 200px;
                     width: 200px;
+                }
+                h2 {
+                    font-size: 1.3rem;
                 }
             }
 
@@ -55,7 +63,7 @@ const CharacterItem = styled.li`
 `;
 const CardBg = styled.div`
     background-color: ${vars.lightBlack};
-    padding: 5px 15px;
+    padding: 15px;
     flex-grow: 1;
     h2 {
         text-transform: uppercase;
