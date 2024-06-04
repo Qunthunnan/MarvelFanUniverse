@@ -5,6 +5,7 @@ import { Container } from "../style/Container";
 import { MainDiv, CharactersContentWrapper, AsideWrapper, MobileMenuButtons } from "./stylesApp";
 
 import { Directory } from '../Directory/Directory';
+import { ErrorBoundary } from "../ErrorBoundary/ErrorBoundary";
 import refCharacter from "../../resources/imgs/characterRef.jpg";
 import refComics from "../../resources/imgs/comics.jpg";
 import { RandomCharacter } from "../RandomCharacter/RandomCharacter";
@@ -54,8 +55,9 @@ class App extends Component {
 				<H1><span>Marvel</span> Fan Universe</H1>
 				<Directory list={ directories.list } active={ directories.active }></Directory>
 			</header>
-
-			<RandomCharacter charactersMaxCount={charactersMaxCount}/>
+			<ErrorBoundary>
+				<RandomCharacter charactersMaxCount={charactersMaxCount}/>
+			</ErrorBoundary>
 
 			<MobileMenuButtons>
 				<svg onClick={ this.onSwichSearch } xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
@@ -64,12 +66,16 @@ class App extends Component {
 			</MobileMenuButtons>
 
 			<CharactersContentWrapper>
-				<CharactersList charactersMaxCount={charactersMaxCount} onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo} activeCharacter={activeCharacter} onOpenCharacter={this.onOpenCharacter}></CharactersList>
+				<ErrorBoundary>
+					<CharactersList charactersMaxCount={charactersMaxCount} onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo} activeCharacter={activeCharacter} onOpenCharacter={this.onOpenCharacter}/>
+				</ErrorBoundary>
 				<AsideWrapper>
-					<CharacterInfo
-					character={ activeCharacter }
-					onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo}></CharacterInfo>
-					<SearchCharacter mobileSearchShowed={ mobileSearchShowed } onSwichSearch={this.onSwichSearch}></SearchCharacter>
+					<ErrorBoundary>
+						<CharacterInfo
+						character={ activeCharacter }
+						onCloseMobileCharacterInfo={this.onCloseMobileCharacterInfo}/>
+					</ErrorBoundary>
+					<SearchCharacter mobileSearchShowed={ mobileSearchShowed } onSwichSearch={this.onSwichSearch}/>
 				</AsideWrapper>
 			</CharactersContentWrapper>
 			{/* <ComicsBaner></ComicsBaner>

@@ -14,7 +14,7 @@ const Error = (props) => (
       backgroundSize: "auto",
       backgroundOrigin: "padding-box",
       backgroundClip: "border-box",
-      background: "#fff",
+      background: "#ffffff00",
       width: 200,
       height: 200,
       animation: "none",
