@@ -26,6 +26,7 @@ export class CharacterInfo extends Component {
 const ContentWithCharacter = ({character: {name, thumbnail, description, urls, comics:{items}}}) => {
     const comicsList = items.length ? <ul>{items.map( (comics, i) => ( <li key={i}>{comics.name}</li> ))}</ul> : <><p>The data source does not have detailed information about comicses with this character.</p><p>
     Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p></> ;
+    const descriptionBlock = description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>;
     const thumbnailPos = isFindThumbnail(thumbnail);
     return (
         <>
@@ -39,7 +40,7 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, urls, c
                     </div>
                 </SideHead>
             </HeadInfo>
-            <p>{ description }</p>
+            <p>{ descriptionBlock }</p>
             <div>
                 <h3>Comics:</h3>
                 {comicsList}

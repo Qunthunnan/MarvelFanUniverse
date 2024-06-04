@@ -44,12 +44,12 @@ const AsideWrapper = styled.div`
 @media (min-width: 320px) {
     display: flex;
     position: fixed;
-    height: 100%;
-    top: 50%;
+    max-height: 100%;
+    top: 0%;
     left: 50%;
     row-gap: 30px;
     flex-direction: column;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
 }
 
 @media (min-width: 768px) {

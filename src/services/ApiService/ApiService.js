@@ -1,6 +1,13 @@
+import { getCookie, setCookie } from "../cookie/cookie";
 export class ApiService {
-    _baseHttp = 'https://gateway.marvel.com:443/v1/public';
-    _apiKey = 'e62e309b7048d9dc3404411cc8e7e029';
+    constructor() {
+        this._baseHttp = 'https://gateway.marvel.com:443/v1/public';
+        this._apiKey = 'e62e309b7048d9dc3404411cc8e7e029';
+
+        this.charactersCount = +getCookie('CharactersCount');
+    }
+
+    
 
     async getResource(url) {
         const result = await fetch(url);
@@ -23,8 +30,15 @@ export class ApiService {
     }
 
     async getCharactersCount() {
-        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${1}&offset=${0}`);
-        return result.data.total;
+        if(this.charactersCount) {
+            return new Promise((resolve)=>{
+                return resolve(this.charactersCount);
+            });
+        } else {
+            const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${1}&offset=${0}`);
+            setCookie('CharactersCount', result.data.total, 1);
+            return result.data.total;
+        }
     }
     
     async searchCharactersByName(name, count=9, offset=0) {

@@ -4,16 +4,12 @@ import { CharacterItem, CardBg } from './stylesCharacterCard';
 export class CharacterCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            active: false,
-        }
     }
     render() {
-        const { character: { name, thumbnail }, onOpenCharacter } = this.props;
-        const { active } = this.state;
+        const { character: { name, thumbnail }, onOpenCharacter, isActive } = this.props;
 
         return(
-            <CharacterItem onClick={ onOpenCharacter } title={name} $active={active}>
+            <CharacterItem onClick={ onOpenCharacter } title={name} $active={isActive}>
                 <img height={200} width={200} style={{objectFit: this.isFindThumbnail(thumbnail) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
                 <CardBg>
                     <h2>{this.cutName(name)}</h2>

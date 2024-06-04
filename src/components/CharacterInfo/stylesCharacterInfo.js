@@ -9,9 +9,6 @@ const InfoWrapper = styled(Aside)`
     position: relative;
     height: 100%;
     width: 100vw;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     overflow: auto;
     h2 {
         display: ${({$active}) => ( $active ? 'none' : 'unset' )};

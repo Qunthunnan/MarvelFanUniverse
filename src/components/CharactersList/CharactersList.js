@@ -6,6 +6,7 @@ import { List, Section, WideButtonBottom } from "./stylesCharacterList";
 import { Loader } from "../Loader/Loader";
 import { ApiService } from "../../services/ApiService/ApiService";
 import Error from "../Error/Error";
+import { getRandNum } from "../../services/randomValues/randomValues";
 
 export class CharactersList extends Component {
     constructor(props) {
@@ -17,15 +18,14 @@ export class CharactersList extends Component {
             error: null,
             count: null
         }
-        this.offset = 0;
     }
     render() {
-        const { onOpenCharacter, onCloseMobileCharacterInfo } = this.props;
+        const { onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter } = this.props;
 
         const { characters, error, loading } = this.state;
         const errorImage = error ? <Error/> : null;
         const loader = loading ? <Loader/> : null;
-        const charactersListItems = characters && !(error || loading) ? <View onOpenCharacter={onOpenCharacter} characters={characters}/> : null;
+        const charactersListItems = characters && !(error || loading) ? <View onOpenCharacter={onOpenCharacter} onCloseMobileCharacterInfo={onCloseMobileCharacterInfo} activeCharacter={activeCharacter} characters={characters}/> : null;
 
         return (
         <Section>
@@ -50,12 +50,11 @@ export class CharactersList extends Component {
             error: null
         });
         const count = this.getTargetCount();
-        marvelApi.getCharacters(count, this.offset)
+        marvelApi.getCharacters(count, this.getRandomCharactersOffset())
         .then(characters => {
-            this.offset += count + 1;
             this.setState({
                 loading: false,
-                characters: characters,
+                characters: characters
             });
         })
         .catch(() => {
@@ -66,7 +65,7 @@ export class CharactersList extends Component {
         });
     }
 
-     getTargetCount() {
+    getTargetCount() {
         let targetCount = 8;
         if(document.documentElement.clientWidth >= 992) {
             targetCount = 9;
@@ -74,11 +73,16 @@ export class CharactersList extends Component {
 
         return targetCount;
     }
+
+    getRandomCharactersOffset() {
+        const { charactersMaxCount } = this.props;
+        return getRandNum(1, (charactersMaxCount - 1) - (this.getTargetCount() * 5));
+    }
 }
 
-const View = ({characters, onOpenCharacter, onCloseMobileCharacterInfo}) => {
+const View = ({characters, onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter}) => {
     return(
-        <>{characters.map((character) => ( <CharacterCard onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
+        <>{characters.map((character) => ( <CharacterCard isActive={(activeCharacter && activeCharacter.id === character.id) ? true : false} onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
             onOpenCharacter(character); 
         } } key={character.id} character={character}/> ))}</>
     )
