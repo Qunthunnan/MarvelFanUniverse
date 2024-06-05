@@ -53,7 +53,7 @@ const AsideWrapper = styled.div`
 }
 
 @media (min-width: 768px) {
-    position: static;
+    position: sticky;
     transform: none;
 }
 `;

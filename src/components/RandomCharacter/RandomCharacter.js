@@ -49,7 +49,7 @@ export class RandomCharacter extends Component {
         const { charactersMaxCount } = this.props;
 
         const loader = loading ? <Loader/> : null;
-        const errrorImage = error ? <Error/> : null;
+        const errrorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
         const content = !(error || loading) && character ? <View character={character}/> : null;
 
         console.log('random render');

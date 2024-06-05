@@ -59,10 +59,10 @@ const InfoWrapper = styled(Aside)`
 
 @media (min-width: 768px) {
     position: static;
-    overflow: unset;
     transform: none;
     display: unset;
     height: unset;
+    max-height: 80vh;
     width: 300px;
     order: 1;
 }

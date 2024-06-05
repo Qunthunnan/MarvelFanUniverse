@@ -91,6 +91,7 @@ class App extends Component {
 
 		const Error = error ? (<Container>
 			<Error/>
+			<p>A system error has occurred, please try again later</p>
 		</Container>) : null;
 
 		const MainContent = !(loading || error || this.charactersMaxCount <= 0) ? contentView : null;
