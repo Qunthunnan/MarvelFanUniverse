@@ -7,6 +7,8 @@ import { Loader } from "../Loader/Loader";
 import { ApiService } from "../../services/ApiService/ApiService";
 import Error from "../Error/Error";
 import { getRandNum } from "../../services/randomValues/randomValues";
+import keygen from "keygenerator";
+
 
 export class CharactersList extends Component {
     constructor(props) {
@@ -17,21 +19,23 @@ export class CharactersList extends Component {
             loadingMore: false,
             loadingMoreError: false,
             error: false,
-            count: null
+            count: null,
+            charactersLimitReached: false
         }
         
         this.offset = 0;
+        this.charactersRendered = 0;
     }
     render() {
         const { onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter } = this.props;
-        const { characters, error, loading, loadingMore, loadingMoreError } = this.state;
+        const { characters, error, loading, loadingMore, loadingMoreError, charactersLimitReached} = this.state;
         
         const errorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></>  : null;
         const loader = loading ? <Loader/> : null;
         const charactersListItems = characters && !(error || loading) ? <View onOpenCharacter={onOpenCharacter} onCloseMobileCharacterInfo={onCloseMobileCharacterInfo} activeCharacter={activeCharacter} characters={characters}/> : null;
         const LoadMoreLoading = loadingMore ? <Loader/> : null;
         const LoadMoreError = loadingMoreError ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
-        const LoadMoreButtons = !(loadingMore || loadingMoreError) ? <WideButtonBottom onClick={this.onLoadMore}>LOAD MORE</WideButtonBottom> : null;
+        const LoadMoreButtons = !(loadingMore || loadingMoreError || charactersLimitReached) ? <WideButtonBottom onClick={this.onLoadMore}>LOAD MORE</WideButtonBottom> : null;
 
         return (
         <Section>
@@ -51,28 +55,26 @@ export class CharactersList extends Component {
         this.loadCharacters();
     }
 
+    componentDidUpdate() {
+        console.log('characters rendered: ' + this.charactersRendered);
+        if(this.state.characters)
+            console.log('real curent rendered: ' + this.state.characters.length);
+    }
+
     loadCharacters = () => {
         const marvelApi = new ApiService();
+
         this.setState({
             loading: true,
             error: null
         });
+
         const count = this.getTargetCount();
         this.offset = this.getRandomCharactersOffset();
+
         marvelApi.getCharacters(count, this.offset)
-        .then(characters => {
-            this.setState({
-                loading: false,
-                error: false,
-                characters: characters
-            });
-        })
-        .catch(() => {
-            this.setState({
-                loading: false,
-                error: true
-            });
-        });
+        .then(this.firstAddCharacters)
+        .catch(this.errorOnLoadCharacters);
     }
 
     getTargetCount = () => {
@@ -99,6 +101,16 @@ export class CharactersList extends Component {
         const { charactersMaxCount } = this.props;
         const count = this.getTargetCount();
 
+        if(this.charactersRendered + count >= charactersMaxCount) {
+            this.setState({
+                charactersLimitReached: true
+            });
+            marvelService.getCharacters(count, (this.offset + count))
+            .then(this.addCharacters)
+            .catch(this.errorOnAddCharacters);
+            return undefined;
+        }
+
         if(this.offset + (count * 2) > charactersMaxCount) {
             const diff = (charactersMaxCount) - (this.offset + count);
             let part1 = [];
@@ -124,32 +136,55 @@ export class CharactersList extends Component {
         }
     }
 
-    addCharacters = (addCharacters) => {
-        const { characters } = this.state;
+    firstAddCharacters = (addCharacters) => {
+        this.setState(()=> (
+            {
+                loading: false,
+                error: false,
+                characters: addCharacters
+            }
+        ), () => {
+            this.charactersRendered = this.state.characters.length;
+        });
+    }
 
-        this.setState({
-            loadingMore: false,
-            loadingMoreError: false,
-            characters: [...characters, ...addCharacters]
+    addCharacters = (addCharacters) => {
+        this.setState(({characters}) => (
+            {
+                loadingMore: false,
+                loadingMoreError: false,
+                characters: [...characters, ...addCharacters]
+            }
+        ), () => {
+            this.charactersRendered = this.state.characters.length;
         });
     }
 
     addCharactersFromParts = (part1, part2) => {
-        const { characters } = this.state;
-
-        this.setState({
-            loadingMore: false,
-            loadingMoreError: false,
-            characters: [...characters, ...part1, ...part2]
+        this.setState(({characters}) => (
+            {
+                loadingMore: false,
+                loadingMoreError: false,
+                characters: [...characters, ...part1, ...part2]
+            }
+        ), () => {
+            this.charactersRendered = this.state.characters.length;
         });
     }
 
     errorOnAddCharacters = () => {
         this.offset = 0;
-
         this.setState({
             loadingMore: false,
             loadingMoreError: true
+        });
+    }
+
+    errorOnLoadCharacters = () => {
+        this.offset = 0;
+        this.setState({
+            loading: false,
+            error: true
         });
     }
 }
@@ -160,6 +195,6 @@ const View = ({characters, onOpenCharacter, onCloseMobileCharacterInfo, activeCh
     return(
         <>{characters.map((character) => ( <CharacterCard isActive={(activeCharacter && activeCharacter.id === character.id) ? true : false} onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
             onOpenCharacter(character); 
-        } } key={character.id} character={character}/> ))}</>
+        } } key={keygen.number()} character={character}/> ))}</>
     )
 }
