@@ -46,7 +46,6 @@ export class RandomCharacter extends Component {
     }
     render() {
         const { character, loading, error } = this.state;
-        const { charactersMaxCount } = this.props;
 
         const loader = loading ? <Loader/> : null;
         const errrorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></> : null;

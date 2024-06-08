@@ -7,7 +7,7 @@ import { Loader } from "../Loader/Loader";
 import { ApiService } from "../../services/ApiService/ApiService";
 import Error from "../Error/Error";
 import { getRandNum } from "../../services/randomValues/randomValues";
-import keygen from "keygenerator";
+import uniqid from 'uniqid';
 
 
 export class CharactersList extends Component {
@@ -195,6 +195,6 @@ const View = ({characters, onOpenCharacter, onCloseMobileCharacterInfo, activeCh
     return(
         <>{characters.map((character) => ( <CharacterCard isActive={(activeCharacter && activeCharacter.id === character.id) ? true : false} onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
             onOpenCharacter(character); 
-        } } key={keygen.number()} character={character}/> ))}</>
+        } } key={uniqid()} character={character}/> ))}</>
     )
 }
