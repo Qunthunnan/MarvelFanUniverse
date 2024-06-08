@@ -9,7 +9,7 @@ export class CharacterCard extends Component {
         const { character: { name, thumbnail }, onOpenCharacter, isActive } = this.props;
 
         return(
-            <CharacterItem onClick={ onOpenCharacter } title={name} $active={isActive}>
+            <CharacterItem onKeyDown={this.onFocusClick} tabIndex={0} onClick={ onOpenCharacter } title={name} $active={isActive}>
                 <img height={200} width={200} style={{objectFit: this.isFindThumbnail(thumbnail) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
                 <CardBg>
                     <h2>{this.cutName(name)}</h2>
@@ -31,6 +31,12 @@ export class CharacterCard extends Component {
             findThumbNail = false;
 
         return findThumbNail;
+    }
+
+    onFocusClick = (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+            this.props.onOpenCharacter();
+        }
     }
 
     onCloseMobileCharacterInfo = () => {
