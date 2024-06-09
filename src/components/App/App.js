@@ -19,7 +19,6 @@ import { ComicsDetailed } from "../ComicsDetailed/ComicsDetailed";
 import { ApiService } from "../../services/ApiService/ApiService";
 import { Loader } from "../Loader/Loader";
 import Error from "../Error/Error";
-import {Example} from '../refsLessons/refsLessons';
 
 class App extends Component {
 	constructor(props) {
@@ -52,7 +51,6 @@ class App extends Component {
 
 		const contentView = ( 
 			<Container>
-				<Example></Example>
 				<header>
 					<H1><span>Marvel</span> Fan Universe</H1>
 					<Directory list={ directories.list } active={ directories.active }></Directory>
