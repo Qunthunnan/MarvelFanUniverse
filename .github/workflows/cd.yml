@@ -22,6 +22,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           cd /var/www/kyrylofolio.pro/html/mfu
