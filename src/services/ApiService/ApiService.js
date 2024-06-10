@@ -1,13 +1,13 @@
 import { getCookie, setCookie } from "../cookie/cookie";
 import { useHttp } from "../../hooks/http.hook";
 
-export function useMarvelService () {
+export function useMarvelService (startLoading = true) {
     
     const _baseHttp = 'https://gateway.marvel.com:443/v1/public';
     const _apiKey = 'e62e309b7048d9dc3404411cc8e7e029';
     const charactersCount = +getCookie('CharactersCount');
 
-    const { loading, setLoading, error, setError, getResource} = useHttp();
+    const { loading, setLoading, error, setError, getResource} = useHttp(startLoading);
 
     async function getCharacters(count=9, offset=0) {
         const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${count}&offset=${offset}&orderBy=-modified`);

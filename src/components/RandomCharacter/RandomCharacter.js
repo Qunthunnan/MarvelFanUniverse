@@ -27,8 +27,8 @@ const View = ({character}) => {
                     <p>{description}</p>
                 </div>
                 <ButtonsWrapper>
-                    <Button href={urls[0].url} >HOMEPAGE</Button>
-                    <Button href={urls[1].url} color={vars.marvelGray}>WIKI</Button>
+                    <Button target="blank" href={urls[0].url} >HOMEPAGE</Button>
+                    <Button target="blank" href={urls[1].url} color={vars.marvelGray}>WIKI</Button>
                 </ButtonsWrapper>
             </InfoWrapper>
         </>
@@ -36,12 +36,12 @@ const View = ({character}) => {
 }
 
 export const RandomCharacter = ({charactersMaxCount}) => {
-        const [character, setCharacter] = useState([]);
+        const [character, setCharacter] = useState();
         const { loading, error, getCharacters } = useMarvelService();
 
         useEffect(() => {
             console.log('random did mount');
-            this.updateCharacter();
+            updateCharacter();
         }, [])
 
         const loader = loading ? <Loader/> : null;

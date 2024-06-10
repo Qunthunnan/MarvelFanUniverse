@@ -1,8 +1,8 @@
 
 import { useState } from "react";
 
-export function useHttp() {
-    const [loading, setLoading] = useState(true);
+export function useHttp(startLoading) {
+    const [loading, setLoading] = useState(!!startLoading);
     const [error, setError] = useState(false);
 
     const getResource = async (url) => {
