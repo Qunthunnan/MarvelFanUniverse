@@ -26,7 +26,8 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           cd /home/${{secrets.USERNAME}}/projects/MarvelFanUniverse
-          git pull origin main
+          git pull origin dev
+          ${{secrets.PASSPHRASE}}
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
           npm install
