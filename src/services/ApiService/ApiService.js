@@ -1,62 +1,54 @@
 import { getCookie, setCookie } from "../cookie/cookie";
-export class ApiService {
-    constructor() {
-        this._baseHttp = 'https://gateway.marvel.com:443/v1/public';
-        this._apiKey = 'e62e309b7048d9dc3404411cc8e7e029';
+import { useHttp } from "../../hooks/http.hook";
 
-        this.charactersCount = +getCookie('CharactersCount');
-    }
-
+export function useMarvelService () {
     
+    const _baseHttp = 'https://gateway.marvel.com:443/v1/public';
+    const _apiKey = 'e62e309b7048d9dc3404411cc8e7e029';
+    const charactersCount = +getCookie('CharactersCount');
 
-    async getResource(url) {
-        const result = await fetch(url);
-        
-        if(!result.ok) {
-            throw new Error(`${result.status}: ${result.statusText}`);
-        } 
+    const { loading, setLoading, error, setError, getResource} = useHttp();
 
-        return await result.json();
+    async function getCharacters(count=9, offset=0) {
+        const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${count}&offset=${offset}&orderBy=-modified`);
+        return result.data.results.map(_transformCharacter);
     }
 
-    async getCharacters(count=9, offset=0) {
-        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${count}&offset=${offset}&orderBy=-modified`);
-        return result.data.results.map(this._transformCharacter);
+    async function getCharacterById(id) {
+        const result = await getResource(`${_baseHttp}/characters/${id}?apikey=${_apiKey}`);
+        return _transformCharacter(result.data.results[0]);
     }
 
-    async getCharacterById(id) {
-        const result = await this.getResource(`${this._baseHttp}/characters/${id}?apikey=${this._apiKey}`);
-        return this._transformCharacter(result.data.results[0]);
-    }
-
-    async getCharactersCount() {
-        if(this.charactersCount) {
+    async function getCharactersCount() {
+        if(charactersCount) {
+            setLoading(false);
+            setError(false);
             return new Promise((resolve)=>{
-                return resolve(this.charactersCount);
+                return resolve(charactersCount);
             });
         } else {
-            const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&limit=${1}&offset=${0}`);
+            const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${1}&offset=${0}`);
             setCookie('CharactersCount', result.data.total, 1);
             return result.data.total;
         }
     }
     
-    async searchCharactersByName(name, count=9, offset=0) {
-        const result = await this.getResource(`${this._baseHttp}/characters?apikey=${this._apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}`);
-        return result.data.results.map(this._transformCharacter);
+    async function searchCharactersByName(name, count=9, offset=0) {
+        const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}`);
+        return result.data.results.map(_transformCharacter);
     }
 
-    async getComicses(count=8, offset=0) {
-        const result = await this.getResource(`${this._baseHttp}/comics?apikey=${this._apiKey}&limit=${count}&offset=${offset}`);
-        return result.data.results.map(this._transformComics);
+    async function getComicses(count=8, offset=0) {
+        const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&limit=${count}&offset=${offset}`);
+        return result.data.results.map(_transformComics);
     }
 
-    async getComicsById(id) {
-        const result = await this.getResource(`${this._baseHttp}/comics/${id}?apikey=${this._apiKey}`);
-        return this._transformComics(result.data.results[0]);
+    async function getComicsById(id) {
+        const result = await getResource(`${_baseHttp}/comics/${id}?apikey=${_apiKey}`);
+        return _transformComics(result.data.results[0]);
     }
 
-    _transformCharacter(data) {
+    function _transformCharacter(data) {
         return {
             id: data.id,
             name: data.name,
@@ -67,7 +59,7 @@ export class ApiService {
         }
     }
 
-    _transformComics(data) {
+    function _transformComics(data) {
         return {
             id: data.id,
             title: data.title,
@@ -79,4 +71,6 @@ export class ApiService {
             urls: data.urls,
         }
     }
+
+    return { loading, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById}
 }

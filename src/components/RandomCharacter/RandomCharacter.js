@@ -1,5 +1,5 @@
-import { Component } from "react";
-import { ApiService } from "../../services/ApiService/ApiService";
+import { useCallback, useEffect, useState } from "react";
+import { useMarvelService } from "../../services/ApiService/ApiService";
 import { Button } from "../style/Button";
 import { Wrapper, RandomCharacterInfo, InfoWrapper, ButtonsWrapper, RandomBaner } from "./stylesRandomCharacter";
 import { vars } from "../style/Vars";
@@ -35,23 +35,26 @@ const View = ({character}) => {
     )
 }
 
-export class RandomCharacter extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            character: null,
-            loading: null,
-            error: null
-        }
-    }
-    render() {
-        const { character, loading, error } = this.state;
+export const RandomCharacter = ({charactersMaxCount}) => {
+        const [character, setCharacter] = useState([]);
+        const { loading, error, getCharacters } = useMarvelService();
+
+        useEffect(() => {
+            console.log('random did mount');
+            this.updateCharacter();
+        }, [])
 
         const loader = loading ? <Loader/> : null;
         const errrorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
         const content = !(error || loading) && character ? <View character={character}/> : null;
 
-        console.log('random render');
+        console.log('random rendered');
+        
+        const updateCharacter = useCallback(() => {
+
+            getCharacters(1, getRandNum(1, (charactersMaxCount - 1)))
+            .then(result => { setCharacter(...result) })
+        });
 
         return(
             <Wrapper>
@@ -63,55 +66,9 @@ export class RandomCharacter extends Component {
                 <RandomBaner>
                     <h2>Random character for today!<br/>Do you want to get to know him better?</h2>
                     <h2>Or choose another one!</h2>
-                    <Button onClick={this.updateCharacter}>TRY IT</Button>
+                    <Button onClick={updateCharacter}>TRY IT</Button>
                 </RandomBaner>
             </Wrapper>
         )
     }
-
-    componentDidMount() {
-        console.log('random did mount');
-        this.updateCharacter();
-    }
-
-    componentDidUpdate( ) {
-        console.log('random did update');
-    }
-
-    updateCharacter = () => {
-        const { charactersMaxCount } = this.props;
-
-        
-        const update = ([{name, description, thumbnail, urls}]) => {
-            this.setState({
-                loading: false,
-                error: false,
-                character: {
-                    name: name,
-                    description: description,
-                    thumbnail: thumbnail, 
-                    urls: urls
-                }
-            });
-        }
-
-        const error = () => {
-            this.setState({
-                loading: false,
-                error: true
-            });
-        }
-
-        const marverlApi = new ApiService();
-
-        this.setState({
-            loading: true,
-            error: false
-        });
-
-        marverlApi.getCharacters(1, getRandNum(1, (charactersMaxCount - 1)))
-        .then(update)
-        .catch(error);
-    }
-}
 
