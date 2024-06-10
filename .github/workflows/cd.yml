@@ -25,6 +25,8 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
+          eval "$(ssh-agent -s)"
+          ssh-add /home/${{secrets.USERNAME}}/.ssh/github_key
           cd /home/${{secrets.USERNAME}}/projects/MarvelFanUniverse
           git pull origin dev
           export NVM_DIR=~/.nvm
