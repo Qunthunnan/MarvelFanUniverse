@@ -25,11 +25,11 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
-          cd /home/qunthunnan/MarvelFanUniverse
+          cd /home/${{secrets.USERNAME}}/projects/MarvelFanUniverse
           git pull origin main
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
-          npm i
+          npm install
           npm run build
           cd build
           cp -rT . /var/www/kyrylofolio.pro/html/mfu
