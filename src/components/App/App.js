@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
+import React from "react";
 
 import { H1 } from "../style/H1";
 import { Container } from "../style/Container";
@@ -48,7 +49,7 @@ export function App () {
 
 	const { error, loading, getCharactersCount } = useMarvelService();
 
-	let [charactersMaxCount, setCharactersMaxCount] = useState(0);
+	const [charactersMaxCount, setCharactersMaxCount] = useState(0);
 
 	const loaderSpiner = loading ? (
 		<Container>
@@ -63,13 +64,13 @@ export function App () {
 
 	console.log(`render preMain, count: ${charactersMaxCount}`);
 
-	const mainContent = !(loading || error || charactersMaxCount <= 0) ? <ContentView directories={directories} 
+	const mainContent = useMemo(() => (!(loading || error || charactersMaxCount <= 0) ? <ContentView directories={directories} 
 	charactersMaxCount = { charactersMaxCount } 
 	onCloseMobileCharacterInfo = { onCloseMobileCharacterInfo }
 	activeCharacter = { activeCharacter }
 	onSwichSearch = { onSwichSearch }
 	mobileSearchShowed = { mobileSearchShowed }
-	onOpenCharacter= { onOpenCharacter }/> : null;
+	onOpenCharacter= { onOpenCharacter }/> : null));
 
 	function upadateMaxCharacterCount () {
 		getCharactersCount()
@@ -88,7 +89,7 @@ export function App () {
 	);
 }
 
-function ContentView ({directories, charactersMaxCount, activeCharacter, onCloseMobileCharacterInfo, mobileSearchShowed, onOpenCharacter, onSwichSearch}) {
+const ContentView = React.memo(({directories, charactersMaxCount, activeCharacter, onCloseMobileCharacterInfo, mobileSearchShowed, onOpenCharacter, onSwichSearch}) => {
 	return (
 		<Container>
 			<header>
@@ -124,4 +125,4 @@ function ContentView ({directories, charactersMaxCount, activeCharacter, onClose
 			{/* <ComicsList comicses={comicses}></ComicsList> */}
 	</Container>
 	)
-}
+});

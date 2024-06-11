@@ -16,8 +16,6 @@ export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMo
     const [charactersLimitReached, setCharactersLimitReached] = useState(false);
     const { loading, error, getCharacters } = useMarvelService ();
     const { loading: loadingMore, error: loadingMoreError, getCharacters: getAddCharacters} = useMarvelService (false);
-    const count = useRef(null);
-
         
     let offset = useRef(0);
     const charactersRendered = characters ? characters.length : 0;
@@ -31,15 +29,17 @@ export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMo
 
     useEffect(() => {
         loadCharacters();
+        console.log('charList mounted');
+        // eslint-disable-next-line
     }, []);
 
-    console.log('real curent rendered: ' + charactersRendered);
+    console.log(`renderCharList, charRendered: ${charactersRendered}, offset: ${offset.current}`);
     
     const loadCharacters = () => {
         const count = getTargetCount();
-        offset = getRandomCharactersOffset();
+        offset.current = getRandomCharactersOffset();
 
-       getCharacters(count, offset)
+       getCharacters(count, offset.current)
         .then(setCharacters)
     }
     
@@ -56,31 +56,31 @@ export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMo
 
         if(charactersRendered + count >= charactersMaxCount) {
             setCharactersLimitReached(true);
-            getAddCharacters(count, (offset + count))
+            getAddCharacters(count, (offset.current + count))
             .then(addCharacters)
 
             return undefined;
         }
 
-        if(offset + (count * 2) > charactersMaxCount) {
-            const diff = (charactersMaxCount) - (offset + count);
+        if(offset.current + (count * 2) > charactersMaxCount) {
+            const diff = (charactersMaxCount) - (offset.current + count);
             let part1 = [];
 
-            getAddCharacters((diff + 1), offset + count)
+            getAddCharacters((diff + 1), offset.current + count)
             .then(data => {
                 part1 = data;
-                offset = 0;
-                return getAddCharacters((count - diff), offset);
+                offset.current = 0;
+                return getAddCharacters((count - diff), offset.current);
             })
             .then(data => {
-                offset -= diff;
+                offset.current -= diff;
                 addCharactersFromParts(part1, data);
             });
         }
         else {
-            offset += count;
+            offset.current += count;
 
-            getAddCharacters(count, offset)
+            getAddCharacters(count, offset.current)
             .then(addCharacters)
         }
     }
