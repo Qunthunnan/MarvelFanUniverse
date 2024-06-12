@@ -1,6 +1,18 @@
+import { useEffect, memo } from 'react';
 import { CharacterItem, CardBg } from './stylesCharacterCard';
 
-export function CharacterCard ({ character: { name, thumbnail }, onOpenCharacter, isActive }) {
+export const CharacterCard = memo(({ character: { name, thumbnail }, onOpenCharacter, isActive }) => {
+
+    // useEffect(() => {
+    //     console.log(`character card ${name} render`);
+    // });
+
+    // useEffect(() => {
+    //     console.log(`character card ${name} mounted`);
+    //     return () => {
+    //         console.log(`character card ${name} unmounted`);
+    //     }
+    // }, []);
 
     function cutName(name) {
         if(name.length >= 15) {
@@ -27,4 +39,4 @@ export function CharacterCard ({ character: { name, thumbnail }, onOpenCharacter
             </CardBg>
         </CharacterItem>
     )
-}
+});

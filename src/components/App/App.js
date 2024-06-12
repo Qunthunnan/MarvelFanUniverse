@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import React from "react";
 
 import { H1 } from "../style/H1";
@@ -33,34 +33,32 @@ export function App () {
 		console.log('main mounted, started updateCharacters');
 		upadateMaxCharacterCount(); 
 	}, []);
-
 	
 	const onCloseMobileCharacterInfo = useCallback(() => {
 		setActiveCharacter(null);
-	}); 
+	}, []); 
 
 	const onSwichSearch = useCallback((e) => {
 		setMobileSearchShowed(!mobileSearchShowed);
-	});
+	}, []);
 	
 	const onOpenCharacter = useCallback((character) => {
 		setActiveCharacter(character)
-	});
+	}, []);
 
 	const onSearch = useCallback((name) => {
         setSearching(name);
-    });
+    }, []);
 
-	const cancelSearch = () => {
-		// setSearching(false);
-		console.log('cancel search');
-	}
-
-	const { error, loading, getCharactersCount, searchCharactersByName } = useMarvelService();
+	const { error, loading, getCharactersCount } = useMarvelService();
 
 	const [charactersMaxCount, setCharactersMaxCount] = useState(0);
 
 	const [searching, setSearching] = useState(false);
+
+	let background = !loading;
+	console.log(`background: ${background}`);
+
 
 	const loaderSpiner = loading ? (
 		<Container>
@@ -83,8 +81,7 @@ export function App () {
 	mobileSearchShowed = { mobileSearchShowed }
 	onOpenCharacter= { onOpenCharacter }
 	searching = { searching }
-	onSearch={onSearch}
-	cancelSearch={cancelSearch}/> : null));
+	onSearch={onSearch}/> : null));
 
 	function upadateMaxCharacterCount () {
 		getCharactersCount()
@@ -95,7 +92,7 @@ export function App () {
 	}
 		
 	return (
-		<MainDiv $bg={ true }>
+		<MainDiv $bg={ background }>
 			{mainContent}
 			{loaderSpiner}
 			{catchedError}

@@ -2,7 +2,6 @@ import styled from "styled-components";
 import mainBg from "../../resources/imgs/mainBg.png";
 
 const MainDiv = styled.div`
-background: ${({$bg}) => ( $bg ? 'url('+mainBg+')no-repeat right bottom' : '')};
 padding: 0 0 45px;
 header {
     padding: 52px 0 25px;
@@ -11,6 +10,7 @@ header {
 }
 
 @media (min-width: 576px) {
+    background: ${({$bg}) => ( $bg ? 'url('+mainBg+') no-repeat right bottom' : '')};
     header {
         padding: 20px 0;
     }

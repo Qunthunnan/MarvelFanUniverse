@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState, memo } from "react";
-
 import { CharacterCard } from "../CharacterCard/CharacterCard";
-
-import { List, Section, WideButtonBottom } from "./stylesCharacterList";
+import { List, Section, WideButtonBottom } from "./stylesInfoList";
 import { Loader } from "../Loader/Loader";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 import Error from "../Error/Error";
@@ -11,11 +9,11 @@ import uniqid from 'uniqid';
 import { vars } from "../style/Vars";
 
 
-export const CharactersList = memo(({ charactersMaxCount, onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter, searchName }) => {
+export const InfoList = memo(({ children, maxCount, onOpenItem, onCloseItemMobile, activeItem, searchValue }) => {
         
-    const [characters, setCharacters] = useState(null);
-    const [charactersLimitReached, setCharactersLimitReached] = useState(false);
-    const { loading, error, getCharacters, searchCharactersByName } = useMarvelService ();
+    const [items, setItems] = useState(null);
+    const [itemsLimitReached, setitemsLimitReached] = useState(false);
+    const { loading, error, getCharacters, getComicses, searchComicsesByTitle, searchCharactersByName } = useMarvelService();
     const { loading: loadingMore, error: loadingMoreError, getCharacters: getAddCharacters, searchCharactersByName: searchMore} = useMarvelService (false);
         
     let offset = useRef(0);

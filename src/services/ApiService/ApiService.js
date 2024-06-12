@@ -41,6 +41,14 @@ export function useMarvelService (startLoading = true) {
         } 
     }
 
+    async function searchComicsesByTitle(title, count, offset) {
+        const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&titleStartsWith=${title}&limit=${count}&offset=${offset}`);
+        return {
+            count: result.data.total,
+            comics: result.data.results.map(_transformCharacter)
+        } 
+    }
+
     async function getComicses(count=8, offset=0) {
         const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&limit=${count}&offset=${offset}`);
         return result.data.results.map(_transformComics);
@@ -75,5 +83,5 @@ export function useMarvelService (startLoading = true) {
         }
     }
 
-    return { loading, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById}
+    return { loading, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle}
 }
