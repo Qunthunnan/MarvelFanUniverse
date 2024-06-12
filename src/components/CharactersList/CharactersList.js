@@ -8,30 +8,41 @@ import { useMarvelService } from "../../services/ApiService/ApiService";
 import Error from "../Error/Error";
 import { getRandNum } from "../../services/randomValues/randomValues";
 import uniqid from 'uniqid';
+import { vars } from "../style/Vars";
 
 
-export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter }) {
+export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter, searchName }) {
         
     const [characters, setCharacters] = useState(null);
     const [charactersLimitReached, setCharactersLimitReached] = useState(false);
-    const { loading, error, getCharacters } = useMarvelService ();
-    const { loading: loadingMore, error: loadingMoreError, getCharacters: getAddCharacters} = useMarvelService (false);
+    const { loading, error, getCharacters, searchCharactersByName } = useMarvelService ();
+    const { loading: loadingMore, error: loadingMoreError, getCharacters: getAddCharacters, searchCharactersByName: searchMore} = useMarvelService (false);
         
     let offset = useRef(0);
     const charactersRendered = characters ? characters.length : 0;
+    let searchCount = useRef();
     
     const errorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></>  : null;
     const loader = loading ? <Loader/> : null;
     const charactersListItems = characters && !(error || loading) ? <View onOpenCharacter={onOpenCharacter} onCloseMobileCharacterInfo={onCloseMobileCharacterInfo} activeCharacter={activeCharacter} characters={ characters }/> : null;
     const LoadMoreLoading = loadingMore ? <Loader/> : null;
     const LoadMoreError = loadingMoreError ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
-    const LoadMoreButtons = !(loadingMore || loadingMoreError || charactersLimitReached) ? <WideButtonBottom onClick={onLoadMore}>LOAD MORE</WideButtonBottom> : null;
+    const LoadMoreButtons = !(loadingMore || loadingMoreError || charactersLimitReached || charactersRendered === 0) ? <WideButtonBottom onClick={searchName && searchName !== '' ? onLoadMoreSearchResults : onLoadMore}>LOAD MORE</WideButtonBottom> : null;
 
     useEffect(() => {
         loadCharacters();
         console.log('charList mounted');
-        // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        if (searchName) {
+            searchCharacter();
+            console.log('charList searching');
+        }
+        if (searchName === '') {
+            loadCharacters();
+        }
+    }, [ searchName ])
 
     console.log(`renderCharList, charRendered: ${charactersRendered}, offset: ${offset.current}`);
     
@@ -41,6 +52,22 @@ export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMo
 
        getCharacters(count, offset.current)
         .then(setCharacters)
+    }
+
+    const searchCharacter = () => {
+        const count = getTargetCount();
+        offset.current = 0;
+
+       searchCharactersByName(searchName, count, offset.current)
+        .then(result => {
+            searchCount.current = result.count; 
+            if(searchCount.current <= count)
+                setCharactersLimitReached(true);
+            else
+                setCharactersLimitReached(false);
+            
+            setCharacters(result.characters);
+        });
     }
     
     const getTargetCount = () => {
@@ -85,6 +112,24 @@ export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMo
         }
     }
 
+    function onLoadMoreSearchResults() {
+        const count = getTargetCount();
+
+        if((charactersRendered + count) >= searchCount.current) {
+            setCharactersLimitReached(true);
+            searchMore(searchName, count, (offset.current + count))
+            .then(result => {addCharacters(result.characters)});
+
+            return undefined;
+        }
+
+        offset.current += count;
+
+        searchMore(searchName, count, offset.current)
+        .then(result => {addCharacters(result.characters)});
+       
+    }
+
     const addCharacters = (addCharacters) => {
         setCharacters([...characters, ...addCharacters]);
     }
@@ -110,6 +155,9 @@ export function CharactersList ({ charactersMaxCount, onOpenCharacter, onCloseMo
 
 
 const View = ({characters, onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter}) => {
+    if(characters.length === 0) {
+        return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Characters not found</p>)
+    }
     return(
         <>{characters.map((character) => ( <CharacterCard isActive={(activeCharacter && activeCharacter.id === character.id) ? true : false} onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
             onOpenCharacter(character); 

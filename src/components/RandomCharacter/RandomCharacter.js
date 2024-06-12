@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, memo } from "react";
+import React from "react";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 import { Button } from "../style/Button";
 import { Wrapper, RandomCharacterInfo, InfoWrapper, ButtonsWrapper, RandomBaner } from "./stylesRandomCharacter";
@@ -7,7 +8,7 @@ import { Loader } from "../Loader/Loader";
 import { getRandNum } from "../../services/randomValues/randomValues";
 import Error from "../Error/Error";
 
-const View = ({character}) => {
+const View = memo(({character}) => {
     let { name, description, thumbnail, urls } = character;
     let findThumbNail = true;
     if (description.length > 188)
@@ -33,44 +34,44 @@ const View = ({character}) => {
             </InfoWrapper>
         </>
     )
-}
+});
 
-export const RandomCharacter = ({charactersMaxCount}) => {
-        const [character, setCharacter] = useState();
-        const { loading, error, getCharacters } = useMarvelService();
+export const RandomCharacter = memo(({charactersMaxCount}) => {
+    const [character, setCharacter] = useState();
+    const { loading, error, getCharacters } = useMarvelService();
 
-        useEffect(() => {
-            console.log('random did mount');
-            updateCharacter();
-        }, [])
+    useEffect(() => {
+        console.log('random did mount');
+        updateCharacter();
+    }, [])
 
-        useEffect(() => {
-            console.log('random render');
-        });
+    useEffect(() => {
+        console.log('random render');
+    });
 
-        const loader = loading ? <Loader/> : null;
-        const errrorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
-        const content = !(error || loading) && character ? <View character={character}/> : null;
-        
-        const updateCharacter = useCallback(() => {
+    const loader = loading ? <Loader/> : null;
+    const errrorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
+    const content = !(error || loading) && character ? <View character={character}/> : null;
+    
+    const updateCharacter = useCallback(() => {
 
-            getCharacters(1, getRandNum(1, (charactersMaxCount - 1)))
-            .then(result => { setCharacter(...result) })
-        });
+        getCharacters(1, getRandNum(1, (charactersMaxCount - 1)))
+        .then(result => { setCharacter(...result) })
+    }, []);
 
-        return(
-            <Wrapper>
-                <RandomCharacterInfo>
-                    {loader}
-                    {errrorImage}
-                    {content}
-                </RandomCharacterInfo>
-                <RandomBaner>
-                    <h2>Random character for today!<br/>Do you want to get to know him better?</h2>
-                    <h2>Or choose another one!</h2>
-                    <Button onClick={updateCharacter}>TRY IT</Button>
-                </RandomBaner>
-            </Wrapper>
-        )
-    }
+    return(
+        <Wrapper>
+            <RandomCharacterInfo>
+                {loader}
+                {errrorImage}
+                {content}
+            </RandomCharacterInfo>
+            <RandomBaner>
+                <h2>Random character for today!<br/>Do you want to get to know him better?</h2>
+                <h2>Or choose another one!</h2>
+                <Button onClick={updateCharacter}>TRY IT</Button>
+            </RandomBaner>
+        </Wrapper>
+    )
+});
 

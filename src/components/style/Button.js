@@ -19,6 +19,10 @@ const Button = styled.a`
     margin: ${ ({margin}) => (margin ? margin : '0')  };
     background-color: ${ ({color}) => (color ? color : vars.marvelRed)   };
     clip-path: polygon(11% 0, 100% 0, 100% 75%, 89% 100%, 25% 100%, 0 100%, 0 28%);
+    &:focus {
+        border: 3px solid ${vars.marvelGray};
+        border-radius: 2px;
+    }
 `;
 
 export {Button};

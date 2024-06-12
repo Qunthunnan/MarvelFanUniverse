@@ -47,9 +47,20 @@ export function App () {
 		setActiveCharacter(character)
 	});
 
-	const { error, loading, getCharactersCount } = useMarvelService();
+	const onSearch = useCallback((name) => {
+        setSearching(name);
+    });
+
+	const cancelSearch = () => {
+		// setSearching(false);
+		console.log('cancel search');
+	}
+
+	const { error, loading, getCharactersCount, searchCharactersByName } = useMarvelService();
 
 	const [charactersMaxCount, setCharactersMaxCount] = useState(0);
+
+	const [searching, setSearching] = useState(false);
 
 	const loaderSpiner = loading ? (
 		<Container>
@@ -70,7 +81,10 @@ export function App () {
 	activeCharacter = { activeCharacter }
 	onSwichSearch = { onSwichSearch }
 	mobileSearchShowed = { mobileSearchShowed }
-	onOpenCharacter= { onOpenCharacter }/> : null));
+	onOpenCharacter= { onOpenCharacter }
+	searching = { searching }
+	onSearch={onSearch}
+	cancelSearch={cancelSearch}/> : null));
 
 	function upadateMaxCharacterCount () {
 		getCharactersCount()
@@ -89,7 +103,7 @@ export function App () {
 	);
 }
 
-const ContentView = React.memo(({directories, charactersMaxCount, activeCharacter, onCloseMobileCharacterInfo, mobileSearchShowed, onOpenCharacter, onSwichSearch}) => {
+const ContentView = React.memo(({directories, charactersMaxCount, activeCharacter, onCloseMobileCharacterInfo, mobileSearchShowed, onOpenCharacter, onSwichSearch, cancelSearch, onSearch, searching}) => {
 	return (
 		<Container>
 			<header>
@@ -108,7 +122,11 @@ const ContentView = React.memo(({directories, charactersMaxCount, activeCharacte
 
 			<CharactersContentWrapper>
 				<ErrorBoundary>
-					<CharactersList charactersMaxCount={ charactersMaxCount } onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } activeCharacter={ activeCharacter } onOpenCharacter={ onOpenCharacter }/>
+					<CharactersList charactersMaxCount={ charactersMaxCount } 
+					onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } 
+					activeCharacter={ activeCharacter } 
+					onOpenCharacter={ onOpenCharacter }
+					searchName = { searching }/>
 				</ErrorBoundary>
 				<AsideWrapper>
 					<ErrorBoundary>
@@ -116,7 +134,10 @@ const ContentView = React.memo(({directories, charactersMaxCount, activeCharacte
 						character={ activeCharacter }
 						onCloseMobileCharacterInfo={onCloseMobileCharacterInfo}/>
 					</ErrorBoundary>
-					<SearchCharacter mobileSearchShowed={ mobileSearchShowed } onSwichSearch={onSwichSearch}/>
+					<SearchCharacter mobileSearchShowed={ mobileSearchShowed } 
+					onSwichSearch={onSwichSearch} 
+					onSearch={onSearch} 
+					cancelSearch={cancelSearch}/>
 				</AsideWrapper>
 			</CharactersContentWrapper>
 			{/* <ComicsBaner></ComicsBaner>

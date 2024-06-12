@@ -35,7 +35,10 @@ export function useMarvelService (startLoading = true) {
     
     async function searchCharactersByName(name, count=9, offset=0) {
         const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}`);
-        return result.data.results.map(_transformCharacter);
+        return {
+            count: result.data.total,
+            characters: result.data.results.map(_transformCharacter)
+        } 
     }
 
     async function getComicses(count=8, offset=0) {

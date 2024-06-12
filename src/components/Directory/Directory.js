@@ -1,7 +1,8 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useCallback, useEffect, memo, useMemo } from "react";
 import { DirectorySpan } from "./stylesDirectory";
+import uniqid from "uniqid";
 
-export function Directory ({ active, list }) {
+export const Directory = memo( ({ active, list }) => {
 
     useEffect(()=>{
         console.log(`Directory render, active${active}, list:`);
@@ -12,17 +13,16 @@ export function Directory ({ active, list }) {
         console.log('Directory did mount');
     }, []);
 
-    const directories = list.map( (item, i) => {
-    const slash = list[i + 1] ? <DirectorySpan key={i + 0.5}>/</DirectorySpan> : null;
-    
-    return (
-        <Fragment key={i + 0.1}>
-            <DirectorySpan href="#" key={i} $active={ item === active ? true : null }>{item}</DirectorySpan>
-            {slash}
-        </Fragment>
-    ) });
+    const directories = list
+    .map( (item, i) => {
+        const slash = list[i + 1] ? <DirectorySpan key={uniqid()}>/</DirectorySpan> : null;
+            return (
+                <Fragment key={uniqid()}>
+                    <DirectorySpan href="#" $active={ item === active ? true : null }>{item}</DirectorySpan>
+                    {slash}
+                </Fragment>
+            ) 
+        });
 
-    return (
-            <nav>{directories}</nav>
-    );
-}
+    return ( <nav>{directories}</nav> );
+});
