@@ -1,151 +1,149 @@
 import { useEffect, useRef, useState, memo } from "react";
-import { CharacterCard } from "../CharacterCard/CharacterCard";
-import { List, Section, WideButtonBottom } from "./stylesInfoList";
 import { Loader } from "../Loader/Loader";
-import { useMarvelService } from "../../services/ApiService/ApiService";
+import { Section, WideButtonBottom } from "../CharactersList/stylesCharacterList";
 import Error from "../Error/Error";
 import { getRandNum } from "../../services/randomValues/randomValues";
-import uniqid from 'uniqid';
 import { vars } from "../style/Vars";
 
 
-export const InfoList = memo(({ children, maxCount, onOpenItem, onCloseItemMobile, activeItem, searchValue }) => {
+export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, targetsCount: { small, big }, onOpenItem, onCloseItemMobile, activeItem, searchValue, getItems, getAddItems, searchItems, searchMore, loading, loadingMore, error, loadingMoreError }) => {
         
     const [items, setItems] = useState(null);
-    const [itemsLimitReached, setitemsLimitReached] = useState(false);
-    const { loading, error, getCharacters, getComicses, searchComicsesByTitle, searchCharactersByName } = useMarvelService();
-    const { loading: loadingMore, error: loadingMoreError, getCharacters: getAddCharacters, searchCharactersByName: searchMore} = useMarvelService (false);
-        
-    let offset = useRef(0);
-    const charactersRendered = characters ? characters.length : 0;
-    let searchCount = useRef();
+    const [itemsLimitReached, setItemsLimitReached] = useState(false);
     
+    let offset = useRef(0);
+    const itemsRendered = items ? items.length : 0;
+    let searchCount = useRef();
+
+    const listItems = items && !(error || loading) ? <View 
+    onOpenItem={onOpenItem} 
+    onCloseItemMobile = {onCloseItemMobile} 
+    activeItem = { activeItem } 
+    ItemComponent = { ItemComponent }
+    items = { items }/> : null;
+
     const errorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></>  : null;
     const loader = loading ? <Loader/> : null;
-    const charactersListItems = characters && !(error || loading) ? <View onOpenCharacter={onOpenCharacter} 
-    onCloseMobileCharacterInfo={onCloseMobileCharacterInfo} 
-    activeCharacter={activeCharacter} 
-    characters={ characters }/> : null;
     const LoadMoreLoading = loadingMore ? <Loader/> : null;
     const LoadMoreError = loadingMoreError ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
-    const LoadMoreButtons = !(loadingMore || loadingMoreError || charactersLimitReached || charactersRendered === 0) ? <WideButtonBottom onClick={searchName && searchName !== '' ? onLoadMoreSearchResults : onLoadMore}>LOAD MORE</WideButtonBottom> : null;
+    const LoadMoreButtons = !(loadingMore || loadingMoreError || itemsLimitReached || itemsRendered === 0) ? <WideButtonBottom onClick={ searchValue && searchValue !== '' ? onLoadMoreSearchResults : onLoadMore}>LOAD MORE</WideButtonBottom> : null;
 
     useEffect(() => {
-        loadCharacters();
-        console.log('charList mounted');
+        loadItems();
+        console.log('itemsList mounted');
     }, []);
 
     useEffect(() => {
-        if (searchName) {
-            searchCharacter();
-            console.log('charList searching');
+        if (searchValue) {
+            searchItem();
+            console.log('itemsList searching');
         }
-        if (searchName === '') {
-            loadCharacters();
+        if (searchValue === '') {
+            loadItems();
         }
-    }, [ searchName ])
+    }, [ searchValue ])
 
-    console.log(`renderCharList, charRendered: ${charactersRendered}, offset: ${offset.current}`);
+    console.log(`renderItemsList, itemsRendered: ${itemsRendered}, offset: ${offset.current}`);
     
-    const loadCharacters = () => {
+    const loadItems = () => {
         const count = getTargetCount();
-        offset.current = getRandomCharactersOffset();
+        offset.current = getRandomItemsOffset();
 
-       getCharacters(count, offset.current)
-        .then(setCharacters)
+       getItems(count, offset.current)
+        .then(setItems);
     }
 
-    const searchCharacter = () => {
+    const searchItem = () => {
         const count = getTargetCount();
         offset.current = 0;
 
-       searchCharactersByName(searchName, count, offset.current)
+       searchItems(searchValue, count, offset.current)
         .then(result => {
             searchCount.current = result.count; 
             if(searchCount.current <= count)
-                setCharactersLimitReached(true);
+                setItemsLimitReached(true);
             else
-                setCharactersLimitReached(false);
+                setItemsLimitReached(false);
             
-            setCharacters(result.characters);
+            setItems(result.data);
         });
     }
     
     const getTargetCount = () => {
-        return document.documentElement.clientWidth >= 992 ? 9 : 8;
+        return document.documentElement.clientWidth >= 992 ? big : small;
     }
 
-    const getRandomCharactersOffset = () => {
-        return getRandNum(1, (charactersMaxCount - 1) - (getTargetCount() * 5));
+    const getRandomItemsOffset = () => {
+        return getRandNum(1, (maxCount - 1) - (getTargetCount() * 5));
     }
 
     function onLoadMore () {
         const count = getTargetCount();
 
-        if(charactersRendered + count >= charactersMaxCount) {
-            setCharactersLimitReached(true);
-            getAddCharacters(count, (offset.current + count))
-            .then(addCharacters)
+        if(itemsRendered + count >= maxCount) {
+            setItemsLimitReached(true);
+            getAddItems(count, (offset.current + count))
+            .then(addItems)
 
             return undefined;
         }
 
-        if(offset.current + (count * 2) > charactersMaxCount) {
-            const diff = (charactersMaxCount) - (offset.current + count);
+        if(offset.current + (count * 2) > maxCount) {
+            const diff = (maxCount) - (offset.current + count);
             let part1 = [];
 
-            getAddCharacters((diff + 1), offset.current + count)
+            getAddItems((diff + 1), offset.current + count)
             .then(data => {
                 part1 = data;
                 offset.current = 0;
-                return getAddCharacters((count - diff), offset.current);
+                return getAddItems((count - diff), offset.current);
             })
             .then(data => {
                 offset.current -= diff;
-                addCharactersFromParts(part1, data);
+                addItemsFromParts(part1, data);
             });
         }
         else {
             offset.current += count;
 
-            getAddCharacters(count, offset.current)
-            .then(addCharacters)
+            getAddItems(count, offset.current)
+            .then(addItems)
         }
     }
 
     function onLoadMoreSearchResults() {
         const count = getTargetCount();
 
-        if((charactersRendered + count) >= searchCount.current) {
-            setCharactersLimitReached(true);
-            searchMore(searchName, count, (offset.current + count))
-            .then(result => {addCharacters(result.characters)});
+        if((itemsRendered + count) >= searchCount.current) {
+            setItemsLimitReached(true);
+            searchMore(searchValue, count, (offset.current + count))
+            .then(result => {addItems(result.data)});
 
             return undefined;
         }
 
         offset.current += count;
 
-        searchMore(searchName, count, offset.current)
-        .then(result => {addCharacters(result.characters)});
+        searchMore(searchValue, count, offset.current)
+        .then(result => {addItems(result.data)});
        
     }
 
-    const addCharacters = (addCharacters) => {
-        setCharacters([...characters, ...addCharacters]);
+    const addItems = (addItems) => {
+        setItems(()=> ([...items, ...addItems]));
     }
 
-    const addCharactersFromParts = (part1, part2) => {
-        setCharacters([...characters, ...part1, ...part2]);
+    const addItemsFromParts = (part1, part2) => {
+        setItems(()=>([...items, ...part1, ...part2]));
     }
 
     return (
         <Section>
-            <List>
+            <ListStyleComponent>
                 {errorImage}
                 {loader}
-                {charactersListItems}
-            </List>
+                {listItems}
+            </ListStyleComponent>
             {LoadMoreLoading}
             {LoadMoreError}
             {LoadMoreButtons}
@@ -155,13 +153,14 @@ export const InfoList = memo(({ children, maxCount, onOpenItem, onCloseItemMobil
 
 
 
-const View = memo(({characters, onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter}) => {
-    if(characters.length === 0) {
-        return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Characters not found</p>)
+const View = memo(({items, onOpenItem, onCloseItemMobile, activeItem, ItemComponent}) => {
+    if(items.length === 0) {
+        return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Data not found</p>)
     }
     return(
-        <>{characters.map((character) => ( <CharacterCard isActive={(activeCharacter && activeCharacter.id === character.id) ? true : false} onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } onOpenCharacter={ () => { 
-            onOpenCharacter(character); 
-        } } key={uniqid()} character={character}/> ))}</>
+        <>{items.map((item, i) => ( <ItemComponent isActive={(activeItem && activeItem.id === item.id) ? true : false} 
+        onCloseItemMobile={ onCloseItemMobile } 
+        onOpen={ () => { onOpenItem( item ) } }
+        key={i} item={ item }/> ))}</>
     )
 });

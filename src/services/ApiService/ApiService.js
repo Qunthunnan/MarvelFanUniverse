@@ -37,7 +37,7 @@ export function useMarvelService (startLoading = true) {
         const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}`);
         return {
             count: result.data.total,
-            characters: result.data.results.map(_transformCharacter)
+            data: result.data.results.map(_transformCharacter)
         } 
     }
 
@@ -45,7 +45,7 @@ export function useMarvelService (startLoading = true) {
         const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&titleStartsWith=${title}&limit=${count}&offset=${offset}`);
         return {
             count: result.data.total,
-            comics: result.data.results.map(_transformCharacter)
+            data: result.data.results.map(_transformCharacter)
         } 
     }
 

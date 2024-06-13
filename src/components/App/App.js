@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useMemo, useRef } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import React from "react";
 
 import { H1 } from "../style/H1";
@@ -120,10 +120,10 @@ const ContentView = React.memo(({directories, charactersMaxCount, activeCharacte
 			<CharactersContentWrapper>
 				<ErrorBoundary>
 					<CharactersList charactersMaxCount={ charactersMaxCount } 
-					onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } 
-					activeCharacter={ activeCharacter } 
-					onOpenCharacter={ onOpenCharacter }
-					searchName = { searching }/>
+						onCloseMobileCharacterInfo={ onCloseMobileCharacterInfo } 
+						activeCharacter={ activeCharacter } 
+						onOpenCharacter={ onOpenCharacter }
+						searchName = { searching }/>
 				</ErrorBoundary>
 				<AsideWrapper>
 					<ErrorBoundary>
