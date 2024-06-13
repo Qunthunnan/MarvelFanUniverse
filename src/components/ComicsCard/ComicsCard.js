@@ -1,13 +1,12 @@
-import { Component } from "react";
 import { ComicsItem } from "./stylesComicsCard";
 
-function ComicsCard ({image, name, price}) {
+export function ComicsCard ({item: {thumbnail, title, prices}}) {
    
-    const priceItem = price ? <span>{price}$</span> : <span>NOT AVAILABLE</span>;
+    const priceItem = prices[0].price ? <span>{prices[0].price}$</span> : <span>NOT AVAILABLE</span>;
     return ( 
     <ComicsItem>
-        <img height={346} width={225} src={image} alt={'comics' + name}  />
-        <h3>{name}</h3>
+        <img height={346} width={225} src={`${thumbnail.path}.${thumbnail.extension}`} alt={'comics' + title}  />
+        <h3>{title}</h3>
         {priceItem}
     </ComicsItem>   
     );

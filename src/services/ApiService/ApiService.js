@@ -5,7 +5,8 @@ export function useMarvelService (startLoading = true) {
     
     const _baseHttp = 'https://gateway.marvel.com:443/v1/public';
     const _apiKey = 'e62e309b7048d9dc3404411cc8e7e029';
-    const charactersCount = +getCookie('CharactersCount');
+    const charactersCount = +getCookie('charactersCount');
+    const comicsCount = +getCookie('comicsCount');
 
     const { loading, setLoading, error, setError, getResource} = useHttp(startLoading);
 
@@ -28,7 +29,21 @@ export function useMarvelService (startLoading = true) {
             });
         } else {
             const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${1}&offset=${0}`);
-            setCookie('CharactersCount', result.data.total, 1);
+            setCookie('charactersCount', result.data.total, 1);
+            return result.data.total;
+        }
+    }
+
+    async function getComicsCount() {
+        if(comicsCount) {
+            setLoading(false);
+            setError(false);
+            return new Promise((resolve)=>{
+                return resolve(comicsCount);
+            });
+        } else {
+            const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&limit=${1}&offset=${0}`);
+            setCookie('comicsCount', result.data.total, 1);
             return result.data.total;
         }
     }
@@ -83,5 +98,5 @@ export function useMarvelService (startLoading = true) {
         }
     }
 
-    return { loading, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle}
+    return { loading, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle, getComicsCount}
 }
