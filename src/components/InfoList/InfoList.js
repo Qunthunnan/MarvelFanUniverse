@@ -158,9 +158,12 @@ const View = memo(({items, onOpenItem, onCloseItemMobile, activeItem, ItemCompon
         return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Data not found</p>)
     }
     return(
-        <>{items.map((item, i) => ( <ItemComponent isActive={(activeItem && activeItem.id === item.id) ? true : false} 
-        onCloseItemMobile={ onCloseItemMobile } 
-        onOpen={ () => { onOpenItem( item ) } }
-        key={i} item={ item }/> ))}</>
+        <> { items.map((item, i) => ( 
+        <ItemComponent 
+            isActive={(activeItem && activeItem.id === item.id) ? true : false} 
+            onCloseItemMobile={ onCloseItemMobile } 
+            onOpen={ () => { onOpenItem( item ) } }
+            key={i} 
+            item={ item }/> )) } </>
     )
 });
