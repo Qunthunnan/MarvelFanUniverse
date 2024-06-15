@@ -1,12 +1,29 @@
 import styled from "styled-components";
 import { vars } from "../style/Vars";
 
-const DirectorySpan = styled.a`
+const Header = styled.header`
+     
+padding: 52px 0 25px;
+display: flex;
+justify-content: space-between;
+
+@media (min-width: 576px) {
+    padding: 20px 0;
+}
+
+@media (max-width: 576px) {
+    padding: 15px 10px;
+}
+`;
+
+const DirectorySpan = styled.span`
     font-size: 24px;
     font-weight: 700;
-    color: ${ ({active}) => (active ? vars.marvelRed : '#000') };
     margin: 0 5px 0 0;
-    text-decoration: none;
+    a {
+        color: #000;
+        text-decoration: none;
+    }
     &:last-child {
         margin: 0;
     }
@@ -19,4 +36,4 @@ const DirectorySpan = styled.a`
     }
 `;
 
-export { DirectorySpan };
+export { DirectorySpan, Header };

@@ -3,17 +3,10 @@ import mainBg from "../../resources/imgs/mainBg.png";
 
 const MainDiv = styled.div`
 padding: 0 0 45px;
-header {
-    padding: 52px 0 25px;
-    display: flex;
-    justify-content: space-between;
-}
+
 
 @media (min-width: 576px) {
     background: ${({$bg}) => ( $bg ? 'url('+mainBg+') no-repeat right bottom' : '')};
-    header {
-        padding: 20px 0;
-    }
 }
 
 @media (max-width: 576px) {

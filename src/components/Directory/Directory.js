@@ -1,11 +1,12 @@
 import { Fragment, useCallback, useEffect, memo, useMemo } from "react";
+import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
+import { vars } from "../style/Vars";
 import { DirectorySpan } from "./stylesDirectory";
-import uniqid from "uniqid";
 
-export const Directory = memo( ({ active, list }) => {
+export const Directory = memo( ({ list }) => {
 
     useEffect(()=>{
-        console.log(`Directory render, active${active}, list:`);
+        console.log(`Directory render`);
         console.log(`${list}`);
     });
 
@@ -15,10 +16,12 @@ export const Directory = memo( ({ active, list }) => {
 
     const directories = list
     .map( (item, i) => {
-        const slash = list[i + 1] ? <DirectorySpan key={uniqid()}>/</DirectorySpan> : null;
+        const slash = list[i + 1] ? <DirectorySpan key={i}>/</DirectorySpan> : null;
             return (
-                <Fragment key={uniqid()}>
-                    <DirectorySpan href="#" $active={ item === active ? true : null }>{item}</DirectorySpan>
+                <Fragment key={i + 0.5}>
+                    <DirectorySpan>
+                        <NavLink exact activeStyle={{color: vars.marvelRed}} to={item.directoryLink}> {item.directoryName}  </NavLink>
+                    </DirectorySpan>
                     {slash}
                 </Fragment>
             ) 

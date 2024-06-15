@@ -34,4 +34,14 @@ const List = styled.ul`
     }
 `;
 
-export { List };
+const ComicsWrapper = styled.section`
+@media (min-width: 320px) {
+    display: block;
+    padding: 0 0 25px;
+}
+@media (min-width: 576px) {
+    padding: 0 0 45px;
+}
+`;
+
+export { List, ComicsWrapper };
