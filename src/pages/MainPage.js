@@ -77,12 +77,12 @@ export const MainPage = () => {
 		} );
 	}
 
-    return (
-        <MainDiv $bg={ false }>
-            {mainContent}
-            {loaderSpiner}
-            {catchedError}
-        </MainDiv>
+    return ( 
+	<MainDiv $bg={ false }>
+		{mainContent}
+		{loaderSpiner}
+		{catchedError}
+	</MainDiv>
     )
 }
 

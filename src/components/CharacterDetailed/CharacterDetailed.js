@@ -1,6 +1,6 @@
 import { TextWrapper, DetailedWrapper } from './stylesCharacterDetailed.js';
 import refImage from "../../resources/imgs/characterRef.jpg"
-import { Link } from 'react-router-dom/cjs/react-router-dom.min.js';
+import { Link } from 'react-router-dom';
 
 export const CharacterDetailed = ({id}) => {
 

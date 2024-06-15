@@ -9,11 +9,16 @@ justify-content: space-between;
 
 @media (min-width: 576px) {
     padding: 20px 0;
+    a {
+        color: #000;
+        text-decoration: none;
+    }
 }
 
 @media (max-width: 576px) {
     padding: 15px 10px;
 }
+
 `;
 
 const DirectorySpan = styled.span`

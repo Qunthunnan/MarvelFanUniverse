@@ -1,5 +1,5 @@
 import { DetailedWrapper, TextWrapper } from "./stylesComicsDetailed";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
 import refComics from "../../resources/imgs/comics.jpg"
 
 export const ComicsDetailed = ({id}) => {

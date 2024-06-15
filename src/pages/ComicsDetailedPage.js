@@ -1,6 +1,6 @@
 import { Container } from "../components/style/Container";
 import { ComicsDetailed } from "../components/ComicsDetailed/ComicsDetailed"
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom";
 
 export const ComicsDetailedPage = () => {
 

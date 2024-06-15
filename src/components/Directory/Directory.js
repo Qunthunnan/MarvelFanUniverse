@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, memo, useMemo } from "react";
-import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
+import { NavLink } from "react-router-dom";
 import { vars } from "../style/Vars";
 import { DirectorySpan } from "./stylesDirectory";
 
@@ -20,7 +20,7 @@ export const Directory = memo( ({ list }) => {
             return (
                 <Fragment key={i + 0.5}>
                     <DirectorySpan>
-                        <NavLink exact activeStyle={{color: vars.marvelRed}} to={item.directoryLink}> {item.directoryName}  </NavLink>
+                        <NavLink end style={({isActive}) => ({ color: isActive ? vars.marvelRed : '#000'})} to={item.directoryLink}> {item.directoryName}  </NavLink>
                     </DirectorySpan>
                     {slash}
                 </Fragment>

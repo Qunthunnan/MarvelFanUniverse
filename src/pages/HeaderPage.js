@@ -3,6 +3,7 @@ import { H1 } from "../components/style/H1";
 import { Container } from "../components/style/Container";
 import { Directory } from "../components/Directory/Directory"
 import { Header } from "../components/Directory/stylesDirectory"
+import { Outlet, Link } from "react-router-dom";
 
 export const HeaderPage = () => {
     const [directories, setDirectories] = useState([ {
@@ -15,11 +16,14 @@ export const HeaderPage = () => {
     } ]);
 
     return (
-        <Container>
-            <Header>
-                <H1><span>Marvel</span> Fan Universe</H1>
-                <Directory list={ directories }/>
-            </Header>
-        </Container>
+        <>
+            <Container>
+                <Header>
+                    <H1><Link to="/"><span>Marvel</span> Fan Universe</Link></H1>
+                    <Directory list={ directories }/>
+                </Header>
+            </Container>
+            <Outlet/>
+        </>
     )
 }
