@@ -23,10 +23,10 @@ export function App () {
 						<Route index element= { <ComicsListPage /> } />
 					</Route>
 					<Route path="comics/:id" element= { <ComicsBanerPage/> } > 
-						<Route index element= { <SingleEntityPage Component={ ComicsDetailed }/> } />
+						<Route index element= { <SingleEntityPage  type={'comics'} Component={ ComicsDetailed }/> } />
 					</Route>
 					<Route path="characters/:id" element= { <ComicsBanerPage/> } >
-						<Route index element= { <SingleEntityPage Component={ CharacterDetailed }/> } />
+						<Route index element= { <SingleEntityPage type={'character'} Component={ CharacterDetailed }/> } />
 					</Route>
 
 					<Route path="*" element= { <NotFoundPage/> }/>

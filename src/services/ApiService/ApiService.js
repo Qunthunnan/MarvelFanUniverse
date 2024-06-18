@@ -93,7 +93,6 @@ export function useMarvelService (startLoading = true) {
             pageCount: data.pageCount,
             prices: data.prices,
             thumbnail: data.thumbnail,
-            textObjects: data.textObjects,
             urls: data.urls,
         }
     }

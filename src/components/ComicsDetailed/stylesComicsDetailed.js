@@ -42,8 +42,8 @@ const DetailedWrapper = styled.section`
             }
         }
         img {
-            height: unset;
-            width: unset;
+            height: 450px;
+            width: 293px;
         }
     }
 

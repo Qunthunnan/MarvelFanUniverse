@@ -18,6 +18,10 @@ const Button = styled.a`
     width: ${ ({width}) => (width ? width : '101px')  };
     margin: ${ ({margin}) => (margin ? margin : '0')  };
     background-color: ${ ({color}) => (color ? color : vars.marvelRed)   };
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
     clip-path: polygon(11% 0, 100% 0, 100% 75%, 89% 100%, 25% 100%, 0 100%, 0 28%);
     &:focus {
         outline-width: 4px;

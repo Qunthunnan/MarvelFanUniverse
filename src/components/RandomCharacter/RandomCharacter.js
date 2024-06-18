@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, memo, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import React from "react";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 import { Button } from "../style/Button";
@@ -7,16 +7,16 @@ import { vars } from "../style/Vars";
 import { getRandNum } from "../../utils/randomValues";
 import { setContent } from "../../utils/setContent";
 import { isFindThumbnail } from "../../utils/isFindThumbnail";
+import { Link } from "react-router-dom";
 
 const View = ({character}) => {
-    let { name, description, thumbnail, urls } = character;
+    let { name, description, thumbnail, urls,id } = character;
 
     if (description.length > 188)
         description = description.slice(0, 188) + '...';
 
     if(!description || description.length === 0) 
-        description = <>The data source does not have detailed information about this character. Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>
-
+        description = <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>
 
     return (
         <>
@@ -27,8 +27,8 @@ const View = ({character}) => {
                     <p>{description}</p>
                 </div>
                 <ButtonsWrapper>
-                    <Button target="blank" href={urls[0].url} >HOMEPAGE</Button>
-                    <Button target="blank" href={urls[1].url} color={vars.marvelGray}>WIKI</Button>
+                    <Button ><Link to={`../characters/${id}`}>HOMEPAGE</Link></Button>
+                    <Button target="blank" href={urls[1].url} color={vars.marvelGray}>Marvel WIKI</Button>
                 </ButtonsWrapper>
             </InfoWrapper>
         </>

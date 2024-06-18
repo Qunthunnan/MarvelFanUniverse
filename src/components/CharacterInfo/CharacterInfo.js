@@ -5,6 +5,7 @@ import { Button } from "../style/Button";
 import { CloseBtn } from "../style/CloseBtn";
 import { InfoWrapper, HeadInfo, SideHead, SkeletonSvg } from "./stylesCharacterInfo";
 import { parseComicsId } from "../../utils/parseComicsId";
+import { Link } from "react-router-dom";
 
 export const CharacterInfo = memo(({ character, onCloseMobileCharacterInfo }) => {
     
@@ -39,9 +40,18 @@ const EmptyCharacter = () => {
 }
 
 const ContentWithCharacter = ({character: {name, thumbnail, description, id, urls, comics:{items}}}) => {
-    const comicsList = items.length ? <ul>{items.map( (comics, i) => ( <li key={i}><a href={`/comics/${ parseComicsId(comics.resourceURI) }`}>{comics.name}</a></li> ))}</ul> : <><p>The data source does not have detailed information about comicses with this character.</p><p>
-    Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p></> ;
-    const descriptionBlock = description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>;
+    const comicsList = items.length ? 
+        <ul>{   items.map( (comics, i) => (
+             <li key={i}>
+                <Link to={`../comics/${ parseComicsId(comics.resourceURI) }`}>{comics.name}</Link>
+            </li> ))}
+        </ul> 
+    : <>
+        <p>The data source does not have detailed information about comicses with this character.</p>
+        <p>Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p>
+    </> ;
+
+    const descriptionBlock = description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>;
     const thumbnailPos = isFindThumbnail(thumbnail);
     return (
         <>
@@ -50,8 +60,8 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, id, url
                 <SideHead>
                     <h2>{name}</h2>
                     <div>
-                        <Button href={`/characters/${id}`}>HOMEPAGE</Button>
-                        <Button href={urls[1].url} color={vars.marvelGray}>WIKI</Button>
+                        <Button><Link to={`../characters/${id}`}>HOMEPAGE</Link></Button>
+                        <Button target="_blank" href={urls[1].url} color={vars.marvelGray}>Marvel WIKI</Button>
                     </div>
                 </SideHead>
             </HeadInfo>
