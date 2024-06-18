@@ -4,27 +4,28 @@ import { List } from "./stylesCharacterList";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 import { InfoList } from "../InfoList/InfoList";
 
-export const CharactersList = memo(({ charactersMaxCount, onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter, searchName }) => {
+export const CharactersList = memo(({ onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter, searchName }) => {
    
-    const { loading, error, getCharacters, searchCharactersByName } = useMarvelService ();
-    const { loading: loadingMore, error: loadingMoreError, getCharacters: getAddCharacters, searchCharactersByName: searchMore} = useMarvelService (false);
+    const { process, setProcess, getCharacters, getCharactersCount, searchCharactersByName } = useMarvelService ();
+    const { process: downloadProcess, setProcess: setDownloadProcess, getCharacters: getAddCharacters, searchCharactersByName: searchMore} = useMarvelService ();
 
     return (
-        <InfoList maxCount = {charactersMaxCount}
+        <InfoList
             targetsCount = {{ small: 8, big: 9 }}
             onOpenItem = { onOpenCharacter } 
             onCloseItemMobile = { onCloseMobileCharacterInfo }
             activeItem = { activeCharacter }
             searchValue = { searchName } 
+            getMaxCount = { getCharactersCount }
             getItems = { getCharacters }
             getAddItems = { getAddCharacters }
             searchItems = { searchCharactersByName }
             searchMore = { searchMore }
-            loading = { loading }
-            loadingMore = { loadingMore }
-            error = { error }
-            loadingMoreError = {loadingMoreError}
+            process = { process }
+            setProcess = { setProcess }
+            downloadProcess = { downloadProcess }
+            setDownloadProcess = { setDownloadProcess }
             ItemComponent = { CharacterCard }
-            ListStyleComponent = { List }/>
+            ListStyleComponent = { List } />
     );
 });

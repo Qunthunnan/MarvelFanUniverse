@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from "../cookie/cookie";
+import { getCookie, setCookie } from "../../utils/cookie";
 import { useHttp } from "../../hooks/http.hook";
 
 export function useMarvelService (startLoading = true) {
@@ -8,7 +8,7 @@ export function useMarvelService (startLoading = true) {
     const charactersCount = +getCookie('charactersCount');
     const comicsCount = +getCookie('comicsCount');
 
-    const { loading, setLoading, error, setError, getResource} = useHttp(startLoading);
+    const { loading, setLoading, error, process, setError, setProcess, getResource} = useHttp(startLoading);
 
     async function getCharacters(count=9, offset=0) {
         const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${count}&offset=${offset}&orderBy=-modified`);
@@ -98,5 +98,5 @@ export function useMarvelService (startLoading = true) {
         }
     }
 
-    return { loading, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle, getComicsCount}
+    return { loading, setProcess, process, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle, getComicsCount}
 }

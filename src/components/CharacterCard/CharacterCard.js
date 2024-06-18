@@ -1,5 +1,6 @@
 import { useEffect, memo } from 'react';
 import { CharacterItem, CardBg } from './stylesCharacterCard';
+import { isFindThumbnail } from '../../utils/isFindThumbnail';
 
 export const CharacterCard = memo(({ item: { name, thumbnail }, onOpen, isActive }) => {
 
@@ -21,10 +22,6 @@ export const CharacterCard = memo(({ item: { name, thumbnail }, onOpen, isActive
         return name;
     }
 
-    function isFindThumbnail(thumbnail) {
-        return !(thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" || thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/f/60/4c002e0305708")
-    }
-
     function onFocusClick (e) {
         if(e.key === 'Enter' || e.key === ' ') {
             onOpen();
@@ -33,7 +30,7 @@ export const CharacterCard = memo(({ item: { name, thumbnail }, onOpen, isActive
 
     return(
         <CharacterItem onKeyDown={onFocusClick} tabIndex={0} onClick={ onOpen } title={name} $active={isActive}>
-            <img height={200} width={200} style={{objectFit: isFindThumbnail(thumbnail) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
+            <img height={200} width={200} style={{objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
             <CardBg>
                 <h2>{cutName(name)}</h2>
             </CardBg>

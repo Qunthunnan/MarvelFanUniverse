@@ -2,34 +2,40 @@ import { useEffect, useRef, useState, memo } from "react";
 import { Loader } from "../Loader/Loader";
 import { Section, WideButtonBottom } from "../CharactersList/stylesCharacterList";
 import Error from "../Error/Error";
-import { getRandNum } from "../../services/randomValues/randomValues";
+import { getRandNum } from "../../utils/randomValues";
 import { vars } from "../style/Vars";
+import { setContent } from "../../utils/setContent";
 
 
-export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, targetsCount: { small, big }, onOpenItem, onCloseItemMobile, activeItem, searchValue, getItems, getAddItems, searchItems, searchMore, loading, loadingMore, error, loadingMoreError }) => {
+export const InfoList = ({ 
+    ItemComponent, 
+    ListStyleComponent,
+    targetsCount: { small, big }, 
+    onOpenItem, 
+    onCloseItemMobile, 
+    activeItem, 
+    searchValue, 
+    getMaxCount,
+    getItems, 
+    getAddItems, 
+    searchItems, 
+    searchMore, 
+    process,
+    setProcess,
+    downloadProcess,
+    setDownloadProcess }) => {
         
-    const [items, setItems] = useState(null);
-    const [itemsLimitReached, setItemsLimitReached] = useState(false);
+    const [items, setItems] = useState();
     
     let offset = useRef(0);
+    let maxCount = useRef();
     const itemsRendered = items ? items.length : 0;
     let searchCount = useRef();
 
-    const listItems = items && !(error || loading) ? <View 
-    onOpenItem={onOpenItem} 
-    onCloseItemMobile = {onCloseItemMobile} 
-    activeItem = { activeItem } 
-    ItemComponent = { ItemComponent }
-    items = { items }/> : null;
-
-    const errorImage = error ? <><Error/><p>A system error has occurred, please try again later</p></>  : null;
-    const loader = loading ? <Loader/> : null;
-    const LoadMoreLoading = loadingMore ? <Loader/> : null;
-    const LoadMoreError = loadingMoreError ? <><Error/><p>A system error has occurred, please try again later</p></> : null;
-    const LoadMoreButtons = !(loadingMore || loadingMoreError || itemsLimitReached || itemsRendered === 0) ? <WideButtonBottom onClick={ searchValue && searchValue !== '' ? onLoadMoreSearchResults : onLoadMore}>LOAD MORE</WideButtonBottom> : null;
-
     useEffect(() => {
-        loadItems();
+        getMaxCount()
+        .then(result => maxCount.current = result)
+        .then(loadItems)
         console.log('itemsList mounted');
     }, []);
 
@@ -50,7 +56,13 @@ export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, tar
         offset.current = getRandomItemsOffset();
 
        getItems(count, offset.current)
-        .then(setItems);
+        .then(result => {
+            setItems(result);
+        })
+        .then(() => {
+            setProcess('view');
+            setDownloadProcess('view');
+        });
     }
 
     const searchItem = () => {
@@ -58,15 +70,18 @@ export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, tar
         offset.current = 0;
 
        searchItems(searchValue, count, offset.current)
-        .then(result => {
+       .then(result => {
             searchCount.current = result.count; 
-            if(searchCount.current <= count)
-                setItemsLimitReached(true);
-            else
-                setItemsLimitReached(false);
-            
             setItems(result.data);
-        });
+        })
+       .then(()=> {
+            setProcess('view');
+            if(searchCount.current <= count) {
+                setDownloadProcess('unmount');
+            } else {
+                setDownloadProcess('view');
+            }
+       });
     }
     
     const getTargetCount = () => {
@@ -74,22 +89,22 @@ export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, tar
     }
 
     const getRandomItemsOffset = () => {
-        return getRandNum(1, (maxCount - 1) - (getTargetCount() * 5));
+        return getRandNum(1, (maxCount.current - 1) - (getTargetCount() * 5));
     }
 
     function onLoadMore () {
         const count = getTargetCount();
 
-        if(itemsRendered + count >= maxCount) {
-            setItemsLimitReached(true);
+        if(itemsRendered + count >= maxCount.current) {
             getAddItems(count, (offset.current + count))
-            .then(addItems)
+            .then((result) => { addItems(result) })
+            .then(() => {setDownloadProcess('unmount')});
 
             return undefined;
         }
 
-        if(offset.current + (count * 2) > maxCount) {
-            const diff = (maxCount) - (offset.current + count);
+        if(offset.current + (count * 2) > maxCount.current) {
+            const diff = (maxCount.current) - (offset.current + count);
             let part1 = [];
 
             getAddItems((diff + 1), offset.current + count)
@@ -101,13 +116,15 @@ export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, tar
             .then(data => {
                 offset.current -= diff;
                 addItemsFromParts(part1, data);
-            });
+            })
+            .then(() => { setDownloadProcess('view') });
         }
         else {
             offset.current += count;
 
             getAddItems(count, offset.current)
-            .then(addItems)
+            .then(result => { addItems(result) })
+            .then(() => { setDownloadProcess('view')});
         }
     }
 
@@ -115,9 +132,9 @@ export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, tar
         const count = getTargetCount();
 
         if((itemsRendered + count) >= searchCount.current) {
-            setItemsLimitReached(true);
             searchMore(searchValue, count, (offset.current + count))
-            .then(result => {addItems(result.data)});
+            .then(result => { addItems(result.data) })
+            .then(() => { setDownloadProcess('unmount')});
 
             return undefined;
         }
@@ -125,31 +142,33 @@ export const InfoList = memo(({ ItemComponent, ListStyleComponent, maxCount, tar
         offset.current += count;
 
         searchMore(searchValue, count, offset.current)
-        .then(result => {addItems(result.data)});
-       
+        .then(result => { addItems(result.data) })
+        .then(() => { setDownloadProcess('view') });
     }
 
     const addItems = (addItems) => {
-        setItems(()=> ([...items, ...addItems]));
+        setItems(() => ([...items, ...addItems]));
     }
 
     const addItemsFromParts = (part1, part2) => {
-        setItems(()=>([...items, ...part1, ...part2]));
+        setItems(() => ([...items, ...part1, ...part2]));
     }
 
     return (
         <Section>
             <ListStyleComponent>
-                {errorImage}
-                {loader}
-                {listItems}
+                {setContent(process, View, {
+                    items: items,
+                    onOpenItem: onOpenItem,
+                    onCloseItemMobile: onCloseItemMobile,
+                    activeItem: activeItem,
+                    ItemComponent: ItemComponent
+                })}
             </ListStyleComponent>
-            {LoadMoreLoading}
-            {LoadMoreError}
-            {LoadMoreButtons}
+            { setContent(downloadProcess, WideButtonBottom, {children: 'Load more', onClick: searchValue && searchValue !== '' ? onLoadMoreSearchResults : onLoadMore}) }
         </Section>
     );
-});
+}
 
 
 

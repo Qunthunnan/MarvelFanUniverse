@@ -42,11 +42,16 @@ const InfoWrapper = styled(Aside)`
             line-height: 24px;
             font-weight: 400;
             box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
             margin: 0 0 10px 0;
-            padding: 0 10px;
             &:last-child {
                 margin: 0;
+            }
+            a {
+                display: block;
+                height: 100%;
+                color: black;
+                text-decoration: none;
+                padding: 0 10px;
             }
         }
     }

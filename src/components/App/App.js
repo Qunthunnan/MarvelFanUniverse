@@ -6,9 +6,10 @@ import { ComicsBanerPage } from "../../pages/ComicsBanerPage";
 import { HeaderPage } from "../../pages/HeaderPage";
 import { MainPage } from "../../pages/MainPage";
 import { ErrorPage } from "../../pages/ErrorPage";
-import { ComicsDetailedPage } from "../../pages/ComicsDetailedPage";
-import { CharacterDetailedPage } from "../../pages/CharacterDetailedPage";
 import { NotFoundPage } from "../../pages/NotFoundPage";
+import { CharacterDetailed } from "../CharacterDetailed/CharacterDetailed";
+import { ComicsDetailed } from "../ComicsDetailed/ComicsDetailed";
+import { SingleEntityPage } from "../../pages/SinglePage";
 
 export function App () {
 	return (
@@ -21,11 +22,11 @@ export function App () {
 					<Route path="comics" element= { <ComicsBanerPage/> } >
 						<Route index element= { <ComicsListPage /> } />
 					</Route>
-					<Route path="comics/:comics" element= { <ComicsBanerPage/> } > 
-						<Route index element= { <ComicsDetailedPage/> } />
+					<Route path="comics/:id" element= { <ComicsBanerPage/> } > 
+						<Route index element= { <SingleEntityPage Component={ ComicsDetailed }/> } />
 					</Route>
-					<Route path="characters/:character" element= { <ComicsBanerPage/> } >
-						<Route index element= { <CharacterDetailedPage/> } />
+					<Route path="characters/:id" element= { <ComicsBanerPage/> } >
+						<Route index element= { <SingleEntityPage Component={ CharacterDetailed }/> } />
 					</Route>
 
 					<Route path="*" element= { <NotFoundPage/> }/>

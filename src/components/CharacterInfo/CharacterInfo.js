@@ -4,6 +4,7 @@ import { vars } from "../style/Vars";
 import { Button } from "../style/Button";
 import { CloseBtn } from "../style/CloseBtn";
 import { InfoWrapper, HeadInfo, SideHead, SkeletonSvg } from "./stylesCharacterInfo";
+import { parseComicsId } from "../../utils/parseComicsId";
 
 export const CharacterInfo = memo(({ character, onCloseMobileCharacterInfo }) => {
     
@@ -37,8 +38,8 @@ const EmptyCharacter = () => {
     );
 }
 
-const ContentWithCharacter = ({character: {name, thumbnail, description, urls, comics:{items}}}) => {
-    const comicsList = items.length ? <ul>{items.map( (comics, i) => ( <li key={i}>{comics.name}</li> ))}</ul> : <><p>The data source does not have detailed information about comicses with this character.</p><p>
+const ContentWithCharacter = ({character: {name, thumbnail, description, id, urls, comics:{items}}}) => {
+    const comicsList = items.length ? <ul>{items.map( (comics, i) => ( <li key={i}><a href={`/comics/${ parseComicsId(comics.resourceURI) }`}>{comics.name}</a></li> ))}</ul> : <><p>The data source does not have detailed information about comicses with this character.</p><p>
     Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p></> ;
     const descriptionBlock = description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>;
     const thumbnailPos = isFindThumbnail(thumbnail);
@@ -49,7 +50,7 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, urls, c
                 <SideHead>
                     <h2>{name}</h2>
                     <div>
-                        <Button href={urls[0].url}>HOMEPAGE</Button>
+                        <Button href={`/characters/${id}`}>HOMEPAGE</Button>
                         <Button href={urls[1].url} color={vars.marvelGray}>WIKI</Button>
                     </div>
                 </SideHead>

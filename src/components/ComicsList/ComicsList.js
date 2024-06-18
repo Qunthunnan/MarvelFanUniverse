@@ -6,36 +6,28 @@ import { useMarvelService } from "../../services/ApiService/ApiService";
 
 export const ComicsList = memo(() => {
     
-    const { loading, error, getComicses, getComicsCount, searchComicsesByTitle } = useMarvelService();
-    const { loading: loadingMore, error: loadingMoreError, getComicses: getAddComicses, searchComicsesByTitle: searchMore} = useMarvelService (false);
-
-    const [comicsCount, setComicsCount] = useState();
-
-    useEffect(() => {
-        getComicsCount()
-        .then(setComicsCount);
-    }, [])
+    const { process, setProcess, getComicses, getComicsCount, searchComicsesByTitle } = useMarvelService();
+    const { process: downloadProcess, setProcess: setDownloadProcess, getComicses: getAddComicses, searchComicsesByTitle: searchMore} = useMarvelService ();
 
     return (
-        comicsCount ? (    
         <section>
             <InfoList
-                ItemComponent = { ComicsCard }
-                ListStyleComponent = { List }
-                maxCount = { comicsCount }
                 targetsCount = { {small: 8, big: 8} }
                 onOpenItem = { () => {} }
                 onCloseItemMobile = { () => {} }
                 activeItem = { null }
                 searchValue = { null }
+                getMaxCount = { getComicsCount }
                 getItems = { getComicses }
                 getAddItems = { getAddComicses }
                 searchItems = { searchComicsesByTitle }
                 searchMore = { searchMore }
-                loading = { loading }
-                loadingMore = { loadingMore }
-                error = { error }
-                loadingMoreError = { loadingMoreError }/>
-        </section>) : null
+                process = { process }
+                setProcess = { setProcess }
+                downloadProcess = { downloadProcess }
+                setDownloadProcess = { setDownloadProcess } 
+                ItemComponent = { ComicsCard }
+                ListStyleComponent = { List }/>
+        </section>
     );
 });
