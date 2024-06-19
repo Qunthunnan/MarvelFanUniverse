@@ -1,10 +1,10 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { ComicsCard } from "../ComicsCard/ComicsCard";
 import { List } from "./stylesComicsList";
 import { InfoList } from "../InfoList/InfoList";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 
-export const ComicsList = memo(() => {
+export const ComicsList = memo(({searchValue}) => {
     
     const { process, setProcess, getComicses, getComicsCount, searchComicsesByTitle } = useMarvelService();
     const { process: downloadProcess, setProcess: setDownloadProcess, getComicses: getAddComicses, searchComicsesByTitle: searchMore} = useMarvelService ();
@@ -16,7 +16,7 @@ export const ComicsList = memo(() => {
                 onOpenItem = { () => {} }
                 onCloseItemMobile = { () => {} }
                 activeItem = { null }
-                searchValue = { null }
+                searchValue = { searchValue }
                 getMaxCount = { getComicsCount }
                 getItems = { getComicses }
                 getAddItems = { getAddComicses }

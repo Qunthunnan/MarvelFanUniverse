@@ -5,7 +5,7 @@ import { RandomCharacter } from "../components/RandomCharacter/RandomCharacter";
 import { MainDiv, MobileMenuButtons, CharactersContentWrapper, AsideWrapper } from "../components/App/stylesApp";
 import { CharactersList } from "../components/CharactersList/CharactersList";
 import { CharacterInfo } from "../components/CharacterInfo/CharacterInfo";
-import { SearchCharacter } from "../components/SearchCharacter/SearchCharacter";
+import { SearchCharacters } from "../components/SearchItems/SearchCharacters";
 
 export const MainPage = () => {
     const [mobileSearchShowed, setMobileSearchShowed] = useState(false);
@@ -59,7 +59,7 @@ export const MainPage = () => {
 								character={ activeCharacter }
 								onCloseMobileCharacterInfo={onCloseMobileCharacterInfo}/>
 						</ErrorBoundary>
-						<SearchCharacter mobileSearchShowed={ mobileSearchShowed } 
+						<SearchCharacters mobileSearchShowed={ mobileSearchShowed } 
 						onSwichSearch={ onSwichSearch } 
 						onSearch={ onSearch } />
 					</AsideWrapper>
