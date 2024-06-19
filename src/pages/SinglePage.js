@@ -5,14 +5,14 @@ import { useMarvelService } from "../services/ApiService/ApiService";
 
 export const SingleEntityPage = ({ Component, type }) => {
     const { id } = useParams();
-    const { getCharacterById, getComicsById, process, setProcess } = useMarvelService();
+    const { getCharacterById, getComicsByCharacterId, getComicsById, getCharactersByComicsId, process, setProcess } = useMarvelService();
 
     function setGettingType(type) {
         switch(type) {
             case 'character':
-                return getCharacterById;
+                return [getCharacterById, getComicsByCharacterId];
             case 'comics':
-                return getComicsById;
+                return [getComicsById, getCharactersByComicsId];
             default:
                 throw new Error(`Unexpected type ${type} of getData in SingleEntityPage`)
         }

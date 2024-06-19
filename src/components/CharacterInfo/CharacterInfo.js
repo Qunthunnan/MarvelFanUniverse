@@ -5,6 +5,7 @@ import { Button } from "../style/Button";
 import { CloseBtn } from "../style/CloseBtn";
 import { InfoWrapper, HeadInfo, SideHead, SkeletonSvg } from "./stylesCharacterInfo";
 import { parseComicsId } from "../../utils/parseComicsId";
+import { ItemsList } from "./stylesCharacterInfo";
 import { Link } from "react-router-dom";
 
 export const CharacterInfo = memo(({ character, onCloseMobileCharacterInfo }) => {
@@ -23,7 +24,6 @@ export const CharacterInfo = memo(({ character, onCloseMobileCharacterInfo }) =>
     )
 });
 
-
 const EmptyCharacter = () => {
     return (
         <>
@@ -41,11 +41,11 @@ const EmptyCharacter = () => {
 
 const ContentWithCharacter = ({character: {name, thumbnail, description, id, urls, comics:{items}}}) => {
     const comicsList = items.length ? 
-        <ul>{   items.map( (comics, i) => (
+        <ItemsList>{   items.map( (comics, i) => (
              <li key={i}>
                 <Link to={`../comics/${ parseComicsId(comics.resourceURI) }`}>{comics.name}</Link>
             </li> ))}
-        </ul> 
+        </ItemsList> 
     : <>
         <p>The data source does not have detailed information about comicses with this character.</p>
         <p>Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p>

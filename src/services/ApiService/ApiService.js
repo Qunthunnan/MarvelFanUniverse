@@ -74,6 +74,16 @@ export function useMarvelService (startLoading = true) {
         return _transformComics(result.data.results[0]);
     }
 
+    async function getComicsByCharacterId(id) {
+        const result = await getResource(`${_baseHttp}/characters/${id}/comics?orderBy=-onsaleDate&apikey=${_apiKey}`);
+        return result.data.results.map(_transformComics);
+    }
+
+    async function getCharactersByComicsId(id) {
+        const result = await getResource(`${_baseHttp}/comics/${id}/characters?apikey=${_apiKey}`);
+        return result.data.results.map(_transformCharacter);
+    }
+
     function _transformCharacter(data) {
         return {
             id: data.id,
@@ -97,5 +107,5 @@ export function useMarvelService (startLoading = true) {
         }
     }
 
-    return { loading, setProcess, process, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle, getComicsCount}
+    return { loading, setProcess, process, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle, getComicsCount, getCharactersByComicsId, getComicsByCharacterId }
 }

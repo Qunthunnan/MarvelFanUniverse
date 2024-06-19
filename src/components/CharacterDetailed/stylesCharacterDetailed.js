@@ -60,6 +60,11 @@ const TextWrapper = styled.div`
         font-weight: 700;
         margin: 0;
     }
+    h3 {
+        margin: 26px 0 0 0;
+        font-size: 20px;
+        font-weight: 700;
+    }
     p {
         line-height: 22px;
         margin: 26px 0 0 0;
