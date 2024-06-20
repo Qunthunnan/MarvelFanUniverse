@@ -1,17 +1,27 @@
-import { Component } from "react";
+import { Link } from "react-router-dom";
+import { isFindThumbnail } from "../../utils/isFindThumbnail";
 import { ComicsItem } from "./stylesComicsCard";
 
-export class ComicsCard extends Component {
-    render () {
-        const { image, name, price } = this.props;
-        const priceItem = price ? <span>{price}$</span> : <span>NOT AVAILABLE</span>;
+export function ComicsCard ({item: {thumbnail, id, title, prices}}) {
+    let [printedPrice, digitalPrice] = prices;
+    const isNoPrice = !(printedPrice?.price || digitalPrice?.price);
+    printedPrice = printedPrice?.price ? `PE: ${printedPrice?.price} $ ` : '';
+    digitalPrice = digitalPrice?.price ? `DE: ${digitalPrice?.price} $` : '';
 
-        return ( 
-        <ComicsItem>
-            <img height={346} width={225} src={image} alt={'comics' + name}  />
-            <h3>{name}</h3>
+    const priceItem = (
+        <span>{isNoPrice ? 'NOT AVAILABLE' : `${printedPrice} ${digitalPrice}` }</span>
+    )
+
+    return ( 
+    <ComicsItem>
+        <Link to={`${id}`}>
+            <img height={346} width={225} style={{ 
+                objectFit: isFindThumbnail(thumbnail.path) ? 'inherit' : 'cover',
+                objectPosition: isFindThumbnail(thumbnail.path) ? 'inherit' : 'left'
+            }} src={`${thumbnail.path}.${thumbnail.extension}`} alt={'comics' + title}  />
+            <h3>{title}</h3>
             {priceItem}
-        </ComicsItem>   
-        );
-    }
+        </Link>
+    </ComicsItem>
+    );
 }

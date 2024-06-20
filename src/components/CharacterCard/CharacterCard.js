@@ -1,49 +1,39 @@
-import { Component, act } from "react";
+import { useEffect, memo } from 'react';
 import { CharacterItem, CardBg } from './stylesCharacterCard';
+import { isFindThumbnail } from '../../utils/isFindThumbnail';
 
-export class CharacterCard extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        const { character: { name, thumbnail }, onOpenCharacter, isActive } = this.props;
+export const CharacterCard = memo(({ item: { name, thumbnail }, onOpen, isActive }) => {
 
-        return(
-            <CharacterItem onKeyDown={this.onFocusClick} tabIndex={0} onClick={ onOpenCharacter } title={name} $active={isActive}>
-                <img height={200} width={200} style={{objectFit: this.isFindThumbnail(thumbnail) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
-                <CardBg>
-                    <h2>{this.cutName(name)}</h2>
-                </CardBg>
-            </CharacterItem>
-        )
-    }
+    useEffect(() => {
+        console.log(`character card ${name} render`);
+    });
 
-    cutName(name) {
+    useEffect(() => {
+        console.log(`character card ${name} mounted`);
+        return () => {
+            console.log(`character card ${name} unmounted`);
+        }
+    }, []);
+
+    function cutName(name) {
         if(name.length >= 15) {
             return name.slice(0, 15) + '...';
         }
         return name;
     }
 
-    isFindThumbnail(thumbnail) {
-        let findThumbNail = true;
-        if(thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" || thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/f/60/4c002e0305708")
-            findThumbNail = false;
-
-        return findThumbNail;
-    }
-
-    onFocusClick = (e) => {
+    function onFocusClick (e) {
         if(e.key === 'Enter' || e.key === ' ') {
-            this.props.onOpenCharacter();
+            onOpen();
         }
     }
 
-    onCloseMobileCharacterInfo = () => {
-        const { active } = this.state;
-        if ( active )
-            this.setState({
-                active: false
-        });
-    }
-}
+    return(
+        <CharacterItem onKeyDown={onFocusClick} tabIndex={0} onClick={ onOpen } title={name} $active={isActive}>
+            <img height={200} width={200} style={{objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
+            <CardBg>
+                <h2>{cutName(name)}</h2>
+            </CardBg>
+        </CharacterItem>
+    )
+});

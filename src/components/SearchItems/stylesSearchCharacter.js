@@ -39,10 +39,10 @@ column-gap: 24px;
 `;
 
 const Label = styled.label`
-display: ${({result}) => ( (result === true || result === false) ? 'block' : 'none' )};
+margin: 10px 0 0 0;
 font-size: 18px;
 font-weight: 700;
-color: ${({result}) => ( result  ? '#03710E' : vars.marvelRed )};
+color: ${vars.marvelRed};
 `;
 
 export {SearchWriper, InputWrapper, Label}; 

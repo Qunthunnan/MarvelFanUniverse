@@ -5,6 +5,9 @@ const ComicsItem = styled.li`
     @media (min-width: 320px) {
         display: block;
         width: 140px;
+        a {
+            text-decoration: none;
+        }
         img {
             width: 140px;
             height: 215px;
@@ -16,11 +19,14 @@ const ComicsItem = styled.li`
             margin: 10px 0 0 0;
             font-size: 14px;
             font-weight: 700;
+            color: #000;
+            text-decoration: none;
         }
         span {
             margin: 5px 0 0 0;
             font-size: 14px;
             font-weight: 700;
+            text-decoration: none;
             color: ${ vars.marvelGray }
         }
     }

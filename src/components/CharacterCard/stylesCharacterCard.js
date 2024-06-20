@@ -10,9 +10,9 @@ const CharacterItem = styled.li`
                 flex-direction: column;
                 box-shadow: ${({$active}) => ( $active ? ('0px 3px 15px 5px' + vars.marvelRed + '90')  : '0px 3px 15px 5px rgba(0, 0, 0, 0.3)')};
                 transform: ${({$active}) => ( $active ? ('translateY(-5px)')  : 'unset')};
-                &:focus{
-                    outline: 1px solid black;
-                    box-shadow: 0px 0px 5px 4px ${vars.marvelRed};
+                transition: all 0.5s;
+                &:focus {
+                    box-shadow: 0px 3px 15px 5px ${vars.marvelRed}90;
                 }
                 img {
                     object-fit: cover;

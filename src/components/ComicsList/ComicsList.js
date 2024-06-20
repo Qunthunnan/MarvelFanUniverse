@@ -1,21 +1,33 @@
-import { Component } from "react";
-
+import { memo, useCallback, useEffect, useState } from "react";
 import { ComicsCard } from "../ComicsCard/ComicsCard";
-import { WideButton } from "../style/WideButton";
 import { List } from "./stylesComicsList";
+import { InfoList } from "../InfoList/InfoList";
+import { useMarvelService } from "../../services/ApiService/ApiService";
 
-export class ComicsList extends Component {
-    render() {
-        const { comicses } = this.props;
+export const ComicsList = memo(({searchValue}) => {
+    
+    const { process, setProcess, getComicses, getComicsCount, searchComicsesByTitle } = useMarvelService();
+    const { process: downloadProcess, setProcess: setDownloadProcess, getComicses: getAddComicses, searchComicsesByTitle: searchMore} = useMarvelService ();
 
-        const comicsesListItems = comicses.map(({name, image, price}, i) => ( <ComicsCard key={i} name={ name } image={ image } price={price}></ComicsCard> ));
-        return (
+    return (
         <section>
-            <List>
-                {[...comicsesListItems]}
-            </List>
-            <WideButton margin={'45px auto 0'}>LOAD MORE</WideButton>
+            <InfoList
+                targetsCount = { {small: 8, big: 8} }
+                onOpenItem = { () => {} }
+                onCloseItemMobile = { () => {} }
+                activeItem = { null }
+                searchValue = { searchValue }
+                getMaxCount = { getComicsCount }
+                getItems = { getComicses }
+                getAddItems = { getAddComicses }
+                searchItems = { searchComicsesByTitle }
+                searchMore = { searchMore }
+                process = { process }
+                setProcess = { setProcess }
+                downloadProcess = { downloadProcess }
+                setDownloadProcess = { setDownloadProcess } 
+                ItemComponent = { ComicsCard }
+                ListStyleComponent = { List }/>
         </section>
-        );
-    }
-}
+    );
+});

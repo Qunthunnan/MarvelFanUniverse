@@ -27,29 +27,6 @@ const InfoWrapper = styled(Aside)`
         font-size: 18px;
         font-weight: 700;
     }
-    ul {
-        margin: 10px 0 0 0;
-        display: flex;
-        flex-direction: column;
-        padding: 0;
-        list-style: none;
-        li {
-            flex: 1;
-            min-height: 24px;
-            max-width: 100%;
-            word-wrap: break-word;
-            font-size: 14px;
-            line-height: 24px;
-            font-weight: 400;
-            box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            margin: 0 0 10px 0;
-            padding: 0 10px;
-            &:last-child {
-                margin: 0;
-            }
-        }
-    }
 }
 
 @media (min-width: 576px) {
@@ -74,8 +51,38 @@ const InfoWrapper = styled(Aside)`
 @media(min-width: 1400px) {
     width: 425px;
 }
-`,
-HeadInfo = styled.div`
+`;
+
+const ItemsList = styled.ul`
+margin: 10px 0 0 0;
+display: flex;
+flex-direction: column;
+padding: 0;
+list-style: none;
+li {
+    flex: 1;
+    min-height: 24px;
+    max-width: 100%;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+    box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.1);
+    margin: 0 0 10px 0;
+    &:last-child {
+        margin: 0;
+    }
+    a {
+        display: block;
+        height: 100%;
+        color: black;
+        text-decoration: none;
+        padding: 0 10px;
+    }
+}
+`;
+
+const HeadInfo = styled.div`
 @media (min-width: 320px) {
     display: flex;
     align-items: center;
@@ -132,4 +139,4 @@ SkeletonSvg = styled.svg`
     width: 100%;
 `;
 
-export { InfoWrapper, HeadInfo, SideHead, SkeletonSvg };
+export { InfoWrapper, ItemsList, HeadInfo, SideHead, SkeletonSvg };

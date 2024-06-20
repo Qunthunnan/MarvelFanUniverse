@@ -2,18 +2,11 @@ import styled from "styled-components";
 import mainBg from "../../resources/imgs/mainBg.png";
 
 const MainDiv = styled.div`
-background: ${({$bg}) => ( $bg ? 'url('+mainBg+')no-repeat right bottom' : '')};
 padding: 0 0 45px;
-header {
-    padding: 52px 0 25px;
-    display: flex;
-    justify-content: space-between;
-}
+
 
 @media (min-width: 576px) {
-    header {
-        padding: 20px 0;
-    }
+    background: ${({$bg}) => ( $bg ? 'url('+mainBg+') no-repeat right bottom' : '')};
 }
 
 @media (max-width: 576px) {
