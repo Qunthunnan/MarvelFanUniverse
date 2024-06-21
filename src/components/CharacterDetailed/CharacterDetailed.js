@@ -56,7 +56,9 @@ function ComicsList ({comicsList, onInput, inputValue, searchError, searchValue,
                           searchItems= { (searchValue, count, offset ) => {
                             return searchComicsByCharacterId(id, searchValue, count, offset );
                           } }
-                          searchMore= { searchMore }
+                          searchMore= { (searchValue, count, offset) => {
+                            return searchMore(id, searchValue, count, offset);
+                          } }
                           process= { process }
                           setProcess= { setProcess }
                           downloadProcess= { addProcess }
