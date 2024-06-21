@@ -6,12 +6,30 @@ export const EntityDetailed = ({id, processTools, Render}) => {
     
     const [data, setData] = useState();
     const [ process, setProcess, [getData, getDataList] ] = processTools;
-    const {name, error, onInput , search} = useSearchItems(onSearch);
+    const {name, error, onInput , search} = useSearchItems({ onSearch });
     const [searchValue, setSearchValue] = useState();
 
     function onSearch (searchValue) {
         setSearchValue(searchValue);
     }
+
+    useEffect(() => {
+        try {
+            const dataObj = {};
+            Object.assign(dataObj, data);           
+            dataObj.searchParams.searchValue = searchValue;
+            setData(dataObj);
+        } catch (error) { }
+    }, [searchValue]);
+
+    useEffect(() => {
+        try {
+            const dataObj = {};
+            Object.assign(dataObj, data);           
+            dataObj.searchParams.inputValue = name;
+            setData(dataObj);
+        } catch (error) { }
+    }, [name]);
 
     useEffect(() => {
         let resultData = {}
@@ -25,11 +43,13 @@ export const EntityDetailed = ({id, processTools, Render}) => {
                 ...resultData,
                 listData: result,
                 searchParams: {
-                    searchValue: name,
+                    searchValue: searchValue,
+                    inputValue: '',
                     searchError: error,
                     onInput,
                     searchAction: search
-                }
+                },
+                id: id
             }
             setData(resultData);
         })

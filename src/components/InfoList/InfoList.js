@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState, memo } from "react";
-import { Loader } from "../Loader/Loader";
 import { Section, WideButtonBottom } from "../CharactersList/stylesCharacterList";
-import Error from "../Error/Error";
 import { getRandNum } from "../../utils/randomValues";
 import { vars } from "../style/Vars";
 import { setContent } from "../../utils/setContent";
@@ -34,17 +32,19 @@ export const InfoList = ({
 
     useEffect(() => {
         getMaxCount()
-        .then(result => maxCount.current = result)
+        .then(result => { 
+            maxCount.current = result 
+        })
         .then(loadItems)
         console.log('itemsList mounted');
     }, []);
 
     useEffect(() => {
-        if (searchValue) {
+        if (searchValue && maxCount.current >= 0) {
             searchItem();
             console.log('itemsList searching');
         }
-        if (searchValue === '') {
+        if (searchValue === ''  && maxCount.current >= 0) {
             loadItems();
         }
     }, [ searchValue ])
@@ -89,6 +89,8 @@ export const InfoList = ({
     }
 
     const getRandomItemsOffset = () => {
+        if(maxCount.current === 0)
+            return 0
         return getRandNum(1, (maxCount.current - 1) - (getTargetCount() * 5));
     }
 

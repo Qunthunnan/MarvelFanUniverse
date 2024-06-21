@@ -9,11 +9,11 @@ export const useSearchItems = ( { onSearch } ) => {
 
     useEffect(() => {
         console.log('render search');
-        clearTimeout(searchTimer.current);
     });
 
     useEffect(() => {
         if(isSearch.current) {
+            clearTimeout(searchTimer.current);
             searchTimer.current = setTimeout(search, 1000);
             console.log(`name changed: ${name}`);
         }

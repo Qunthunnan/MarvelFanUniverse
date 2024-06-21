@@ -84,6 +84,22 @@ export function useMarvelService (startLoading = true) {
         return result.data.results.map(_transformCharacter);
     }
 
+    async function searchComicsByCharacterId(id, title, count, offset) {
+        const result = await getResource(`${_baseHttp}/characters/${id}/comics?orderBy=-onsaleDate&apikey=${_apiKey}&titleStartsWith=${title}&offset=${offset}&limit=${count}`);
+        return {
+            count: result.data.total,
+            data: result.data.results.map(_transformComics)
+        } 
+    }
+
+    async function searchCharactersByComicsId(id, name, count, offset) {
+        const result = await getResource(`${_baseHttp}/comics/${id}/characters?apikey=${_apiKey}&nameStartsWith=${name}&offset=${offset}&limit=${count}`);
+        return {
+            count: result.data.total,
+            data: result.data.results.map(_transformCharacter)
+        } 
+    }
+
     function _transformCharacter(data) {
         return {
             id: data.id,
@@ -107,5 +123,5 @@ export function useMarvelService (startLoading = true) {
         }
     }
 
-    return { loading, setProcess, process, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle, getComicsCount, getCharactersByComicsId, getComicsByCharacterId }
+    return { loading, setProcess, process, setLoading, error, setError, getCharacters, getCharacterById, getCharactersCount, searchCharactersByName, getComicses, getComicsById, searchComicsesByTitle, getComicsCount, getCharactersByComicsId, getComicsByCharacterId, searchCharactersByComicsId, searchComicsByCharacterId }
 }
