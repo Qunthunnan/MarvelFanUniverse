@@ -54,6 +54,28 @@ const DetailedWrapper = styled.section`
 }
 `;
 
+const ImgWrapper = styled.div`
+display: flex;
+flex-direction: column;
+a {
+    margin: 0 0 25px 0;
+}
+@media (min-width: 1200px) {
+    a {
+        display: none;
+    }
+}
+`;
+
+const AsideLink = styled.div`
+@media (min-width: 320px) {
+    display: none;
+}
+@media (min-width: 1200px) {
+    display: block;
+}
+`;
+
 const SearchForm = styled.form`
 @media (min-width: 320px) {
     margin: 20px 0 0 0;
@@ -138,6 +160,11 @@ const TextWrapper = styled.div`
 const ListDataWrapper = styled.div`
 @media (min-width: 320px) {
     margin: 30px 0 0 0;
+    && a {
+        margin: 0;
+        font-weight: 400;
+        font-size: 14px;
+    }
 }
 `;
 
@@ -149,4 +176,4 @@ const LoadMoreBtn = styled(WideButton)`
     }
 }`;
 
-export { TextWrapper, DetailedWrapper, ListDataWrapper, LoadMoreBtn, SearchForm };
+export { TextWrapper, DetailedWrapper, AsideLink, ImgWrapper, ListDataWrapper, LoadMoreBtn, SearchForm };

@@ -13,7 +13,6 @@ export function ComicsCard ({item: {thumbnail, id, title, prices}}) {
     )
 
     return ( 
-    <ComicsItem>
         <Link to={`${id}`}>
             <img height={346} width={225} style={{ 
                 objectFit: isFindThumbnail(thumbnail.path) ? 'inherit' : 'cover',
@@ -22,6 +21,5 @@ export function ComicsCard ({item: {thumbnail, id, title, prices}}) {
             <h3>{title}</h3>
             {priceItem}
         </Link>
-    </ComicsItem>
     );
 }

@@ -26,7 +26,8 @@ export const InfoList = ({
     setProcess,
     downloadProcess,
     setDownloadProcess,
-    dataOnMount }) => {
+    dataOnMount,
+    tabIndexOnLi }) => {
         
     const [items, setItems] = useState();
     
@@ -189,10 +190,10 @@ export const InfoList = ({
                 {setContent(process, View, {
                     items: items,
                     onOpenItem: onOpenItem,
-                    onCloseItemMobile: onCloseItemMobile,
                     activeItem: activeItem,
                     ItemSC: ItemSC,
-                    ItemChildren: ItemChildren
+                    ItemChildren: ItemChildren,
+                    tabIndexOnLi: tabIndexOnLi
                 })}
             </ListSC>
             { setContent(downloadProcess, LoadButtonSC, {children: 'Load more', onClick: searchValue && searchValue !== '' ? onLoadMoreSearchResults : onLoadMore}) }
@@ -203,7 +204,7 @@ export const InfoList = ({
 
 
 
-const View = memo(({items, onOpenItem, onCloseItemMobile, activeItem, ItemSC, ItemChildren}) => {
+const View = memo(({items, onOpenItem, activeItem, ItemSC, ItemChildren, tabIndexOnLi}) => {
     if(items.length === 0) {
         return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Data not found</p>)
     }
@@ -211,9 +212,8 @@ const View = memo(({items, onOpenItem, onCloseItemMobile, activeItem, ItemSC, It
         <>
             { items.map((item, i) => (
                  <ItemSC 
-                    tabindex= {0}
-                    isActive={(activeItem && activeItem.id === item.id) ? true : false} 
-                    onCloseItemMobile={ onCloseItemMobile } 
+                    tabIndex= { tabIndexOnLi ? 0 : 'none'}
+                    $isActive={(activeItem && activeItem.id === item.id) ? true : false} 
                     onKeyPress = { (e) => {onFocusClick(e, () => {onOpenItem(item)})} }
                     onClick={ onOpenItem ? () => { onOpenItem( item ) } : null }
                     key={i} 

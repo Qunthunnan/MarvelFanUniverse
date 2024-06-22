@@ -1,9 +1,16 @@
 import styled from "styled-components";
 import { vars } from "../style/Vars";
 
+const CharactersListSC = styled.section`
+@media (min-width: 320px) {
+    margin: 20px 0 0 0;
+}
+`
+
 const DetailedWrapper = styled.section`
     @media( min-width: 320px) {
         margin: 30px 0 0 0;
+        padding: 0 0 30px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -24,6 +31,7 @@ const DetailedWrapper = styled.section`
         flex-direction: row;
         flex-wrap: wrap;
         align-items: flex-start;
+        padding: 0 0 40px 0;
         img { 
             height: 330.20px;
             width: 215px;
@@ -35,6 +43,7 @@ const DetailedWrapper = styled.section`
 
     @media(min-width: 768px) {
         margin: 50px 0 0 0;
+        padding: 0 0 50px 0;
         a {
             font-size: 20px;
             &:hover {
@@ -51,6 +60,28 @@ const DetailedWrapper = styled.section`
         a {
             margin: 0 0 0 auto;
         }
+    }
+    `;
+
+    const ImgWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    a {
+        margin: 0 0 25px 0;
+    }
+    @media (min-width: 1200px) {
+        a {
+            display: none;
+        }
+    }
+    `;
+
+    const AsideLink = styled.div`
+    @media (min-width: 320px) {
+        display: none;
+    }
+    @media (min-width: 1200px) {
+        display: block;
     }
     `;
 
@@ -95,4 +126,4 @@ const DetailedWrapper = styled.section`
     }
 `;
 
-export { DetailedWrapper, TextWrapper };
+export { DetailedWrapper, TextWrapper, CharactersListSC, AsideLink, ImgWrapper };

@@ -20,7 +20,7 @@ export const SingleEntityPage = ({ Component, type }) => {
 
     return ( 
         <Container>
-            <EntityDetailed Render={Component} processTools={[process, setProcess, setGettingType(type)]} id={id} />
+            <EntityDetailed key={id} Render={Component} processTools={[process, setProcess, setGettingType(type)]} id={id} />
         </Container>
     )
 }

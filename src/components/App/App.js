@@ -22,9 +22,11 @@ export function App () {
 					<Route path="comics" element= { <ComicsBanerPage/> } >
 						<Route index element= { <ComicsListPage /> } />
 					</Route>
+
 					<Route path="comics/:id" element= { <ComicsBanerPage/> } > 
 						<Route index element= { <SingleEntityPage  type={'comics'} Component={ ComicsDetailed }/> } />
 					</Route>
+					
 					<Route path="characters/:id" element= { <ComicsBanerPage/> } >
 						<Route index element= { <SingleEntityPage type={'character'} Component={ CharacterDetailed }/> } />
 					</Route>

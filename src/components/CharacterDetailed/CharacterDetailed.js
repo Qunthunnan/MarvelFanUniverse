@@ -1,4 +1,4 @@
-import { TextWrapper, DetailedWrapper, ListDataWrapper, LoadMoreBtn, SearchForm } from './stylesCharacterDetailed';
+import { TextWrapper, AsideLink, ImgWrapper, DetailedWrapper, ListDataWrapper, LoadMoreBtn, SearchForm } from './stylesCharacterDetailed';
 import { ItemsList } from '../CharacterInfo/stylesCharacterInfo';
 import { isFindThumbnail } from '../../utils/isFindThumbnail';
 import { InfoList } from "../InfoList/InfoList";
@@ -9,14 +9,21 @@ export const CharacterDetailed = ({ name, description, thumbnail, listData, maxC
 
     return (
         <DetailedWrapper>
-            <img height={293} width={293} style={ { objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'contain' }} src={`${thumbnail.path}.${thumbnail.extension}`} alt={name} />
+            <ImgWrapper>
+                <Link to="/">Back to all</Link>
+                <img height={293} width={293} style={ { objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'contain' }} src={`${thumbnail.path}.${thumbnail.extension}`} alt={name} />
+            </ ImgWrapper>
+
             <TextWrapper>
                 <h2>{name}</h2>
                 <p>{ description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>}</p>
 
                 <ComicsList comicsList={listData} name={name} maxCount={maxCount} onInput={ onInput } inputValue={ inputValue } searchValue = { searchValue } searchAction={searchAction} searchError = { searchError } id={ id } />
             </TextWrapper>
-            <Link to="/">Back to all</Link>
+            <AsideLink>
+                <Link to="/">Back to all</Link>
+            </AsideLink>
+
         </DetailedWrapper>
     )
 }

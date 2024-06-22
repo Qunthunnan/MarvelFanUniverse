@@ -1,5 +1,5 @@
 import { setContent } from '../../utils/setContent';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useSearchItems } from '../../hooks/useSearchItems';
 
 export const EntityDetailed = ({id, processTools, Render}) => {
@@ -32,6 +32,11 @@ export const EntityDetailed = ({id, processTools, Render}) => {
     }, [name]);
 
     useEffect(() => {
+        setProcess('loading');
+        loadData();
+    }, [id]);
+
+    function loadData () {
         let resultData = {}
         getData(id)
         .then(result => { 
@@ -57,11 +62,11 @@ export const EntityDetailed = ({id, processTools, Render}) => {
         .then(() => {
             setProcess('view');
         });
-    }, []);
+    }
 
     return (
-        <>
-            { setContent(process, Render, data) }
-        </>
+        <Fragment key={id}>
+            { data ? setContent(process, Render, data) : setContent('loading', Render, data) }
+        </Fragment>
     )
 }

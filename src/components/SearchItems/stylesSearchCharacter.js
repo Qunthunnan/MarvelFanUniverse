@@ -4,7 +4,7 @@ import { vars } from "../style/Vars";
 
 const SearchWriper = styled(Aside)`
 @media (min-width: 320px) {
-    display: ${ ({$mobileActive}) => ( $mobileActive ? 'block' : 'none')};
+    display: ${ ({$mobileActive}) => ( $mobileActive ? 'block' : 'none') };
     position: relative;
     order: 1;
     h2 {

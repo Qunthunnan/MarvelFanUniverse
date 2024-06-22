@@ -27,7 +27,7 @@ const View = ({character}) => {
                     <p>{description}</p>
                 </div>
                 <ButtonsWrapper>
-                    <Button ><Link to={`../characters/${id}`}>HOMEPAGE</Link></Button>
+                    <Button as={'div'} ><Link to={`../characters/${id}`}>HOMEPAGE</Link></Button>
                     <Button target="blank" href={urls[1].url} color={vars.marvelGray}>Marvel WIKI</Button>
                 </ButtonsWrapper>
             </InfoWrapper>

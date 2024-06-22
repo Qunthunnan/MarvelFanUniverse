@@ -20,7 +20,6 @@ export const CharactersList = memo(({ onOpenCharacter, onCloseMobileCharacterInf
             ContentWrapperSC={ Section }
             targetsCount = {{ small: 8, big: 9 }}
             onOpenItem = { onOpenCharacter } 
-            onCloseItemMobile = { onCloseMobileCharacterInfo }
             activeItem = { activeCharacter }
             searchValue = { searchName } 
             getMaxCount = { getCharactersCount }
@@ -31,6 +30,7 @@ export const CharactersList = memo(({ onOpenCharacter, onCloseMobileCharacterInf
             process = { process }
             setProcess = { setProcess }
             downloadProcess = { downloadProcess }
-            setDownloadProcess = { setDownloadProcess } />
+            setDownloadProcess = { setDownloadProcess }
+            tabIndexOnLi />
     );
 });
