@@ -12,7 +12,10 @@ export function useMarvelService (startLoading = true) {
 
     async function getCharacters(count=9, offset=0) {
         const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${count}&offset=${offset}&orderBy=-modified`);
-        return result.data.results.map(_transformCharacter);
+        return {
+            count: result.data.total,
+            data: result.data.results.map(_transformCharacter)
+        } 
     }
 
     async function getCharacterById(id) {
@@ -66,7 +69,10 @@ export function useMarvelService (startLoading = true) {
 
     async function getComicses(count=8, offset=0) {
         const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&limit=${count}&offset=${offset}`);
-        return result.data.results.map(_transformComics);
+        return {
+            count: result.data.total,
+            data: result.data.results.map(_transformComics)
+        }
     }
 
     async function getComicsById(id) {
@@ -76,12 +82,18 @@ export function useMarvelService (startLoading = true) {
 
     async function getComicsByCharacterId(id) {
         const result = await getResource(`${_baseHttp}/characters/${id}/comics?orderBy=-onsaleDate&apikey=${_apiKey}`);
-        return result.data.results.map(_transformComics);
+        return {
+            count: result.data.total,
+            data: result.data.results.map(_transformComics)
+        }
     }
 
     async function getCharactersByComicsId(id) {
         const result = await getResource(`${_baseHttp}/comics/${id}/characters?apikey=${_apiKey}`);
-        return result.data.results.map(_transformCharacter);
+        return {
+            count: result.data.total,
+            data: result.data.results.map(_transformCharacter)
+        } 
     }
 
     async function searchComicsByCharacterId(id, title, count, offset) {

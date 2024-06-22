@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState, memo } from "react";
-import { Section, WideButtonBottom } from "../CharactersList/stylesCharacterList";
+import { Section } from "../CharactersList/stylesCharacterList";
 import { getRandNum } from "../../utils/randomValues";
 import { vars } from "../style/Vars";
 import { setContent } from "../../utils/setContent";
-
+import { onFocusClick } from "../../utils/onFocusClick";
+import styled from "styled-components";
 
 export const InfoList = ({ 
-    ItemComponent, 
-    ListStyleComponent,
+    ItemSC = styled.li``,
+    ItemChildren, 
+    ListSC = styled.ul``,
+    LoadButtonSC = styled.button``,
+    ContentWrapperSC = styled.div``,
     targetsCount: { small, big }, 
     onOpenItem, 
     onCloseItemMobile, 
@@ -21,7 +25,8 @@ export const InfoList = ({
     process,
     setProcess,
     downloadProcess,
-    setDownloadProcess }) => {
+    setDownloadProcess,
+    dataOnMount }) => {
         
     const [items, setItems] = useState();
     
@@ -31,11 +36,16 @@ export const InfoList = ({
     let searchCount = useRef();
 
     useEffect(() => {
-        getMaxCount()
-        .then(result => { 
-            maxCount.current = result 
-        })
-        .then(loadItems)
+        if( !(dataOnMount?.maxCount || dataOnMount?.maxCount >= 0) ) {
+            getMaxCount()
+            .then(result => { 
+                maxCount.current = result;
+            })
+            .then(loadItems)
+        } else
+            loadItems();
+
+        
         console.log('itemsList mounted');
     }, []);
 
@@ -52,17 +62,34 @@ export const InfoList = ({
     console.log(`renderItemsList, itemsRendered: ${itemsRendered}, offset: ${offset.current}`);
     
     const loadItems = () => {
-        const count = getTargetCount();
-        offset.current = getRandomItemsOffset();
-
-       getItems(count, offset.current)
-        .then(result => {
-            setItems(result);
-        })
-        .then(() => {
+        if( (dataOnMount?.items) && (dataOnMount?.offset || dataOnMount?.offset >= 0) && (dataOnMount?.maxCount || dataOnMount?.maxCount >= 0) ) {
+            offset.current = dataOnMount.offset;
+            maxCount.current = dataOnMount.maxCount;
+            setItems(dataOnMount.items);
             setProcess('view');
-            setDownloadProcess('view');
-        });
+
+            if(maxCount.current <= dataOnMount.items.length ) 
+                setDownloadProcess('unmount');
+            else
+                setDownloadProcess('view');
+        } else {
+            const count = getTargetCount();
+            offset.current = getRandomItemsOffset();
+    
+           getItems(count, offset.current)
+            .then(({data}) => {
+                setItems(data);
+                return data.length;
+            })
+            .then((itemsCount) => {
+                setProcess('view');
+
+                if(maxCount.current <= itemsCount ) 
+                    setDownloadProcess('unmount');
+                else
+                    setDownloadProcess('view');
+            });
+        }
     }
 
     const searchItem = () => {
@@ -99,7 +126,7 @@ export const InfoList = ({
 
         if(itemsRendered + count >= maxCount.current) {
             getAddItems(count, (offset.current + count))
-            .then((result) => { addItems(result) })
+            .then(({data}) => { addItems(data) })
             .then(() => {setDownloadProcess('unmount')});
 
             return undefined;
@@ -110,12 +137,12 @@ export const InfoList = ({
             let part1 = [];
 
             getAddItems((diff + 1), offset.current + count)
-            .then(data => {
+            .then(({data}) => {
                 part1 = data;
                 offset.current = 0;
                 return getAddItems((count - diff), offset.current);
             })
-            .then(data => {
+            .then(({data}) => {
                 offset.current -= diff;
                 addItemsFromParts(part1, data);
             })
@@ -125,7 +152,7 @@ export const InfoList = ({
             offset.current += count;
 
             getAddItems(count, offset.current)
-            .then(result => { addItems(result) })
+            .then(({data}) => { addItems(data) })
             .then(() => { setDownloadProcess('view')});
         }
     }
@@ -157,34 +184,42 @@ export const InfoList = ({
     }
 
     return (
-        <Section>
-            <ListStyleComponent>
+        <ContentWrapperSC>
+            <ListSC>
                 {setContent(process, View, {
                     items: items,
                     onOpenItem: onOpenItem,
                     onCloseItemMobile: onCloseItemMobile,
                     activeItem: activeItem,
-                    ItemComponent: ItemComponent
+                    ItemSC: ItemSC,
+                    ItemChildren: ItemChildren
                 })}
-            </ListStyleComponent>
-            { setContent(downloadProcess, WideButtonBottom, {children: 'Load more', onClick: searchValue && searchValue !== '' ? onLoadMoreSearchResults : onLoadMore}) }
-        </Section>
+            </ListSC>
+            { setContent(downloadProcess, LoadButtonSC, {children: 'Load more', onClick: searchValue && searchValue !== '' ? onLoadMoreSearchResults : onLoadMore}) }
+        </ContentWrapperSC>
     );
 }
 
 
 
-const View = memo(({items, onOpenItem, onCloseItemMobile, activeItem, ItemComponent}) => {
+const View = memo(({items, onOpenItem, onCloseItemMobile, activeItem, ItemSC, ItemChildren}) => {
     if(items.length === 0) {
         return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Data not found</p>)
     }
     return(
-        <> { items.map((item, i) => ( 
-        <ItemComponent 
-            isActive={(activeItem && activeItem.id === item.id) ? true : false} 
-            onCloseItemMobile={ onCloseItemMobile } 
-            onOpen={ () => { onOpenItem( item ) } }
-            key={i} 
-            item={ item }/> )) } </>
-    )
+        <>
+            { items.map((item, i) => (
+                 <ItemSC 
+                    tabindex= {0}
+                    isActive={(activeItem && activeItem.id === item.id) ? true : false} 
+                    onCloseItemMobile={ onCloseItemMobile } 
+                    onKeyPress = { (e) => {onFocusClick(e, () => {onOpenItem(item)})} }
+                    onClick={ onOpenItem ? () => { onOpenItem( item ) } : null }
+                    key={i} 
+                    >
+                        <ItemChildren item={item}/> 
+                    </ItemSC>
+            )) } 
+        </>
+        )
 });

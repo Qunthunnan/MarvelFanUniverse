@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { vars } from "../style/Vars";
+import { WideButton } from "../style/WideButton";
 
 const DetailedWrapper = styled.section`
 @media (min-width: 320px) {
     display: flex;
     flex-direction: column;
     margin: 30px 0 0 0;
+    padding: 0 0 30px 0;
     align-items: center;
     img {
         object-fit: cover;
@@ -44,9 +46,51 @@ const DetailedWrapper = styled.section`
 
 @media (min-width: 992px) {
     margin: 50px 0 0 0;
+    padding: 0 0 50px 0;
     img {
         height: 293px;
         width: 293px;
+    }
+}
+`;
+
+const SearchForm = styled.form`
+@media (min-width: 320px) {
+    margin: 20px 0 0 0;
+    display: flex;
+    div {
+        width: 100%;
+        position: relative;
+    }
+    svg {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    input {
+        width: 100%;
+        border: none;
+        font-size: 14px;
+        font-weight: 400;
+        padding: 0 30px 0 10px;
+        height: 38px;
+        box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.1);
+        &::placeholder {
+            color: #00000080;
+        }
+    }
+    label {
+        margin: 0 0 0 20px;
+        font-size: 16px;
+        font-weight: 700;
+        color: ${vars.marvelRed}   
+    }
+}
+
+@media (min-width: 768px) {
+    div {
+        width: 60%;
     }
 }
 `;
@@ -91,4 +135,18 @@ const TextWrapper = styled.div`
 }
 `;
 
-export { TextWrapper, DetailedWrapper };
+const ListDataWrapper = styled.div`
+@media (min-width: 320px) {
+    margin: 30px 0 0 0;
+}
+`;
+
+const LoadMoreBtn = styled(WideButton)`
+&&& {
+    @media (min-width: 320px) {
+        margin: 20px 0 0 0;
+        color: #fff;
+    }
+}`;
+
+export { TextWrapper, DetailedWrapper, ListDataWrapper, LoadMoreBtn, SearchForm };

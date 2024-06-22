@@ -41,7 +41,8 @@ export const EntityDetailed = ({id, processTools, Render}) => {
         .then(result => {
             resultData = {
                 ...resultData,
-                listData: result,
+                listData: result.data,
+                maxCount: result.count,
                 searchParams: {
                     searchValue: searchValue,
                     inputValue: '',

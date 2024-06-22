@@ -22,18 +22,14 @@ export const CharacterCard = memo(({ item: { name, thumbnail }, onOpen, isActive
         return name;
     }
 
-    function onFocusClick (e) {
-        if(e.key === 'Enter' || e.key === ' ') {
-            onOpen();
-        }
-    }
+
 
     return(
-        <CharacterItem onKeyDown={onFocusClick} tabIndex={0} onClick={ onOpen } title={name} $active={isActive}>
-            <img height={200} width={200} style={{objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
+        <>
+            <img title={name} height={200} width={200} style={{objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'fill'}} src={thumbnail.path + '.' + thumbnail.extension} alt={`character ${name}`} />
             <CardBg>
                 <h2>{cutName(name)}</h2>
             </CardBg>
-        </CharacterItem>
+        </>
     )
 });

@@ -55,12 +55,10 @@ export const RandomCharacter = () => {
     
     const updateCharacter = useCallback(() => {
         getCharacters(1, getRandNum(1, (charactersMaxCount.current - 1)))
-        .then(result => { 
-            setCharacter(...result) 
+        .then(({data}) => { 
+            setCharacter(...data) 
         })
-        .then(result => {
-            setProcess('view')
-        });
+        .then(() => { setProcess('view') });
     }, []);
 
     return(

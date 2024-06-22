@@ -1,7 +1,9 @@
 import { memo } from "react";
 import { CharacterCard } from "../CharacterCard/CharacterCard";
-import { List } from "./stylesCharacterList";
+import { CharacterItem } from "../CharacterCard/stylesCharacterCard";
+import { List, WideButtonBottom } from "./stylesCharacterList";
 import { useMarvelService } from "../../services/ApiService/ApiService";
+import { Section } from "./stylesCharacterList";
 import { InfoList } from "../InfoList/InfoList";
 
 export const CharactersList = memo(({ onOpenCharacter, onCloseMobileCharacterInfo, activeCharacter, searchName }) => {
@@ -11,6 +13,11 @@ export const CharactersList = memo(({ onOpenCharacter, onCloseMobileCharacterInf
 
     return (
         <InfoList
+            ListSC={ List }
+            ItemSC={ CharacterItem }
+            ItemChildren={ CharacterCard }
+            LoadButtonSC= { WideButtonBottom }
+            ContentWrapperSC={ Section }
             targetsCount = {{ small: 8, big: 9 }}
             onOpenItem = { onOpenCharacter } 
             onCloseItemMobile = { onCloseMobileCharacterInfo }
@@ -24,8 +31,6 @@ export const CharactersList = memo(({ onOpenCharacter, onCloseMobileCharacterInf
             process = { process }
             setProcess = { setProcess }
             downloadProcess = { downloadProcess }
-            setDownloadProcess = { setDownloadProcess }
-            ItemComponent = { CharacterCard }
-            ListStyleComponent = { List } />
+            setDownloadProcess = { setDownloadProcess } />
     );
 });

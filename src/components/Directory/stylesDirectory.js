@@ -7,7 +7,7 @@ padding: 52px 0 25px;
 display: flex;
 justify-content: space-between;
 
-@media (min-width: 576px) {
+@media (min-width: 320px) {
     padding: 20px 0;
     a {
         color: #000;
