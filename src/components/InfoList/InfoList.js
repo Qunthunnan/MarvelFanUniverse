@@ -202,6 +202,7 @@ export const InfoList = ({
 
 
 
+
 const View = memo(({items, onOpenItem, onCloseItemMobile, activeItem, ItemSC, ItemChildren}) => {
     if(items.length === 0) {
         return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Data not found</p>)
