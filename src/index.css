@@ -2,28 +2,28 @@
 	font-family: 'Roboto Condensed';
 	font-style: normal;
 	font-weight: 400;
-	src: url('resources/fonts/RobotoCondensed-Regular.ttf') format('ttf');
+	src: url('./resources/fonts/RobotoCondensed-Regular.ttf') format('ttf');
   }
 
 @font-face {
 	font-family: 'Roboto Condensed';
 	font-style: normal;
 	font-weight: 700;
-	src: url('resources/fonts/RobotoCondensed-Bold.ttf') format('ttf');
+	src: url('./resources/fonts/RobotoCondensed-Bold.ttf') format('ttf');
   }
 
 @font-face {
 	font-family: 'Roboto Condensed';
 	font-style: normal;
 	font-weight: 400;
-	src: url('resources/fonts/RobotoCondensed-Regular.woff2') format('woff2');
+	src: url('./resources/fonts/RobotoCondensed-Regular.woff2') format('woff2');
   }
 
 @font-face {
 	font-family: 'Roboto Condensed';
 	font-style: normal;
 	font-weight: 700;
-	src: url('resources/fonts/RobotoCondensed-Bold.woff2') format('woff2');
+	src: url('./resources/fonts/RobotoCondensed-Bold.woff2') format('woff2');
   }
 
 body {
