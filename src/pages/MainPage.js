@@ -6,11 +6,15 @@ import { MainDiv, MobileMenuButtons, CharactersContentWrapper, AsideWrapper } fr
 import { CharactersList } from "../components/CharactersList/CharactersList";
 import { CharacterInfo } from "../components/CharacterInfo/CharacterInfo";
 import { SearchCharacters } from "../components/SearchItems/SearchCharacters";
+import { SortList } from "../components/SortList/SortList";
+import { SortMainWraper } from "../components/SortList/stylesSortList";
 
 export const MainPage = () => {
     const [mobileSearchShowed, setMobileSearchShowed] = useState(false);
 	const [activeCharacter, setActiveCharacter] = useState();
 	const [searching, setSearching] = useState(false);
+	const [randomOffset, setRandomOffset] = useState(true);
+	const [charactersOrder, setCharactersOrder] = useState('-modified');
 
 	useEffect(()=>{ 
 		console.log('main mounted, started updateCharacters');
@@ -32,6 +36,47 @@ export const MainPage = () => {
         setSearching(name);
     }, []);
 
+	const switchRandomOffset = () => {
+		console.log(randomOffset, charactersOrder);
+		setRandomOffset((prevOffset) => (
+			!prevOffset
+		));
+	}
+
+	const offRandomOffset = () => {
+		console.log(randomOffset, charactersOrder);
+
+		setRandomOffset(false);
+	}
+
+	const orders = [
+		{
+			name: 'Random',
+			value: '-modified',
+			action: switchRandomOffset
+		},
+		{
+			name: 'By name A↓',
+			value: 'name',
+			action: offRandomOffset
+		},
+		{
+			name: 'By name Z↓',
+			value: '-name',
+			action: offRandomOffset
+		},
+		{
+			name: 'Last updated',
+			value: '-modified',
+			action: offRandomOffset
+		},
+		{
+			name: 'A little forgotten',
+			value: 'modified',
+			action: offRandomOffset,
+		}
+	]
+
     return ( 
 		<MainDiv $bg={ true }>
 			<Container>
@@ -45,12 +90,18 @@ export const MainPage = () => {
 					</svg>
 				</MobileMenuButtons>
 
+				<SortMainWraper>
+					<SortList orders={ orders } activeOrder={charactersOrder} setOrder={setCharactersOrder}/>
+				</SortMainWraper>
+
 				<CharactersContentWrapper>
 					<ErrorBoundary>
 						<CharactersList 
 							activeCharacter={ activeCharacter } 
 							onOpenCharacter={ onOpenCharacter }
-							searchName = { searching }/>
+							searchName = { searching }
+							isRandomOffset = { randomOffset }
+							order = { charactersOrder }/>
 					</ErrorBoundary>
 					<AsideWrapper>
 						<ErrorBoundary>

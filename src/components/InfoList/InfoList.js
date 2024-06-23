@@ -14,7 +14,6 @@ export const InfoList = ({
     ContentWrapperSC = styled.div``,
     targetsCount: { small, big }, 
     onOpenItem, 
-    onCloseItemMobile, 
     activeItem, 
     searchValue, 
     getMaxCount,
@@ -27,7 +26,9 @@ export const InfoList = ({
     downloadProcess,
     setDownloadProcess,
     dataOnMount,
-    tabIndexOnLi }) => {
+    tabIndexOnLi,
+    isRandomOffset,
+    order }) => {
         
     const [items, setItems] = useState();
     
@@ -35,6 +36,9 @@ export const InfoList = ({
     let maxCount = useRef();
     const itemsRendered = items ? items.length : 0;
     let searchCount = useRef();
+    const dataOnMountMounted = useRef(false);
+    const prevOrder = useRef(order);
+    const prevIsRandomOffset = useRef(isRandomOffset)
 
     useEffect(() => {
         if( !(dataOnMount?.maxCount || dataOnMount?.maxCount >= 0) ) {
@@ -55,19 +59,34 @@ export const InfoList = ({
             searchItem();
             console.log('itemsList searching');
         }
-        if (searchValue === ''  && maxCount.current >= 0) {
+        if (searchValue === '' && maxCount.current >= 0) {
             loadItems();
         }
-    }, [ searchValue ])
+    }, [ searchValue ]);
+
+    useEffect(() => {
+        if(prevOrder.current !== order || prevIsRandomOffset.current !== isRandomOffset) {
+            prevOrder.current = order;
+            prevIsRandomOffset.current = isRandomOffset;
+            if(maxCount.current >= 0) {
+                if(searchValue) {
+                    searchItem();
+                } else {
+                    loadItems();
+                }
+            }
+        }
+    }, [order, isRandomOffset]);
 
     console.log(`renderItemsList, itemsRendered: ${itemsRendered}, offset: ${offset.current}`);
     
     const loadItems = () => {
-        if( (dataOnMount?.items) && (dataOnMount?.offset || dataOnMount?.offset >= 0) && (dataOnMount?.maxCount || dataOnMount?.maxCount >= 0) ) {
+        if( (dataOnMount?.items) && (dataOnMount?.offset || dataOnMount?.offset >= 0) && (dataOnMount?.maxCount || dataOnMount?.maxCount >= 0) && !dataOnMountMounted.current) {
             offset.current = dataOnMount.offset;
             maxCount.current = dataOnMount.maxCount;
             setItems(dataOnMount.items);
             setProcess('view');
+            dataOnMountMounted.current = true;
 
             if(maxCount.current <= dataOnMount.items.length ) 
                 setDownloadProcess('unmount');
@@ -75,9 +94,9 @@ export const InfoList = ({
                 setDownloadProcess('view');
         } else {
             const count = getTargetCount();
-            offset.current = getRandomItemsOffset();
+            offset.current = isRandomOffset ? getRandomItemsOffset() : 0;
     
-           getItems(count, offset.current)
+           getItems(count, offset.current, order)
             .then(({data}) => {
                 setItems(data);
                 return data.length;
@@ -97,7 +116,7 @@ export const InfoList = ({
         const count = getTargetCount();
         offset.current = 0;
 
-       searchItems(searchValue, count, offset.current)
+       searchItems(searchValue, count, offset.current, order)
        .then(result => {
             searchCount.current = result.count; 
             setItems(result.data);
@@ -126,7 +145,7 @@ export const InfoList = ({
         const count = getTargetCount();
 
         if(itemsRendered + count >= maxCount.current) {
-            getAddItems(count, (offset.current + count))
+            getAddItems(count, (offset.current + count), order)
             .then(({data}) => { addItems(data) })
             .then(() => {setDownloadProcess('unmount')});
 
@@ -137,11 +156,11 @@ export const InfoList = ({
             const diff = (maxCount.current) - (offset.current + count);
             let part1 = [];
 
-            getAddItems((diff + 1), offset.current + count)
+            getAddItems((diff + 1), offset.current + count, order)
             .then(({data}) => {
                 part1 = data;
                 offset.current = 0;
-                return getAddItems((count - diff), offset.current);
+                return getAddItems((count - diff), offset.current, order);
             })
             .then(({data}) => {
                 offset.current -= diff;
@@ -152,7 +171,7 @@ export const InfoList = ({
         else {
             offset.current += count;
 
-            getAddItems(count, offset.current)
+            getAddItems(count, offset.current, order)
             .then(({data}) => { addItems(data) })
             .then(() => { setDownloadProcess('view')});
         }
@@ -162,7 +181,7 @@ export const InfoList = ({
         const count = getTargetCount();
 
         if((itemsRendered + count) >= searchCount.current) {
-            searchMore(searchValue, count, (offset.current + count))
+            searchMore(searchValue, count, (offset.current + count), order)
             .then(result => { addItems(result.data) })
             .then(() => { setDownloadProcess('unmount')});
 
@@ -171,7 +190,7 @@ export const InfoList = ({
 
         offset.current += count;
 
-        searchMore(searchValue, count, offset.current)
+        searchMore(searchValue, count, offset.current, order)
         .then(result => { addItems(result.data) })
         .then(() => { setDownloadProcess('view') });
     }

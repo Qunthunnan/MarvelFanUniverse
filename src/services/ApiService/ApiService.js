@@ -10,8 +10,8 @@ export function useMarvelService (startLoading = true) {
 
     const { loading, setLoading, error, process, setError, setProcess, getResource} = useHttp(startLoading);
 
-    async function getCharacters(count=9, offset=0) {
-        const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${count}&offset=${offset}&orderBy=-modified`);
+    async function getCharacters(count=9, offset=0, order=`-modified`) {
+        const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&limit=${count}&offset=${offset}&orderBy=${order}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformCharacter)
@@ -51,24 +51,24 @@ export function useMarvelService (startLoading = true) {
         }
     }
     
-    async function searchCharactersByName(name, count=9, offset=0) {
-        const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}`);
+    async function searchCharactersByName(name, count=9, offset=0, order='name') {
+        const result = await getResource(`${_baseHttp}/characters?apikey=${_apiKey}&nameStartsWith=${name}&limit=${count}&offset=${offset}&orderBy=${order}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformCharacter)
         } 
     }
 
-    async function searchComicsesByTitle(title, count, offset) {
-        const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&titleStartsWith=${title}&limit=${count}&offset=${offset}`);
+    async function searchComicsesByTitle(title, count=20, offset=0, order='title') {
+        const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&titleStartsWith=${title}&limit=${count}&offset=${offset}&orderBy=${order}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformComics)
         } 
     }
 
-    async function getComicses(count=8, offset=0) {
-        const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&limit=${count}&offset=${offset}`);
+    async function getComicses(count=8, offset=0, order='-focDate') {
+        const result = await getResource(`${_baseHttp}/comics?apikey=${_apiKey}&limit=${count}&offset=${offset}&orderBy=${order}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformComics)
@@ -80,32 +80,32 @@ export function useMarvelService (startLoading = true) {
         return _transformComics(result.data.results[0]);
     }
 
-    async function getComicsByCharacterId(id) {
-        const result = await getResource(`${_baseHttp}/characters/${id}/comics?orderBy=-onsaleDate&apikey=${_apiKey}`);
+    async function getComicsByCharacterId(id, count=20, offset=0, order='-focDate') {
+        const result = await getResource(`${_baseHttp}/characters/${id}/comics?offset=${offset}&limit=${count}&orderBy=${order}&apikey=${_apiKey}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformComics)
         }
     }
 
-    async function getCharactersByComicsId(id) {
-        const result = await getResource(`${_baseHttp}/comics/${id}/characters?apikey=${_apiKey}`);
+    async function getCharactersByComicsId(id, count=20, offset=0, order='name') {
+        const result = await getResource(`${_baseHttp}/comics/${id}/characters?apikey=${_apiKey}&limit=${count}&orderBy=${order}&offset=${offset}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformCharacter)
         } 
     }
 
-    async function searchComicsByCharacterId(id, title, count, offset) {
-        const result = await getResource(`${_baseHttp}/characters/${id}/comics?orderBy=-onsaleDate&apikey=${_apiKey}&titleStartsWith=${title}&offset=${offset}&limit=${count}`);
+    async function searchComicsByCharacterId(id, title, count=20, offset=0, order='-focDate') {
+        const result = await getResource(`${_baseHttp}/characters/${id}/comics?orderBy=${order}&apikey=${_apiKey}&titleStartsWith=${title}&offset=${offset}&limit=${count}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformComics)
         } 
     }
 
-    async function searchCharactersByComicsId(id, name, count, offset) {
-        const result = await getResource(`${_baseHttp}/comics/${id}/characters?apikey=${_apiKey}&nameStartsWith=${name}&offset=${offset}&limit=${count}`);
+    async function searchCharactersByComicsId(id, name, count=20, offset=0, order='name') {
+        const result = await getResource(`${_baseHttp}/comics/${id}/characters?apikey=${_apiKey}&nameStartsWith=${name}&offset=${offset}&limit=${count}&orderBy=${order}`);
         return {
             count: result.data.total,
             data: result.data.results.map(_transformCharacter)

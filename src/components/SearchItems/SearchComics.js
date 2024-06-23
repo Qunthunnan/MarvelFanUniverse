@@ -1,5 +1,4 @@
 import { Button } from "../style/Button";
-import { CloseBtn  } from "../style/CloseBtn";
 import { useSearchItems } from "../../hooks/useSearchItems";
 import { SearchComicsWriper } from "./stylesSearchComics";
 import { InputWrapper, Label } from "./stylesSearchCharacter";

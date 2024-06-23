@@ -19,7 +19,7 @@ padding: 0 0 45px;
 
 const CharactersContentWrapper = styled.div`
 @media (min-width: 320px) {
-    margin: 0;
+    margin: 30px 0 0 0;
     position: relative;
 }
 

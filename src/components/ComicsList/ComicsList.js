@@ -1,11 +1,12 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo } from "react";
 import { ComicsCard } from "../ComicsCard/ComicsCard";
 import { List } from "./stylesComicsList";
 import { InfoList } from "../InfoList/InfoList";
 import { ComicsItem } from "../ComicsCard/stylesComicsCard";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 import { WideButtonBottom } from "../CharactersList/stylesCharacterList";
-export const ComicsList = memo(({searchValue}) => {
+import { Section } from "../CharactersList/stylesCharacterList";
+export const ComicsList = memo(({searchValue, isRandomOffset, order}) => {
     
     const { process, setProcess, getComicses, getComicsCount, searchComicsesByTitle } = useMarvelService();
     const { process: downloadProcess, setProcess: setDownloadProcess, getComicses: getAddComicses, searchComicsesByTitle: searchMore} = useMarvelService ();
@@ -16,6 +17,7 @@ export const ComicsList = memo(({searchValue}) => {
                 ListSC={ List }
                 ItemSC={ ComicsItem }
                 LoadButtonSC={ WideButtonBottom }
+                ContentWrapperSC= { Section }
                 ItemChildren={ ComicsCard }
                 targetsCount = { {small: 8, big: 8} }
                 searchValue = { searchValue }
@@ -28,7 +30,10 @@ export const ComicsList = memo(({searchValue}) => {
                 setProcess = { setProcess }
                 downloadProcess = { downloadProcess }
                 setDownloadProcess = { setDownloadProcess } 
-                tabIndexOnLi />
+                tabIndexOnLi 
+                isRandomOffset={ isRandomOffset }
+                order={ order }
+                />
         </section>
     );
 });
