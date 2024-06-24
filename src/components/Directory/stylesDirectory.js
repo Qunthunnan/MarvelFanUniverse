@@ -25,6 +25,7 @@ const DirectorySpan = styled.span`
     font-size: 24px;
     font-weight: 700;
     margin: 0 5px 0 0;
+    transition: color 0.3s;
     a {
         color: #000;
         text-decoration: none;

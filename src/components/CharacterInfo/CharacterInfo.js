@@ -61,7 +61,6 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, id, url
                     <h2>{name}</h2>
                     <div>
                         <Button as={'div'}><Link to={`../characters/${id}`}>HOMEPAGE</Link></Button>
-                        <Button target="_blank" href={urls[1].url} color={vars.marvelGray}>Marvel WIKI</Button>
                     </div>
                 </SideHead>
             </HeadInfo>

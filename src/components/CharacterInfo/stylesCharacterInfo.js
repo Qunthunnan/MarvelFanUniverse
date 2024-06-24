@@ -93,6 +93,7 @@ const HeadInfo = styled.div`
         object-fit: cover;
     }
 }
+
 @media (min-width: 576px) {
     align-items: flex-start;
     flex-direction: row;
@@ -102,12 +103,20 @@ const HeadInfo = styled.div`
     flex-direction: row;
     column-gap: 25px;
 }
-`,
-SideHead = styled.div`
+`;
+
+const TitleWrapper = styled.div`
+@media (min-width: 320px) {
+    width: 100%;
+}
+`;
+
+const SideHead = styled.div`
 @media (min-width: 320px) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 100%;
     h2 {
         text-align: unset;
         font-size: 22px;
@@ -133,10 +142,10 @@ SideHead = styled.div`
         row-gap: 10px;
     }
 }
-`,
-SkeletonSvg = styled.svg`
+`;
+const SkeletonSvg = styled.svg`
     margin: 30px 0 0 0;
     width: 100%;
 `;
 
-export { InfoWrapper, ItemsList, HeadInfo, SideHead, SkeletonSvg };
+export { InfoWrapper, ItemsList, HeadInfo, TitleWrapper, SideHead, SkeletonSvg };

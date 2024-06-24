@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, memo, useMemo } from "react";
+import { Fragment, useCallback, useEffect, memo, useMemo, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { vars } from "../style/Vars";
 import { DirectorySpan } from "./stylesDirectory";
@@ -13,14 +13,16 @@ export const Directory = memo( ({ list }) => {
     useEffect(()=>{
         console.log('Directory did mount');
     }, []);
+    const nodeRef = useRef();
 
     const directories = list
     .map( (item, i) => {
         const slash = list[i + 1] ? <DirectorySpan key={i}>/</DirectorySpan> : null;
             return (
+
                 <Fragment key={i + 0.5}>
-                    <DirectorySpan>
-                        <NavLink end style={({isActive}) => ({ color: isActive ? vars.marvelRed : '#000'})} to={item.directoryLink}> {item.directoryName}  </NavLink>
+                    <DirectorySpan ref={nodeRef}>
+                        <NavLink end style={({isActive}) => ({ transition: 'color 0.3s', color: isActive ? vars.marvelRed : '#000'})} to={item.directoryLink}> {item.directoryName}  </NavLink>
                     </DirectorySpan>
                     {slash}
                 </Fragment>
