@@ -10,7 +10,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Link } from "react-router-dom";
 import './transitions.css';
 
-const View = ({character}) => {
+const View = ({character, animation, setAnimation}) => {
     let { name, description, thumbnail , id } = character;
 
     if (description.length > 188)
@@ -18,17 +18,17 @@ const View = ({character}) => {
 
     if(!description || description.length === 0) 
         description = <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>
-
-    const [animation, setAnimation] = useState(false)
     
-    setTimeout(() => {setAnimation(true); console.log('render');}, 0);
+    useEffect(() => {
+        setAnimation(true);
+    }, [character])
 
     const imgRef = useRef();
     const infoRef = useRef();
 
     return (
         <>
-            <CSSTransition in={ animation } classNames={'fade'} nodeRef={ imgRef } timeout={500}>
+            <CSSTransition in={ animation } classNames={'fade'} nodeRef={ imgRef } timeout={300}>
                 <img
                 src={`${thumbnail.path}.${thumbnail.extension}`} 
                 alt={`character ${name}`} 
@@ -37,7 +37,7 @@ const View = ({character}) => {
                 width={180} 
                 ref={ imgRef }/>
             </CSSTransition>
-            <CSSTransition in={ animation } classNames={'fade'} nodeRef={ infoRef } timeout={500}>
+            <CSSTransition in={ animation } classNames={'fade'} nodeRef={ infoRef } timeout={300}>
                 <InfoWrapper ref={ infoRef }>
                     <div>
                         <h2>{name}</h2>
@@ -55,6 +55,7 @@ const View = ({character}) => {
 export const RandomCharacter = () => {
     const [character, setCharacter] = useState();
     const { process, setProcess, getCharacters, getCharactersCount } = useMarvelService();
+    const [animation, setAnimation] = useState(false);
 
     let charactersMaxCount = useRef();
 
@@ -84,13 +85,13 @@ export const RandomCharacter = () => {
         <Wrapper>
             
             <RandomCharacterInfo ref={nodeRef}>
-                { setContent(process, View, {character: character}) }
+                { setContent(process, View, {character: character, animation: animation, setAnimation: setAnimation, }, nodeRef) }
             </RandomCharacterInfo>
 
             <RandomBaner>
                 <h2>Random character for today!<br/>Do you want to get to know him better?</h2>
                 <h2>Or choose another one!</h2>
-                <Button onClick={updateCharacter}>TRY IT</Button>
+                <Button onClick={() => {updateCharacter(); setAnimation(false)}}>TRY IT</Button>
             </RandomBaner>
         </Wrapper>
     )

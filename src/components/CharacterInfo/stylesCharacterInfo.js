@@ -122,30 +122,30 @@ const SideHead = styled.div`
         font-size: 22px;
         font-weight: 700;
     }
-    div {
-        display: flex;
-        column-gap: 20px;
-        row-gap: 10px;
-    }
+}
+`;
+
+const ButtonWrap = styled.div`
+@media (min-width: 320px) {
+    display: flex;
+    column-gap: 20px;
+    row-gap: 10px;
 }
 
 @media (min-width: 768px) {
-    div {
-        flex-direction: row;
-        column-gap: 20px;
-    }
+    flex-direction: row;
+    column-gap: 20px;
 }
 
 @media (min-width: 992px) {
-    div {
-        flex-direction: column;
-        row-gap: 10px;
-    }
+    flex-direction: column;
+    row-gap: 10px;
 }
-`;
+`
+
 const SkeletonSvg = styled.svg`
     margin: 30px 0 0 0;
     width: 100%;
 `;
 
-export { InfoWrapper, ItemsList, HeadInfo, TitleWrapper, SideHead, SkeletonSvg };
+export { InfoWrapper, ItemsList, HeadInfo, ButtonWrap, TitleWrapper, SideHead, SkeletonSvg };

@@ -1,12 +1,12 @@
-import { Component, memo } from "react";
-
-import { vars } from "../style/Vars";
+import { memo, useEffect, useRef, useState } from "react";
+import { CSSTransition } from "react-transition-group";
 import { Button } from "../style/Button";
 import { CloseBtn } from "../style/CloseBtn";
-import { InfoWrapper, HeadInfo, SideHead, SkeletonSvg } from "./stylesCharacterInfo";
+import { InfoWrapper, HeadInfo, SideHead, SkeletonSvg, ButtonWrap } from "./stylesCharacterInfo";
 import { parseComicsId } from "../../utils/parseComicsId";
 import { ItemsList } from "./stylesCharacterInfo";
 import { Link } from "react-router-dom";
+import './transitions.css';
 
 export const CharacterInfo = memo(({ character, onCloseMobileCharacterInfo }) => {
     
@@ -39,7 +39,7 @@ const EmptyCharacter = () => {
     );
 }
 
-const ContentWithCharacter = ({character: {name, thumbnail, description, id, urls, comics:{items}}}) => {
+const ContentWithCharacter = ({character: {name, thumbnail, description, id, comics:{items}}}) => {
     const comicsList = items.length ? 
         <ItemsList>{   items.map( (comics, i) => (
              <li key={i}>
@@ -53,23 +53,44 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, id, url
 
     const descriptionBlock = description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>;
     const thumbnailPos = isFindThumbnail(thumbnail);
+    const headRef = useRef();
+
+    const [animation, setAnimation] = useState(false);
+
+    useEffect(() => {
+        setAnimation(() => (!animation));
+    }, [name])
+
+  
     return (
-        <>
-            <HeadInfo>
-                <img height={150} width={150} style={{objectFit: thumbnailPos ? 'cover' : 'contain'}} src={thumbnail.path + '.' + thumbnail.extension} alt={"character" + name}/>
-                <SideHead>
-                    <h2>{name}</h2>
-                    <div>
-                        <Button as={'div'}><Link to={`../characters/${id}`}>HOMEPAGE</Link></Button>
-                    </div>
-                </SideHead>
-            </HeadInfo>
-            <p>{ descriptionBlock }</p>
-            <div>
-                <h3>Comics:</h3>
-                {comicsList}
+        
+        <CSSTransition 
+        ref={ headRef }
+        in={ animation }
+        classNames={ 'char-info-fade' }
+        timeout={ 100 }>
+            <div ref={headRef}>
+                <HeadInfo>
+                    <img height={150} width={150} style={{objectFit: thumbnailPos ? 'cover' : 'contain'}} src={thumbnail.path + '.' + thumbnail.extension} alt={"character" + name}/>
+                    <SideHead>
+                        <h2>{name}</h2>
+                        <ButtonWrap>
+                            <Button as={'div'}><Link to={`../characters/${id}`}>HOMEPAGE</Link></Button>
+                        </ButtonWrap>
+                    </SideHead>
+                </HeadInfo>
+                <p>{ descriptionBlock }</p>
+                <div>
+                    <h3>Comics:</h3>
+                    {comicsList}
+                </div>
             </div>
-        </>
+
+    
+
+        </CSSTransition>
+
+    
     )
 
     function isFindThumbnail(thumbnail) {

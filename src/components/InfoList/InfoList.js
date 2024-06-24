@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState, memo } from "react";
+import { useEffect, useRef, useState, memo, createRef } from "react";
 import { Section } from "../CharactersList/stylesCharacterList";
 import { getRandNum } from "../../utils/randomValues";
 import { vars } from "../style/Vars";
 import { setContent } from "../../utils/setContent";
 import { onFocusClick } from "../../utils/onFocusClick";
 import styled from "styled-components";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 export const InfoList = ({ 
     ItemSC = styled.li``,
@@ -228,18 +229,28 @@ const View = memo(({items, onOpenItem, activeItem, ItemSC, ItemChildren, tabInde
         return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Data not found</p>)
     }
     return(
-        <>
-            { items.map((item, i) => (
-                 <ItemSC 
+        <TransitionGroup component={null}>
+            { items.map((item, i) => {
+                const ref = createRef(null);
+                return (
+                    <CSSTransition
+                    key={i} 
+                    nodeRef={ref}
+                    timeout={500}
+                    classNames={'add-item'}
+                >
+                 <ItemSC
+                    ref={ref} 
                     tabIndex= { tabIndexOnLi ? 0 : 'none'}
                     $isActive={(activeItem && activeItem.id === item.id) ? true : false} 
                     onKeyPress = { (e) => {onFocusClick(e, () => {onOpenItem(item)})} }
                     onClick={ onOpenItem ? () => { onOpenItem( item ) } : null }
-                    key={i} 
                     >
                         <ItemChildren item={item}/> 
                     </ItemSC>
-            )) } 
-        </>
+                </CSSTransition>
+                )
+            }) } 
+        </TransitionGroup>    
         )
 });
