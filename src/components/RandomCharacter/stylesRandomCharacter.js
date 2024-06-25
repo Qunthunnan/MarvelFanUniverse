@@ -4,13 +4,17 @@ import hammer from '../../resources/imgs/hammer.png';
 
 const Wrapper = styled.section`
 @media ( min-width: 320px) {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template: 2.2fr 1fr  / auto;
+    box-shadow: 0px 3px 15px 1px rgba(0, 0, 0, 0.3);
+}
+
+@media ( min-width: 576px) {
+    grid-template: 1.85fr 1fr  / auto;
     box-shadow: 0px 3px 15px 1px rgba(0, 0, 0, 0.3);
 }
 
 @media (min-width: 768px) {
-    display: grid;
     grid-template: auto / 1fr 1fr;
 }
 `;

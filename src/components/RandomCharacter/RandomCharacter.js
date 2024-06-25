@@ -32,13 +32,13 @@ const View = ({character, animation, setAnimation}) => {
                 <img
                 src={`${thumbnail.path}.${thumbnail.extension}`} 
                 alt={`character ${name}`} 
-                style={{ objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'contain' }} 
+                style={{ opacity: animation ? null : 0, objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'contain' }} 
                 height={180} 
                 width={180} 
                 ref={ imgRef }/>
             </CSSTransition>
             <CSSTransition in={ animation } classNames={'fade'} nodeRef={ infoRef } timeout={300}>
-                <InfoWrapper ref={ infoRef }>
+                <InfoWrapper style={{opacity: animation ? null : 0}} ref={ infoRef }>
                     <div>
                         <h2>{name}</h2>
                         <p>{description}</p>

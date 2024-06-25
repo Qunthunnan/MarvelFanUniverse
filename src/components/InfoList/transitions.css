@@ -1,27 +1,32 @@
 .add-item-enter {
     opacity: 0;
-    transition: opacity 300ms, transform 300ms;
+    transform: translateY(100px) scale(0.9);
+    transition: opacity 500ms, transform 500ms;
   }
   .add-item-enter-active {
     opacity: 0;
-    transition: opacity 300ms, transform 300ms;
+    transform: translateY(100px) scale(0.9);
+    transition: opacity 500ms, transform 500ms;
   }
   .add-item-enter-done {
     opacity: 1;
-    transform: scale(1);
-    transition: opacity 300ms, transform 300ms;
+    transform: translateY(0) scale(1);
+    transition: opacity 500ms, transform 500ms;
   }
 
   .add-item-fade-exit {
-    opacity: 0;
-    transition: opacity 300ms, transform 300ms;
+    opacity: 1;
+    transition: opacity 500ms, transform 500ms;
+    transform: translateY(0) scale(1);
   }
 
   .add-item-fade-exit-actve {
     opacity: 0;
-    transition: opacity 300ms, transform 300ms;
+    transition: opacity 500ms, transform 500ms;
+    transform: translateY(100px) scale(0.9);
   }
   .add-item-fade-exit-done {
-    opacity: 1;
-    transition: opacity 300ms, transform 300ms;
+    opacity: 0;
+    transition: opacity 500ms, transform 500ms;
+    transform: translateY(100px) scale(0.9);
   }

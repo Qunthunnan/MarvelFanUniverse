@@ -7,16 +7,15 @@ const List = styled.ul`
 
 
     @media (min-width: 320px) {
-        padding: 0;
-        
-        grid-template: auto auto / auto auto;
-        row-gap: 30px;
-        justify-content: space-around;
+        padding: 0 10px;
+        grid-template: auto auto / minmax(140px, auto) minmax(140px, auto);
+        column-gap: 20px;
+        row-gap: 20px;
+        justify-content: space-evenly;
     }
 
     @media (min-width: 576px) {
         row-gap: 40px;
-        justify-content: space-between;
     }
 
     @media (min-width: 786px) {
@@ -26,6 +25,7 @@ const List = styled.ul`
 
     @media (min-width: 992px) {
         row-gap: 55px;
+        column-gap: 25px;
     }
 
     @media (min-width: 1200px) {

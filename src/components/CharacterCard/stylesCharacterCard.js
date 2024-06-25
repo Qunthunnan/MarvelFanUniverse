@@ -5,19 +5,19 @@ const CharacterItem = styled.li`
             @media (min-width: 320px) {
                 cursor: pointer;
                 display: flex;
-                height: 222.60px;
-                width: 140px;
+                aspect-ratio: 200 / 318;
                 flex-direction: column;
                 box-shadow: ${({$active}) => ( $active ? ('0px 3px 15px 5px' + vars.marvelRed + '90')  : '0px 3px 15px 5px rgba(0, 0, 0, 0.3)')};
-                transform: ${({$active}) => ( $active ? ('translateY(-5px)')  : 'unset')};
+                transform: ${({$active}) => ( $active ? ('translateY(-5px)')  : null )};
                 transition: all 0.5s;
                 &:focus {
                     box-shadow: 0px 3px 15px 5px ${vars.marvelRed}90;
                 }
                 img {
                     object-fit: cover;
-                    height: 140px;
-                    width: 140px;
+                    width: 100%;
+                    height: fit-content;
+                    aspect-ratio: 1 / 1;
                 }
                 h2 {
                     font-size: 1.2rem;
@@ -27,41 +27,8 @@ const CharacterItem = styled.li`
             }
 
             @media (min-width: 576px) {
-                height: 318px;
-                width: 200px;
-                img {
-                    height: 200px;
-                    width: 200px;
-                }
                 h2 {
                     font-size: 1.3rem;
-                }
-            }
-
-            @media (min-width: 768px) {
-                height: 286.20px;
-                width: 180px;
-                img {
-                    height: 180px;
-                    width: 180px;
-                }
-            }
-
-            @media (min-width: 992px) {
-                height: 254.40px;
-                width: 160px;
-                img {
-                    height: 160px;
-                    width: 160px;
-                }
-            }
-
-            @media (min-width: 1400px) {
-                height: 318px;
-                width: 200px;
-                img {
-                    height: 200px;
-                    width: 200px;
                 }
             }
 `;

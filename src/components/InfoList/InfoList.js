@@ -6,6 +6,7 @@ import { setContent } from "../../utils/setContent";
 import { onFocusClick } from "../../utils/onFocusClick";
 import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import './transitions.css';
 
 export const InfoList = ({ 
     ItemSC = styled.li``,
@@ -233,20 +234,20 @@ const View = memo(({items, onOpenItem, activeItem, ItemSC, ItemChildren, tabInde
             { items.map((item, i) => {
                 const ref = createRef(null);
                 return (
-                    <CSSTransition
+                <CSSTransition
                     key={i} 
                     nodeRef={ref}
                     timeout={500}
                     classNames={'add-item'}
                 >
-                 <ItemSC
-                    ref={ref} 
-                    tabIndex= { tabIndexOnLi ? 0 : 'none'}
-                    $isActive={(activeItem && activeItem.id === item.id) ? true : false} 
-                    onKeyPress = { (e) => {onFocusClick(e, () => {onOpenItem(item)})} }
-                    onClick={ onOpenItem ? () => { onOpenItem( item ) } : null }
-                    >
-                        <ItemChildren item={item}/> 
+                    <ItemSC
+                        ref={ref} 
+                        tabIndex= { tabIndexOnLi ? 0 : 'none'}
+                        $isActive={(activeItem && activeItem.id === item.id) ? true : false} 
+                        onKeyPress = { (e) => {onFocusClick(e, () => {onOpenItem(item)})} }
+                        onClick={ onOpenItem ? () => { onOpenItem( item ) } : null }
+                        >
+                            <ItemChildren item={item}/> 
                     </ItemSC>
                 </CSSTransition>
                 )

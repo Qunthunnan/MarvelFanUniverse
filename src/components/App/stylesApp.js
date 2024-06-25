@@ -30,6 +30,11 @@ const CharactersContentWrapper = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin: 53px 0 0 0;
+    column-gap: 15px;
+}
+
+@media (min-width: 992px) {
+    column-gap: 25px;
 }
 `;
 
