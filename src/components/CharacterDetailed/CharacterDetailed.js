@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary.js';
 
 export const CharacterDetailed = ({ name, description, thumbnail, listData, maxCount, searchParams: {searchValue, inputValue, searchError, onInput, searchAction}, id}) => {
-
+    
     return (
         <ErrorBoundary>
             <DetailedWrapper>

@@ -1,10 +1,22 @@
 import styled from "styled-components";
 import mainBg from "../../resources/imgs/mainBg.png";
 
+const AppContentWrapper = styled.div`
+@media (min-width: 320px) {
+    padding: 80px 0 0 0;
+}
+
+@media (min-width: 576px) {
+    padding: 100px 0 0 0;
+}
+
+@media (min-width: 768px) {
+    padding: 100px 0 0 0;
+}
+`
+
 const MainDiv = styled.div`
 padding: 0 0 45px;
-
-
 @media (min-width: 576px) {
     background: ${({$bg}) => ( $bg ? 'url('+mainBg+') no-repeat right bottom' : '')};
 }
@@ -43,7 +55,7 @@ const AsideWrapper = styled.div`
     display: flex;
     position: fixed;
     max-height: 100%;
-    top: 0%;
+    top: 85px;
     left: 50%;
     row-gap: 30px;
     flex-direction: column;
@@ -52,6 +64,7 @@ const AsideWrapper = styled.div`
 
 @media (min-width: 768px) {
     position: sticky;
+    top: 100px;
     transform: none;
 }
 `;
@@ -72,4 +85,4 @@ const MobileMenuButtons = styled.nav`
 }
 `;
 
-export { MainDiv, CharactersContentWrapper, AsideWrapper, MobileMenuButtons }; 
+export { MainDiv, CharactersContentWrapper, AsideWrapper, MobileMenuButtons, AppContentWrapper }; 

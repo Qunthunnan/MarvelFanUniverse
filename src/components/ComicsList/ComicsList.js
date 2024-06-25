@@ -6,10 +6,13 @@ import { ComicsItem } from "../ComicsCard/stylesComicsCard";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 import { WideButtonBottom } from "../CharactersList/stylesCharacterList";
 import { Section } from "../CharactersList/stylesCharacterList";
+import { useList } from "../../hooks/useList";
+
 export const ComicsList = memo(({searchValue, isRandomOffset, order}) => {
     
     const { process, setProcess, getComicses, getComicsCount, searchComicsesByTitle } = useMarvelService();
     const { process: downloadProcess, setProcess: setDownloadProcess, getComicses: getAddComicses, searchComicsesByTitle: searchMore} = useMarvelService ();
+    const { listState, setListState } = useList();
 
     return (
         <section>
@@ -33,6 +36,8 @@ export const ComicsList = memo(({searchValue, isRandomOffset, order}) => {
                 tabIndexOnLi 
                 isRandomOffset={ isRandomOffset }
                 order={ order }
+                listState={listState}
+                setListState={setListState}
                 />
         </section>
     );

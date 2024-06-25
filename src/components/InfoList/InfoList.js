@@ -6,6 +6,7 @@ import { setContent } from "../../utils/setContent";
 import { onFocusClick } from "../../utils/onFocusClick";
 import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { useList } from "../../hooks/useList";
 import './transitions.css';
 
 export const InfoList = ({ 
@@ -27,23 +28,27 @@ export const InfoList = ({
     setProcess,
     downloadProcess,
     setDownloadProcess,
-    dataOnMount,
     tabIndexOnLi,
     isRandomOffset,
-    order }) => {
-        
+    order,
+    listState,
+    setListState }) => {
     const [items, setItems] = useState();
+
     
-    let offset = useRef(0);
+    let offset = useRef();
     let maxCount = useRef();
     const itemsRendered = items ? items.length : 0;
     let searchCount = useRef();
     const dataOnMountMounted = useRef(false);
     const prevOrder = useRef(order);
-    const prevIsRandomOffset = useRef(isRandomOffset)
+    const prevIsRandomOffset = useRef(isRandomOffset);
+    const itemsLoaded = useRef(false);
+
+    const scrollPosition = useRef();
 
     useEffect(() => {
-        if( !(dataOnMount?.maxCount || dataOnMount?.maxCount >= 0) ) {
+        if( !(listState?.maxCount || listState?.maxCount >= 0) ) {
             getMaxCount()
             .then(result => { 
                 maxCount.current = result;
@@ -51,10 +56,41 @@ export const InfoList = ({
             .then(loadItems)
         } else
             loadItems();
-
         
         console.log('itemsList mounted');
+
+        document.addEventListener('scroll', onScrolling);
+
+        return () => {
+            document.removeEventListener('scroll', onScrolling);
+
+            if ( listState ) {
+                setListState((prevState) => (
+                    {   ...prevState,
+                        scrollY: scrollPosition.current,
+                    }
+                ));
+            }
+        }
     }, []);
+
+    useEffect(() => {
+        if ( listState ) {
+            if(itemsLoaded.current === false && items?.length > 0) {
+                window.scrollTo({top: listState?.scrollY, behavior: 'instant'});
+                itemsLoaded.current = true;
+            }
+            setListState(({scrollY}) => ({
+                items: items,
+                offset: offset.current,
+                maxCount: maxCount.current,
+                searchValue: searchValue,
+                order: order,
+                isRandomOffset: isRandomOffset,
+                scrollY: scrollY
+            }) );
+        }
+    }, [items])
 
     useEffect(() => {
         if (searchValue && maxCount.current >= 0) {
@@ -81,16 +117,20 @@ export const InfoList = ({
     }, [order, isRandomOffset]);
 
     console.log(`renderItemsList, itemsRendered: ${itemsRendered}, offset: ${offset.current}`);
+
+    const onScrolling = (e) => {
+        scrollPosition.current = window.scrollY;
+    }
     
     const loadItems = () => {
-        if( (dataOnMount?.items) && (dataOnMount?.offset || dataOnMount?.offset >= 0) && (dataOnMount?.maxCount || dataOnMount?.maxCount >= 0) && !dataOnMountMounted.current) {
-            offset.current = dataOnMount.offset;
-            maxCount.current = dataOnMount.maxCount;
-            setItems(dataOnMount.items);
+        if( (listState?.items && listState?.items.length > 0 || listState?.renderZero) && (listState?.offset || listState?.offset >= 0) && (listState?.maxCount || listState?.maxCount >= 0) && !dataOnMountMounted.current ) {
+            offset.current = listState.offset;
+            maxCount.current = listState.maxCount;
+            setItems(listState.items);
             setProcess('view');
             dataOnMountMounted.current = true;
 
-            if(maxCount.current <= dataOnMount.items.length ) 
+            if(maxCount.current <= listState.items.length ) 
                 setDownloadProcess('unmount');
             else
                 setDownloadProcess('view');

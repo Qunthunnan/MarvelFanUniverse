@@ -8,30 +8,33 @@ import { NotFoundPage } from "../../pages/NotFoundPage";
 import { CharacterDetailed } from "../CharacterDetailed/CharacterDetailed";
 import { ComicsDetailed } from "../ComicsDetailed/ComicsDetailed";
 import { SingleEntityPage } from "../../pages/SinglePage";
+import { AppContentWrapper } from "./stylesApp";
+
 
 export function App () {
 	const location = useLocation();
 
 	return (
-			<Routes location={ location }>
-					<Route path="/" element= { <HeaderPage /> }>
-								<Route index element={ <MainPage /> } />
-								<Route path="characters" element={ <MainPage /> } />
+				<Routes location={ location }>
+						<Route path="/" element= { <HeaderPage /> }>
+						
+									<Route index element={  <AppContentWrapper><MainPage /></AppContentWrapper>  } />
+									<Route path="characters" element={ <AppContentWrapper><MainPage /></AppContentWrapper>  } />
 
-								<Route path="comics" element= { <ComicsBanerPage/> } >
-									<Route index element= { <ComicsListPage /> } />
-								</Route>
+									<Route path="comics" element= { <AppContentWrapper><ComicsBanerPage/></AppContentWrapper> } >
+										<Route index element= { <ComicsListPage /> } />
+									</Route>
 
-								<Route path="comics/:id" element= { <ComicsBanerPage/> } > 
-									<Route index element= { <SingleEntityPage  type={'comics'} Component={ ComicsDetailed }/> } />
-								</Route>
-								
-								<Route path="characters/:id" element= { <ComicsBanerPage/> } >
-									<Route index element= { <SingleEntityPage type={'character'} Component={ CharacterDetailed }/> } />
-								</Route>
+									<Route path="comics/:id" element= {<AppContentWrapper><ComicsBanerPage/></AppContentWrapper>  } > 
+										<Route index element= { <SingleEntityPage  type={'comics'} Component={ ComicsDetailed }/> } />
+									</Route>
+									
+									<Route path="characters/:id" element= { <AppContentWrapper><ComicsBanerPage/></AppContentWrapper> } >
+										<Route index element= { <SingleEntityPage type={'character'} Component={ CharacterDetailed }/> } />
+									</Route>
 
-								<Route path="*" element= { <NotFoundPage/> }/>
-					</Route>
-			</Routes>
+									<Route path="*" element= { <NotFoundPage/> }/>
+						</Route>
+				</Routes>
 	);
 }
