@@ -36,8 +36,7 @@ export const CharactersList = memo(({ onOpenCharacter, activeCharacter, isRandom
             tabIndexOnLi 
             isRandomOffset={isRandomOffset}
             order={ order }
-            listState={ listState }
-            setListState={ setListState }
+            listContext = { [listState, setListState, 'characters'] }
             />
     );
 });

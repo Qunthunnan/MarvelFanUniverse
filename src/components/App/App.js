@@ -9,15 +9,16 @@ import { CharacterDetailed } from "../CharacterDetailed/CharacterDetailed";
 import { ComicsDetailed } from "../ComicsDetailed/ComicsDetailed";
 import { SingleEntityPage } from "../../pages/SinglePage";
 import { AppContentWrapper } from "./stylesApp";
+import { ListProvider } from "../../hooks/useList";
 
 
 export function App () {
 	const location = useLocation();
 
 	return (
+			<ListProvider >
 				<Routes location={ location }>
 						<Route path="/" element= { <HeaderPage /> }>
-						
 									<Route index element={  <AppContentWrapper><MainPage /></AppContentWrapper>  } />
 									<Route path="characters" element={ <AppContentWrapper><MainPage /></AppContentWrapper>  } />
 
@@ -36,5 +37,7 @@ export function App () {
 									<Route path="*" element= { <NotFoundPage/> }/>
 						</Route>
 				</Routes>
+			</ListProvider>
+
 	);
 }

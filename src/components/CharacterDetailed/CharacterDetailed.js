@@ -123,11 +123,14 @@ function ComicsList ({comicsList, name, maxCount, onInput, inputValue, searchErr
                           setProcess= { setProcess }
                           downloadProcess= { addProcess }
                           setDownloadProcess= { setAddProcess } 
-                          dataOnMount= {{
-                            items: comicsList,
-                            offset: 0,
-                            maxCount: maxCount
-                          }} 
+                          listContext= {[{
+                            chatacterDetailed: {
+                                items: comicsList,
+                                offset: 0,
+                                maxCount: maxCount,
+                                isRandomOffset: randomOffset,
+                            }
+                          }, ()=>{}, 'chatacterDetailed']} 
                           isRandomOffset={ randomOffset }
                           order={ comicsOrder }
                           />

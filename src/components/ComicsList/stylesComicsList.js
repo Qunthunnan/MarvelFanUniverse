@@ -19,7 +19,7 @@ const List = styled.ul`
     }
 
     @media (min-width: 786px) {
-        grid-template: auto auto / auto auto auto;
+        grid-template: auto auto / minmax(160px, auto) minmax(160px, auto) minmax(160px, auto);
     }
 
 
@@ -29,7 +29,7 @@ const List = styled.ul`
     }
 
     @media (min-width: 1200px) {
-        grid-template: auto auto / auto auto auto auto;
+        grid-template: auto auto / minmax(200px, auto) minmax(200px, auto) minmax(200px, auto) minmax(200px, auto);
 
     }
 `;

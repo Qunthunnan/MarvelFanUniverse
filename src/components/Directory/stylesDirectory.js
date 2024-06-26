@@ -8,7 +8,7 @@ justify-content: space-between;
 position: fixed;
 top: 0;
 left: 0;
-width: 100vw;
+width: 100%;
 background: #fff;
 z-index: 2;
 box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.3);

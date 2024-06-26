@@ -72,11 +72,13 @@ function CharactersList ({charactersList, maxCount, id}) {
                           setProcess= { setProcess }
                           downloadProcess= { addProcess }
                           setDownloadProcess= { setAddProcess } 
-                          dataOnMount= {{
-                            items: charactersList,
-                            offset: 0,
-                            maxCount: maxCount
-                          }} />
+                          listContext= {[{
+                            comicsDetailed: {
+                                items: charactersList,
+                                offset: 0,
+                                maxCount: maxCount,
+                            }
+                          }, ()=>{}, 'comicsDetailed']}  />
             </CharactersListSC>
 
         )

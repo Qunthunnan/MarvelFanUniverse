@@ -31,10 +31,12 @@ export const InfoList = ({
     tabIndexOnLi,
     isRandomOffset,
     order,
-    listState,
-    setListState }) => {
+    listContext }) => {
     const [items, setItems] = useState();
 
+    const [listState, setListState, type] = listContext ? listContext : [];
+
+    const {[type]: currentListState } = listState;
     
     let offset = useRef();
     let maxCount = useRef();
@@ -44,11 +46,12 @@ export const InfoList = ({
     const prevOrder = useRef(order);
     const prevIsRandomOffset = useRef(isRandomOffset);
     const itemsLoaded = useRef(false);
+    const searchRef = useRef(searchValue);
 
     const scrollPosition = useRef();
 
     useEffect(() => {
-        if( !(listState?.maxCount || listState?.maxCount >= 0) ) {
+        if( !(currentListState?.maxCount || currentListState?.maxCount >= 0) ) {
             getMaxCount()
             .then(result => { 
                 maxCount.current = result;
@@ -65,11 +68,24 @@ export const InfoList = ({
             document.removeEventListener('scroll', onScrolling);
 
             if ( listState ) {
-                setListState((prevState) => (
-                    {   ...prevState,
-                        scrollY: scrollPosition.current,
+
+                setListState((prevState) => {
+                    const newState = {}
+                    Object.assign(newState, prevState);
+                    newState[type] = {
+                        items: prevState[type]?.items,
+                        offset: offset.current,
+                        maxCount: maxCount.current,
+                        searchCount: searchCount.current,
+                        searchValue: searchRef.current,
+                        order: order,
+                        isRandomOffset: isRandomOffset,
+                        scrollY: scrollPosition.current
                     }
-                ));
+
+                    return newState;
+                });
+                    
             }
         }
     }, []);
@@ -77,29 +93,39 @@ export const InfoList = ({
     useEffect(() => {
         if ( listState ) {
             if(itemsLoaded.current === false && items?.length > 0) {
-                window.scrollTo({top: listState?.scrollY, behavior: 'instant'});
+                window.scrollTo({top: currentListState?.scrollY, behavior: 'instant'});
                 itemsLoaded.current = true;
             }
-            setListState(({scrollY}) => ({
-                items: items,
-                offset: offset.current,
-                maxCount: maxCount.current,
-                searchValue: searchValue,
-                order: order,
-                isRandomOffset: isRandomOffset,
-                scrollY: scrollY
-            }) );
+
+            if(items?.length > 0) {
+                setListState((prevState) => {
+                    const newState = {}
+                    Object.assign(newState, prevState);
+                    newState[type] = {
+                        items: items,
+                        offset: offset.current,
+                        maxCount: maxCount.current,
+                        searchCount: searchCount.current,
+                        searchValue: searchRef.current,
+                        order: order,
+                        isRandomOffset: isRandomOffset,
+                        scrollY: scrollPosition.current
+                    }
+                    return newState;
+                });
+            }
         }
     }, [items])
 
     useEffect(() => {
-        if (searchValue && maxCount.current >= 0) {
+        if (searchValue && maxCount.current >= 0 && itemsLoaded.current) {
             searchItem();
             console.log('itemsList searching');
         }
         if (searchValue === '' && maxCount.current >= 0) {
             loadItems();
         }
+        searchRef.current = searchValue;
     }, [ searchValue ]);
 
     useEffect(() => {
@@ -123,17 +149,25 @@ export const InfoList = ({
     }
     
     const loadItems = () => {
-        if( (listState?.items && listState?.items.length > 0 || listState?.renderZero) && (listState?.offset || listState?.offset >= 0) && (listState?.maxCount || listState?.maxCount >= 0) && !dataOnMountMounted.current ) {
-            offset.current = listState.offset;
-            maxCount.current = listState.maxCount;
-            setItems(listState.items);
+        if( (currentListState?.items && currentListState?.items.length > 0 || currentListState?.renderZero) && (currentListState?.offset || currentListState?.offset >= 0) && (currentListState?.maxCount || currentListState?.maxCount >= 0) && !dataOnMountMounted.current ) {
+            offset.current = currentListState.offset;
+            maxCount.current = currentListState.maxCount;
+            searchValue = currentListState.searchValue;
+            searchCount.current = currentListState.searchCount;
+            setItems(currentListState.items);
             setProcess('view');
             dataOnMountMounted.current = true;
 
-            if(maxCount.current <= listState.items.length ) 
-                setDownloadProcess('unmount');
-            else
-                setDownloadProcess('view');
+            if(searchCount.current) {
+                if(searchCount.current <= currentListState.items.length )
+                    setDownloadProcess('unmount')
+                else
+                    setDownloadProcess('view');
+            } else if(maxCount.current <= currentListState.items.length ) 
+                        setDownloadProcess('unmount');
+                    else
+                        setDownloadProcess('view');
+
         } else {
             const count = getTargetCount();
             offset.current = isRandomOffset ? getRandomItemsOffset() : 0;

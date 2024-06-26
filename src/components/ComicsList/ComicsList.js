@@ -36,8 +36,7 @@ export const ComicsList = memo(({searchValue, isRandomOffset, order}) => {
                 tabIndexOnLi 
                 isRandomOffset={ isRandomOffset }
                 order={ order }
-                listState={listState}
-                setListState={setListState}
+                listContext={[listState, setListState, 'comics']}
                 />
         </section>
     );
