@@ -214,7 +214,7 @@ export const InfoList = ({
     const getRandomItemsOffset = () => {
         if(maxCount.current === 0)
             return 0
-        return getRandNum(1, (maxCount.current - 1) - (getTargetCount() * 5));
+        return getRandNum(1, (maxCount.current || currentListState.maxCount - 1) - (getTargetCount() * 5));
     }
 
     function onLoadMore () {
