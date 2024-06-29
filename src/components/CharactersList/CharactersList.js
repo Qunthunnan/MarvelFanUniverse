@@ -5,13 +5,11 @@ import { List, WideButtonBottom } from "./stylesCharacterList";
 import { useMarvelService } from "../../services/ApiService/ApiService";
 import { Section } from "./stylesCharacterList";
 import { InfoList } from "../InfoList/InfoList";
-import { useList } from "../../hooks/useList";
 
-export const CharactersList = memo(({ onOpenCharacter, activeCharacter, isRandomOffset, order, searchName,  }) => {
+export const CharactersList = memo(({ onOpenCharacter, activeCharacter, isRandomOffset, order, searchName, listState, setListState }) => {
    
     const { process, setProcess, getCharacters, getCharactersCount, searchCharactersByName } = useMarvelService ();
     const { process: downloadProcess, setProcess: setDownloadProcess, getCharacters: getAddCharacters, searchCharactersByName: searchMore} = useMarvelService ();
-    const { listState, setListState } = useList();
 
     return (
         <InfoList

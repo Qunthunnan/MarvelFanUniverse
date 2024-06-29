@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState, memo, createRef } from "react";
-import { Section } from "../CharactersList/stylesCharacterList";
 import { getRandNum } from "../../utils/randomValues";
 import { vars } from "../style/Vars";
 import { setContent } from "../../utils/setContent";
 import { onFocusClick } from "../../utils/onFocusClick";
 import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { useList } from "../../hooks/useList";
 import './transitions.css';
 
 export const InfoList = ({ 
@@ -50,24 +48,17 @@ export const InfoList = ({
 
     const scrollPosition = useRef();
 
-    useEffect(() => {
-        if( !(currentListState?.maxCount || currentListState?.maxCount >= 0) ) {
-            getMaxCount()
-            .then(result => { 
-                maxCount.current = result;
-            })
-            .then(loadItems)
-        } else
-            loadItems();
-        
+    useEffect(() => {        
         console.log('itemsList mounted');
+
+        loadItems();
 
         document.addEventListener('scroll', onScrolling);
 
         return () => {
             document.removeEventListener('scroll', onScrolling);
 
-            if ( listState ) {
+            if ( listState && (offset.current || offset.current === 0) && (maxCount.current || maxCount.current === 0)) {
 
                 setListState((prevState) => {
                     const newState = {}
@@ -136,7 +127,7 @@ export const InfoList = ({
                 if(searchValue) {
                     searchItem();
                 } else {
-                    loadItems();
+                    loadItems(true);
                 }
             }
         }
@@ -148,8 +139,8 @@ export const InfoList = ({
         scrollPosition.current = window.scrollY;
     }
     
-    const loadItems = () => {
-        if( (currentListState?.items && currentListState?.items.length > 0 || currentListState?.renderZero) && (currentListState?.offset || currentListState?.offset >= 0) && (currentListState?.maxCount || currentListState?.maxCount >= 0) && !dataOnMountMounted.current ) {
+    const loadItems = (force) => {
+    if( (currentListState?.items && currentListState?.items.length > 0 || currentListState?.renderZero) && (currentListState?.offset || currentListState?.offset >= 0) && (currentListState?.maxCount || currentListState?.maxCount >= 0) && !dataOnMountMounted.current && !force ) {
             offset.current = currentListState.offset;
             maxCount.current = currentListState.maxCount;
             searchValue = currentListState.searchValue;
@@ -169,22 +160,28 @@ export const InfoList = ({
                         setDownloadProcess('view');
 
         } else {
-            const count = getTargetCount();
-            offset.current = isRandomOffset ? getRandomItemsOffset() : 0;
-    
-           getItems(count, offset.current, order)
-            .then(({data}) => {
-                setItems(data);
-                return data.length;
+            getMaxCount()
+            .then(result => { 
+                maxCount.current = result;
             })
-            .then((itemsCount) => {
-                setProcess('view');
-
-                if(maxCount.current <= itemsCount ) 
-                    setDownloadProcess('unmount');
-                else
-                    setDownloadProcess('view');
-            });
+            .then(() => {
+                const count = getTargetCount();
+                offset.current = isRandomOffset ? getRandomItemsOffset() : 0;
+        
+               getItems(count, offset.current, order)
+                .then(({data}) => {
+                    setItems(data);
+                    return data.length;
+                })
+                .then((itemsCount) => {
+                    setProcess('view');
+    
+                    if(maxCount.current <= itemsCount ) 
+                        setDownloadProcess('unmount');
+                    else
+                        setDownloadProcess('view');
+                });
+            })
         }
     }
 
@@ -254,6 +251,11 @@ export const InfoList = ({
     }
 
     function onLoadMoreSearchResults() {
+        if(!searchValue || !searchCount.current) {
+            searchValue = currentListState.searchValue;
+            searchCount.current = currentListState.searchCount;
+        }
+
         const count = getTargetCount();
 
         if((itemsRendered + count) >= searchCount.current) {
@@ -291,7 +293,13 @@ export const InfoList = ({
                     tabIndexOnLi: tabIndexOnLi
                 })}
             </ListSC>
-            { setContent(downloadProcess, LoadButtonSC, {children: 'Load more', onClick: searchValue && searchValue !== '' ? onLoadMoreSearchResults : onLoadMore}) }
+            { setContent(downloadProcess, LoadButtonSC, {children: 'Load more', onClick: () => {
+                if ((searchValue && searchValue !== '') || (currentListState?.searchValue && currentListState?.searchValue !== '' )) {
+                    onLoadMoreSearchResults();
+                } else {
+                    onLoadMore();
+                } 
+            }}) }
         </ContentWrapperSC>
     );
 }

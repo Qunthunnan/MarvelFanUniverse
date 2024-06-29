@@ -8,21 +8,50 @@ import { CharacterInfo } from "../components/CharacterInfo/CharacterInfo";
 import { SearchCharacters } from "../components/SearchItems/SearchCharacters";
 import { SortList } from "../components/SortList/SortList";
 import { SortMainWraper } from "../components/SortList/stylesSortList";
+import { usePagesContext } from "../hooks/usePagesContext";
 
 export const MainPage = () => {
-    const [mobileSearchShowed, setMobileSearchShowed] = useState(false);
-	const [activeCharacter, setActiveCharacter] = useState();
-	const [searching, setSearching] = useState(false);
-	const [randomOffset, setRandomOffset] = useState(true);
-	const [charactersOrder, setCharactersOrder] = useState('-modified');
+	const {pageState, setSpecificPageState} = usePagesContext();
+	const { main: mainPageState } = pageState;
 
-	useEffect(()=>{ 
-		console.log('main mounted, started updateCharacters');
+    const [mobileSearchShowed, setMobileSearchShowed] = useState(false);
+
+	const [activeCharacter, setActiveCharacter] = useState(mainPageState?.main?.activeCharacter);
+	const [randomOffset, setRandomOffset] = useState(  typeof(mainPageState?.main?.randomOffset) === 'boolean' ? mainPageState?.main?.randomOffset : true );
+	const [charactersOrder, setCharactersOrder] = useState(mainPageState?.main?.charactersOrder || '-modified');
+	const [searchValue, setSearchValue] = useState(mainPageState?.main?.searchValue || '');
+
+	function setSpecificComponentState(component, state) {
+		const newState = {}
+		Object.assign(newState, mainPageState);
+		newState[component] = state;
+		setSpecificPageState('main', newState);
+	}
+
+	useEffect(()=>{
+
+		// setSpecificComponentState('list', {
+		// 	items: mainPageState?.list?.items || undefined,
+		// 	offset: mainPageState?.list?.offset >= 0 ? mainPageState.list.offset : 0,
+		// 	maxCount: mainPageState?.list?.maxCount ? mainPageState.list.maxCount : undefined,
+		// 	searchCount: mainPageState?.list?.searchCount ? mainPageState.list.searchCount : undefined,
+		// })
 	}, []);
+
+	console.log(pageState);
+
+	useEffect(() => {
+		setSpecificComponentState('main', {
+			searchValue: searchValue,
+			charactersOrder: charactersOrder,
+			randomOffset: randomOffset,
+			activeCharacter: activeCharacter
+		})
+	}, [ searchValue, charactersOrder, randomOffset, activeCharacter ]);
 	
 	const onCloseMobileCharacterInfo = useCallback(() => {
 		setActiveCharacter(null);
-	}, []); 
+	}, []);
 
 	const onSwichSearch = useCallback((e) => {
 		setMobileSearchShowed((prevSearchShowed) => (!prevSearchShowed) );
@@ -33,26 +62,35 @@ export const MainPage = () => {
 	}, []);
 
 	const onSearch = useCallback((name) => {
-        setSearching(name);
+        setSearchValue(name);
     }, []);
 
 	const switchRandomOffset = () => {
-		console.log(randomOffset, charactersOrder);
 		setRandomOffset((prevOffset) => (
 			!prevOffset
 		));
 	}
 
 	const offRandomOffset = () => {
-		console.log(randomOffset, charactersOrder);
-
 		setRandomOffset(false);
 	}
 
+	console.log(`randomOffset: ${randomOffset}`);
+
 	const orders = [
 		{
-			name: 'Random',
+			name: 'Last updated',
 			value: '-modified',
+			action: offRandomOffset
+		},
+		{
+			name: 'A little forgotten',
+			value: 'modified',
+			action: offRandomOffset,
+		},
+		{
+			name: 'Random',
+			value: 'random',
 			action: switchRandomOffset
 		},
 		{
@@ -65,57 +103,48 @@ export const MainPage = () => {
 			value: '-name',
 			action: offRandomOffset
 		},
-		{
-			name: 'Last updated',
-			value: '-modified',
-			action: offRandomOffset
-		},
-		{
-			name: 'A little forgotten',
-			value: 'modified',
-			action: offRandomOffset,
-		}
+
 	]
 
     return ( 
-		<MainDiv $bg={ true }>
-			<Container>
-				<ErrorBoundary>
-					<RandomCharacter />
-				</ErrorBoundary>
+			<MainDiv $bg={ true }>
+				<Container>
+					{/* <ErrorBoundary>
+						<RandomCharacter />
+					</ErrorBoundary> */}
 
-				<MobileMenuButtons >
-					<svg onClick={ onSwichSearch } xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-						<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-					</svg>
-				</MobileMenuButtons>
+					<MobileMenuButtons >
+						<svg onClick={ onSwichSearch } xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+							<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+						</svg>
+					</MobileMenuButtons>
 
-				<SortMainWraper>
-					<SortList orders={ orders } activeOrder={charactersOrder} setOrder={setCharactersOrder}/>
-				</SortMainWraper>
+					<SortMainWraper>
+						<SortList orders={ orders } setOrder={setCharactersOrder} defaultValue={'random'}/>
+					</SortMainWraper>
 
-				<CharactersContentWrapper>
-					<ErrorBoundary>
-						<CharactersList 
-							activeCharacter={ activeCharacter } 
-							onOpenCharacter={ onOpenCharacter }
-							searchName = { searching }
-							isRandomOffset = { randomOffset }
-							order = { charactersOrder }/>
-					</ErrorBoundary>
-					<AsideWrapper>
-						<ErrorBoundary>
-							<CharacterInfo
-								character={ activeCharacter }
-								onCloseMobileCharacterInfo={onCloseMobileCharacterInfo}/>
-						</ErrorBoundary>
-						
-						<SearchCharacters mobileSearchShowed={ mobileSearchShowed } 
-						onSwichSearch={ onSwichSearch } 
-						onSearch={ onSearch } />
-					</AsideWrapper>
-				</CharactersContentWrapper>
-			</Container>
-		</MainDiv>
+					<CharactersContentWrapper>
+						{/* <ErrorBoundary>
+							<CharactersList 
+								activeCharacter={ activeCharacter } 
+								onOpenCharacter={ onOpenCharacter }
+								searchName = { searching }
+								isRandomOffset = { randomOffset }
+								order = { charactersOrder }/>
+						</ErrorBoundary> */}
+						<AsideWrapper>
+							{/* <ErrorBoundary>
+								<CharacterInfo
+									character={ activeCharacter }
+									onCloseMobileCharacterInfo={onCloseMobileCharacterInfo}/>
+							</ErrorBoundary> */}
+							
+							<SearchCharacters mobileSearchShowed={ mobileSearchShowed } 
+							onSwichSearch={ onSwichSearch } 
+							onSearch={ onSearch } />
+						</AsideWrapper>
+					</CharactersContentWrapper>
+				</Container>
+			</MainDiv>
     )
 }
