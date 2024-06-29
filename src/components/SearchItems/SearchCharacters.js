@@ -3,7 +3,7 @@ import { CloseBtn  } from "../style/CloseBtn";
 import { useSearchItems } from "../../hooks/useSearchItems";
 import { SearchWriper, InputWrapper, Label } from "./stylesSearchCharacter";
 
-export const SearchCharacters = ({ onSwichSearch, mobileSearchShowed, onSearch }) => {
+export const SearchCharacters = ({ onSwichSearch, mobileSearchShowed, onSearch, value }) => {
     const { onInput, name, search, error } = useSearchItems({onSearch});
 
     const message = error ? 'Search value is iccorect' : '';
@@ -17,7 +17,7 @@ export const SearchCharacters = ({ onSwichSearch, mobileSearchShowed, onSearch }
         <h2>Or find a character by name:</h2>
         <form onSubmit={(e) => { e.preventDefault(); search();} }>
             <InputWrapper>
-                <input onChange={onInput} placeholder="Enter name" value={name} type="text" name="characterName" id="characterName" />
+                <input onChange={onInput} placeholder="Enter name" value={name || value} type="text" name="characterName" id="characterName" />
                 <Button type="submit">FIND</Button>
             </InputWrapper>
             <Label htmlFor="characterName">{message}</Label>

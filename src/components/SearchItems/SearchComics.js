@@ -3,7 +3,7 @@ import { useSearchItems } from "../../hooks/useSearchItems";
 import { SearchComicsWriper } from "./stylesSearchComics";
 import { InputWrapper, Label } from "./stylesSearchCharacter";
 
-export const SearchComics = ({ onSearch }) => {
+export const SearchComics = ({ onSearch, value }) => {
     const { onInput, name, search, error } = useSearchItems({onSearch});
 
     const message = error ? 'Search value is iccorect' : '';
@@ -12,7 +12,7 @@ export const SearchComics = ({ onSearch }) => {
         <h2>Find your favorite comics:</h2>
         <form onSubmit={(e) => { e.preventDefault(); search();} }>
             <InputWrapper>
-                <input onChange={onInput} placeholder="Enter comics title" value={name} type="text" name="characterName" id="characterName" />
+                <input onChange={onInput} placeholder="Enter comics title" value={name || value} type="text" name="characterName" id="characterName" />
                 <Button type="submit">FIND</Button>
             </InputWrapper>
             <Label htmlFor="characterName">{message}</Label>

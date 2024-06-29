@@ -41,20 +41,21 @@ export const InfoList = ({
 
     const prevOrder = useRef(order);
     const prevIsRandomOffset = useRef(isRandomOffset);
-    const itemsLoaded = useRef(false);
+    const prevSearchValue = useRef(searchValue);
+    const itemsStore = useRef(items);
 
     useEffect(() => {        
       
-    loadItems();
+        loadItems();
 
-    return () => {
-        setListState( {
-                items: items,
-                offset: offset.current,
-                maxCount: maxCount.current,
-                searchCount: searchCount.current,
-            });
-    }
+        return () => {
+            setListState( {
+                    items: itemsStore.current,
+                    offset: offset.current,
+                    maxCount: maxCount.current,
+                    searchCount: searchCount.current,
+                });
+        }
     }, []);
 
     useEffect(() => {
@@ -66,17 +67,23 @@ export const InfoList = ({
                 searchCount: searchCount.current,
             });
         }
+        itemsStore.current = items;
     }, [items])
 
     useEffect(() => {
-        if (searchValue && maxCount.current >= 0) {
-            searchItem();
-            console.log('itemsList searching');
+        if(searchValue !== prevSearchValue.current) {
+            prevSearchValue.current = searchValue;
+
+            if (searchValue) {
+                searchItem();
+                console.log('itemsList searching');
+            }
+    
+            if (searchValue === '') {
+                loadItems(true);
+            }
         }
 
-        if (searchValue === '' && maxCount.current >= 0) {
-            loadItems(true);
-        }
     }, [ searchValue ]);
 
     useEffect(() => {
@@ -93,7 +100,7 @@ export const InfoList = ({
         }
     }, [order, isRandomOffset]);
 
-    console.log(`renderItemsList, itemsRendered: ${itemsRendered}, offset: ${offset.current}`);
+    // console.log(`renderItemsList, itemsRendered: ${itemsRendered}, offset: ${offset.current}`);
     
     const loadItems = (force) => {
         if( items && (offset.current >= 0) && (maxCount.current >= 0) && !force ) {

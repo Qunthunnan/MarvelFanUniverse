@@ -6,12 +6,12 @@ import { DirectorySpan } from "./stylesDirectory";
 export const Directory = memo( ({ list }) => {
 
     useEffect(()=>{
-        console.log(`Directory render`);
-        console.log(`${list}`);
+        // console.log(`Directory render`);
+        // console.log(list);
     });
 
     useEffect(()=>{
-        console.log('Directory did mount');
+        // console.log('Directory did mount');
     }, []);
     const nodeRef = useRef();
 

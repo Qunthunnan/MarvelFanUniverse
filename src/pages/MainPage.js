@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Container } from "../components/style/Container";
 import { ErrorBoundary } from "../components/ErrorBoundary/ErrorBoundary";
 import { RandomCharacter } from "../components/RandomCharacter/RandomCharacter";
@@ -16,27 +16,56 @@ export const MainPage = () => {
 
     const [mobileSearchShowed, setMobileSearchShowed] = useState(false);
 
-	const [activeCharacter, setActiveCharacter] = useState(mainPageState?.main?.activeCharacter);
-	const [randomOffset, setRandomOffset] = useState(  typeof(mainPageState?.main?.randomOffset) === 'boolean' ? mainPageState?.main?.randomOffset : true );
-	const [charactersOrder, setCharactersOrder] = useState(mainPageState?.main?.charactersOrder || '-modified');
-	const [searchValue, setSearchValue] = useState(mainPageState?.main?.searchValue || '');
+	const [activeCharacter, setActiveCharacter] = useState(mainPageState?.page?.activeCharacter);
+	const [randomOffset, setRandomOffset] = useState( typeof(mainPageState?.page?.randomOffset) === 'boolean' ? mainPageState?.page?.randomOffset : true );
+	const [charactersOrder, setCharactersOrder] = useState(mainPageState?.page?.charactersOrder || '-modified');
+	const [searchValue, setSearchValue] = useState(mainPageState?.page?.searchValue || '');
+
+	const searchValueStore = useRef(searchValue);
+	const randomOffsetStore = useRef(randomOffset);
+	const charactersOrderStore = useRef(charactersOrder);
+	const activeCharacterStore = useRef(activeCharacter);
 
 	function setSpecificComponentState(component, state) {
+		console.log(`set component`);
+		console.log(component);
+		console.log('state');
+		console.log(state);
+		
 		const newState = {}
 		Object.assign(newState, mainPageState);
 		newState[component] = state;
 		setSpecificPageState('main', newState);
 	}
 
+	console.log(`page main: `);
 	console.log(pageState);
 
 	useEffect(() => {
-		setSpecificComponentState('main', {
-			searchValue: searchValue,
-			charactersOrder: charactersOrder,
-			randomOffset: randomOffset,
-			activeCharacter: activeCharacter
-		})
+		return () => {
+			setSpecificPageState('main', {
+				searchValue: searchValueStore.current,
+				charactersOrder: charactersOrderStore.current,
+				randomOffset: randomOffsetStore.current,
+				activeCharacter: activeCharacterStore.current
+			})
+		}
+	}, [])
+
+	useEffect(() => {
+		if(searchValueStore.current !== searchValue || randomOffsetStore.current !== randomOffset || charactersOrderStore.current !== charactersOrder || activeCharacterStore.current !== charactersOrder) {
+			searchValueStore.current = searchValue;
+			randomOffsetStore.current = randomOffset;
+			charactersOrderStore.current = charactersOrder;
+			activeCharacterStore.current = activeCharacter;
+	
+			setSpecificComponentState('page', {
+				searchValue: searchValue,
+				charactersOrder: charactersOrder,
+				randomOffset: randomOffset,
+				activeCharacter: activeCharacter
+			})
+		}
 	}, [ searchValue, charactersOrder, randomOffset, activeCharacter ]);
 	
 	const onCloseMobileCharacterInfo = useCallback(() => {
@@ -132,7 +161,8 @@ export const MainPage = () => {
 							
 							<SearchCharacters mobileSearchShowed={ mobileSearchShowed } 
 							onSwichSearch={ onSwichSearch } 
-							onSearch={ onSearch } />
+							onSearch={ onSearch } 
+							value={ searchValue }/>
 						</AsideWrapper>
 					</CharactersContentWrapper>
 				</Container>

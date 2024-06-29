@@ -2,18 +2,7 @@ import { useEffect, memo } from 'react';
 import { CharacterItem, CardBg } from './stylesCharacterCard';
 import { isFindThumbnail } from '../../utils/isFindThumbnail';
 
-export const CharacterCard = memo(({ item: { name, thumbnail }, onOpen, isActive }) => {
-
-    useEffect(() => {
-        console.log(`character card ${name} render`);
-    });
-
-    useEffect(() => {
-        console.log(`character card ${name} mounted`);
-        return () => {
-            console.log(`character card ${name} unmounted`);
-        }
-    }, []);
+export const CharacterCard = memo(({ item: { name, thumbnail } }) => {
 
     function cutName(name) {
         if(name.length >= 15) {
@@ -21,8 +10,6 @@ export const CharacterCard = memo(({ item: { name, thumbnail }, onOpen, isActive
         }
         return name;
     }
-
-
 
     return(
         <>

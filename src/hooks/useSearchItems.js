@@ -7,9 +7,9 @@ export const useSearchItems = ( { onSearch } ) => {
     let searchTimer = useRef();
     let isSearch = useRef(false);
 
-    useEffect(() => {
-        console.log('render search');
-    });
+    // useEffect(() => {
+    //     console.log('render search');
+    // });
 
     useEffect(() => {
         if(isSearch.current) {
@@ -19,9 +19,9 @@ export const useSearchItems = ( { onSearch } ) => {
     }, [name]);
 
     useEffect(() => {
-        console.log('search mounted');
+        // console.log('search mounted');
         return () => {
-            console.log('search unmounted');
+            // console.log('search unmounted');
             clearTimeout(searchTimer.current);
         }
     }, []);
