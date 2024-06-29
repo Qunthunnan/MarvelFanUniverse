@@ -15,7 +15,6 @@ export const useSearchItems = ( { onSearch } ) => {
         if(isSearch.current) {
             clearTimeout(searchTimer.current);
             searchTimer.current = setTimeout(search, 1000);
-            console.log(`name changed: ${name}`);
         }
     }, [name]);
 
@@ -28,7 +27,6 @@ export const useSearchItems = ( { onSearch } ) => {
     }, []);
 
     const onInput = (e) => {
-        console.log('input ', e.target.value);
         isSearch.current = true;
         setError(false);
         setName(e.target.value);

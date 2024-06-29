@@ -28,16 +28,6 @@ export const MainPage = () => {
 		setSpecificPageState('main', newState);
 	}
 
-	useEffect(()=>{
-
-		// setSpecificComponentState('list', {
-		// 	items: mainPageState?.list?.items || undefined,
-		// 	offset: mainPageState?.list?.offset >= 0 ? mainPageState.list.offset : 0,
-		// 	maxCount: mainPageState?.list?.maxCount ? mainPageState.list.maxCount : undefined,
-		// 	searchCount: mainPageState?.list?.searchCount ? mainPageState.list.searchCount : undefined,
-		// })
-	}, []);
-
 	console.log(pageState);
 
 	useEffect(() => {
@@ -74,8 +64,6 @@ export const MainPage = () => {
 	const offRandomOffset = () => {
 		setRandomOffset(false);
 	}
-
-	console.log(`randomOffset: ${randomOffset}`);
 
 	const orders = [
 		{
@@ -124,20 +112,23 @@ export const MainPage = () => {
 					</SortMainWraper>
 
 					<CharactersContentWrapper>
-						{/* <ErrorBoundary>
+						<ErrorBoundary>
 							<CharactersList 
 								activeCharacter={ activeCharacter } 
 								onOpenCharacter={ onOpenCharacter }
-								searchName = { searching }
+								searchValue = { searchValue }
 								isRandomOffset = { randomOffset }
-								order = { charactersOrder }/>
-						</ErrorBoundary> */}
+								order = { charactersOrder } 
+								listState = {[ mainPageState?.list, (state) => {
+									setSpecificComponentState('list', state);
+								} ]} />
+						</ErrorBoundary>
 						<AsideWrapper>
-							{/* <ErrorBoundary>
+							<ErrorBoundary>
 								<CharacterInfo
 									character={ activeCharacter }
 									onCloseMobileCharacterInfo={onCloseMobileCharacterInfo}/>
-							</ErrorBoundary> */}
+							</ErrorBoundary>
 							
 							<SearchCharacters mobileSearchShowed={ mobileSearchShowed } 
 							onSwichSearch={ onSwichSearch } 

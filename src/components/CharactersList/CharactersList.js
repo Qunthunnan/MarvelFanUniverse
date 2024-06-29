@@ -6,7 +6,7 @@ import { useMarvelService } from "../../services/ApiService/ApiService";
 import { Section } from "./stylesCharacterList";
 import { InfoList } from "../InfoList/InfoList";
 
-export const CharactersList = memo(({ onOpenCharacter, activeCharacter, isRandomOffset, order, searchName, listState, setListState }) => {
+export const CharactersList = memo(({ onOpenCharacter, activeCharacter, isRandomOffset, order, searchValue, listState }) => {
    
     const { process, setProcess, getCharacters, getCharactersCount, searchCharactersByName } = useMarvelService ();
     const { process: downloadProcess, setProcess: setDownloadProcess, getCharacters: getAddCharacters, searchCharactersByName: searchMore} = useMarvelService ();
@@ -21,7 +21,7 @@ export const CharactersList = memo(({ onOpenCharacter, activeCharacter, isRandom
             targetsCount = {{ small: 8, big: 9 }}
             onOpenItem = { onOpenCharacter } 
             activeItem = { activeCharacter }
-            searchValue = { searchName } 
+            searchValue = { searchValue } 
             getMaxCount = { getCharactersCount }
             getItems = { getCharacters }
             getAddItems = { getAddCharacters }
@@ -34,7 +34,7 @@ export const CharactersList = memo(({ onOpenCharacter, activeCharacter, isRandom
             tabIndexOnLi 
             isRandomOffset={isRandomOffset}
             order={ order }
-            listContext = { [listState, setListState, 'characters'] }
+            listState = { listState }
             />
     );
 });

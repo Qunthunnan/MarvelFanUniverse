@@ -29,94 +29,54 @@ export const InfoList = ({
     tabIndexOnLi,
     isRandomOffset,
     order,
-    listContext }) => {
-    const [items, setItems] = useState();
+    listState }) => {
+    const [currentListState, setListState] = listState ? listState : [];
 
-    const [listState, setListState, type] = listContext ? listContext : [];
+    const [items, setItems] = useState(currentListState?.items || undefined);
+    let offset = useRef(currentListState?.offset >= 0 ? currentListState.offset : undefined);
+    let maxCount = useRef(currentListState?.maxCount >= 0 ? currentListState.maxCount : undefined);
+    let searchCount = useRef(currentListState?.searchCount >= 0 ? currentListState.searchCount : undefined);
 
-    const {[type]: currentListState } = listState;
-    
-    let offset = useRef();
-    let maxCount = useRef();
     const itemsRendered = items ? items.length : 0;
-    let searchCount = useRef();
-    const dataOnMountMounted = useRef(false);
+
     const prevOrder = useRef(order);
     const prevIsRandomOffset = useRef(isRandomOffset);
     const itemsLoaded = useRef(false);
-    const searchRef = useRef(searchValue);
-
-    const scrollPosition = useRef();
 
     useEffect(() => {        
-        console.log('itemsList mounted');
+      
+    loadItems();
 
-        loadItems();
-
-        document.addEventListener('scroll', onScrolling);
-
-        return () => {
-            document.removeEventListener('scroll', onScrolling);
-
-            if ( listState && (offset.current || offset.current === 0) && (maxCount.current || maxCount.current === 0)) {
-
-                setListState((prevState) => {
-                    const newState = {}
-                    Object.assign(newState, prevState);
-                    newState[type] = {
-                        items: prevState[type]?.items,
-                        offset: offset.current,
-                        maxCount: maxCount.current,
-                        searchCount: searchCount.current,
-                        searchValue: searchRef.current,
-                        order: order,
-                        isRandomOffset: isRandomOffset,
-                        scrollY: scrollPosition.current
-                    }
-
-                    return newState;
-                });
-                    
-            }
-        }
+    return () => {
+        setListState( {
+                items: items,
+                offset: offset.current,
+                maxCount: maxCount.current,
+                searchCount: searchCount.current,
+            });
+    }
     }, []);
 
     useEffect(() => {
-        if ( listState ) {
-            if(itemsLoaded.current === false && items?.length > 0) {
-                window.scrollTo({top: currentListState?.scrollY, behavior: 'instant'});
-                itemsLoaded.current = true;
-            }
-
-            if(items?.length > 0) {
-                setListState((prevState) => {
-                    const newState = {}
-                    Object.assign(newState, prevState);
-                    newState[type] = {
-                        items: items,
-                        offset: offset.current,
-                        maxCount: maxCount.current,
-                        searchCount: searchCount.current,
-                        searchValue: searchRef.current,
-                        order: order,
-                        isRandomOffset: isRandomOffset,
-                        scrollY: scrollPosition.current
-                    }
-                    return newState;
-                });
-            }
+        if(items?.length > 0) {
+            setListState( {
+                items: items,
+                offset: offset.current,
+                maxCount: maxCount.current,
+                searchCount: searchCount.current,
+            });
         }
     }, [items])
 
     useEffect(() => {
-        if (searchValue && maxCount.current >= 0 && itemsLoaded.current) {
+        if (searchValue && maxCount.current >= 0) {
             searchItem();
             console.log('itemsList searching');
         }
+
         if (searchValue === '' && maxCount.current >= 0) {
-            loadItems();
+            loadItems(true);
         }
-        searchRef.current = searchValue;
     }, [ searchValue ]);
 
     useEffect(() => {
@@ -134,31 +94,20 @@ export const InfoList = ({
     }, [order, isRandomOffset]);
 
     console.log(`renderItemsList, itemsRendered: ${itemsRendered}, offset: ${offset.current}`);
-
-    const onScrolling = (e) => {
-        scrollPosition.current = window.scrollY;
-    }
     
     const loadItems = (force) => {
-    if( (currentListState?.items && currentListState?.items.length > 0 || currentListState?.renderZero) && (currentListState?.offset || currentListState?.offset >= 0) && (currentListState?.maxCount || currentListState?.maxCount >= 0) && !dataOnMountMounted.current && !force ) {
-            offset.current = currentListState.offset;
-            maxCount.current = currentListState.maxCount;
-            searchValue = currentListState.searchValue;
-            searchCount.current = currentListState.searchCount;
-            setItems(currentListState.items);
-            setProcess('view');
-            dataOnMountMounted.current = true;
+        if( items && (offset.current >= 0) && (maxCount.current >= 0) && !force ) {
+                setProcess('view');
 
-            if(searchCount.current) {
-                if(searchCount.current <= currentListState.items.length )
-                    setDownloadProcess('unmount')
-                else
-                    setDownloadProcess('view');
-            } else if(maxCount.current <= currentListState.items.length ) 
-                        setDownloadProcess('unmount');
+                if(searchCount.current) {
+                    if(searchCount.current <= items.length )
+                        setDownloadProcess('unmount')
                     else
                         setDownloadProcess('view');
-
+                } else if(maxCount.current <= items.length ) 
+                            setDownloadProcess('unmount');
+                        else
+                            setDownloadProcess('view');
         } else {
             getMaxCount()
             .then(result => { 
@@ -293,13 +242,7 @@ export const InfoList = ({
                     tabIndexOnLi: tabIndexOnLi
                 })}
             </ListSC>
-            { setContent(downloadProcess, LoadButtonSC, {children: 'Load more', onClick: () => {
-                if ((searchValue && searchValue !== '') || (currentListState?.searchValue && currentListState?.searchValue !== '' )) {
-                    onLoadMoreSearchResults();
-                } else {
-                    onLoadMore();
-                } 
-            }}) }
+            { setContent( downloadProcess, LoadButtonSC, { children: 'Load more', onClick: searchValue ? onLoadMoreSearchResults : onLoadMore } ) }
         </ContentWrapperSC>
     );
 }
