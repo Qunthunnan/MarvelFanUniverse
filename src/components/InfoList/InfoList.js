@@ -48,14 +48,14 @@ export const InfoList = ({
       
         loadItems();
 
-        return () => {
-            setListState( {
-                    items: itemsStore.current,
-                    offset: offset.current,
-                    maxCount: maxCount.current,
-                    searchCount: searchCount.current,
-                });
-        }
+        // return () => {
+        //     setListState( {
+        //             items: itemsStore.current,
+        //             offset: offset.current,
+        //             maxCount: maxCount.current,
+        //             searchCount: searchCount.current,
+        //         });
+        // }
     }, []);
 
     useEffect(() => {

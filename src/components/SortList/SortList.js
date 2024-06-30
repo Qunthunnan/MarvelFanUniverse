@@ -1,6 +1,6 @@
 import { SortSelect } from "./stylesSortList";
 
-export function SortList ({orders, setOrder, defaultValue}) {
+export function SortList ({orders, setOrder, setDefaultValue, defaultValue}) {
     return (
         <SortSelect defaultValue={defaultValue} onChange={handleChange}>
             {
@@ -13,6 +13,7 @@ export function SortList ({orders, setOrder, defaultValue}) {
 
     function handleChange({target}) {
         setOrder(target.value === 'random' ? orders[0].value : target.value);
+        setDefaultValue(target.value);
         orders[target.selectedIndex].action();
     }
 }

@@ -15,16 +15,19 @@ export const MainPage = () => {
 	const { main: mainPageState } = pageState;
 
     const [mobileSearchShowed, setMobileSearchShowed] = useState(false);
+	const [currentSearchValue, setCurrentSearchValue] = useState('');
 
 	const [activeCharacter, setActiveCharacter] = useState(mainPageState?.page?.activeCharacter);
 	const [randomOffset, setRandomOffset] = useState( typeof(mainPageState?.page?.randomOffset) === 'boolean' ? mainPageState?.page?.randomOffset : true );
 	const [charactersOrder, setCharactersOrder] = useState(mainPageState?.page?.charactersOrder || '-modified');
 	const [searchValue, setSearchValue] = useState(mainPageState?.page?.searchValue || '');
+	const [currentOrderValue, setCurrentOrderValue] = useState(mainPageState?.page?.currentOrderValue || 'random');
 
 	const searchValueStore = useRef(searchValue);
 	const randomOffsetStore = useRef(randomOffset);
 	const charactersOrderStore = useRef(charactersOrder);
 	const activeCharacterStore = useRef(activeCharacter);
+	const currentOrderValueStore = useRef(currentOrderValue);
 
 	function setSpecificComponentState(component, state) {
 		console.log(`set component`);
@@ -42,31 +45,22 @@ export const MainPage = () => {
 	console.log(pageState);
 
 	useEffect(() => {
-		return () => {
-			setSpecificPageState('main', {
-				searchValue: searchValueStore.current,
-				charactersOrder: charactersOrderStore.current,
-				randomOffset: randomOffsetStore.current,
-				activeCharacter: activeCharacterStore.current
-			})
-		}
-	}, [])
-
-	useEffect(() => {
-		if(searchValueStore.current !== searchValue || randomOffsetStore.current !== randomOffset || charactersOrderStore.current !== charactersOrder || activeCharacterStore.current !== charactersOrder) {
+		if(searchValueStore.current !== searchValue || randomOffsetStore.current !== randomOffset || charactersOrderStore.current !== charactersOrder || activeCharacterStore.current !== charactersOrder || currentOrderValueStore.current !== currentOrderValue) {
 			searchValueStore.current = searchValue;
 			randomOffsetStore.current = randomOffset;
 			charactersOrderStore.current = charactersOrder;
 			activeCharacterStore.current = activeCharacter;
+			currentOrderValueStore.current = currentOrderValue;
 	
 			setSpecificComponentState('page', {
 				searchValue: searchValue,
 				charactersOrder: charactersOrder,
 				randomOffset: randomOffset,
-				activeCharacter: activeCharacter
+				activeCharacter: activeCharacter,
+				currentOrderValue: currentOrderValue,
 			})
 		}
-	}, [ searchValue, charactersOrder, randomOffset, activeCharacter ]);
+	}, [ searchValue, charactersOrder, randomOffset, activeCharacter, currentOrderValue ]);
 	
 	const onCloseMobileCharacterInfo = useCallback(() => {
 		setActiveCharacter(null);
@@ -137,7 +131,7 @@ export const MainPage = () => {
 					</MobileMenuButtons>
 
 					<SortMainWraper>
-						<SortList orders={ orders } setOrder={setCharactersOrder} defaultValue={'random'}/>
+						<SortList orders={ orders } setOrder={setCharactersOrder} defaultValue={ currentOrderValue } setDefaultValue={ setCurrentOrderValue }/>
 					</SortMainWraper>
 
 					<CharactersContentWrapper>

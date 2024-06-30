@@ -14,21 +14,25 @@ export const ComicsListPage = () => {
     const [searchValue, setSearchValue] = useState(comicsPageState?.page?.searchValue || '');
     const [randomOffset, setRandomOffset] = useState( typeof(comicsPageState?.page?.randomOffset) === 'boolean' ? comicsPageState?.page?.randomOffset : true );
 	const [comicsOrder, setcomicsOrder] = useState( comicsPageState?.page?.comicsOrder || '-modified');
+	const [currentOrderValue, setCurrentOrderValue] = useState(comicsPageState?.page?.currentOrderValue || 'random');
 
 	const searchValueStore = useRef(searchValue);
 	const randomOffsetStore = useRef(randomOffset);
 	const comicsOrderStore = useRef(comicsOrder);
+	const currentOrderValueStore = useRef(currentOrderValue);
 
 	useEffect(() => {
-		if(searchValueStore.current !== searchValue || randomOffsetStore.current !== randomOffset || comicsOrderStore.current !== comicsOrder) {
+		if(searchValueStore.current !== searchValue || randomOffsetStore.current !== randomOffset || comicsOrderStore.current !== comicsOrder  || currentOrderValueStore.current !== currentOrderValue) {
 			searchValueStore.current = searchValue;
 			randomOffsetStore.current = randomOffset;
 			comicsOrderStore.current = comicsOrder;
+			currentOrderValueStore.current = currentOrderValue;
 
 			setSpecificComponentState('page', {
 				searchValue: searchValue,
 				comicsOrder: comicsOrder,
 				randomOffset: randomOffset,
+				currentOrderValue: currentOrderValue,
 			})
 		}
 
@@ -96,7 +100,7 @@ export const ComicsListPage = () => {
         <Container>
             <SearchComics onSearch= { onSearch } value={ searchValue }/>
             <SortComicsWrapper>
-					<SortList orders={ orders } setOrder={setcomicsOrder} defaultValue={ 'random' }/>
+					<SortList orders={ orders } setOrder={setcomicsOrder} defaultValue={ currentOrderValue } setDefaultValue={setCurrentOrderValue}/>
 			</SortComicsWrapper>
             <ComicsWrapper>
                 <ComicsList isRandomOffset={randomOffset} order={comicsOrder} searchValue={searchValue} listState={[comicsPageState?.list, (state) => {
