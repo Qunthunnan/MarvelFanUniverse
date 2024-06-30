@@ -28,6 +28,10 @@ export const MainPage = () => {
 	const charactersOrderStore = useRef(charactersOrder);
 	const activeCharacterStore = useRef(activeCharacter);
 	const currentOrderValueStore = useRef(currentOrderValue);
+	const mainPageStateStore = useRef();
+	const scrollPosition = useRef(mainPageState?.page?.scrollPosition || 0);
+
+	const itemsMounted = useRef(false);
 
 	function setSpecificComponentState(component, state) {
 		console.log(`set component`);
@@ -36,13 +40,36 @@ export const MainPage = () => {
 		console.log(state);
 		
 		const newState = {}
-		Object.assign(newState, mainPageState);
+		Object.assign(newState, mainPageState || mainPageStateStore.current);
 		newState[component] = state;
 		setSpecificPageState('main', newState);
 	}
 
+	const onScrolling = (e) => {
+        scrollPosition.current = window.scrollY;
+    }
+
 	console.log(`page main: `);
 	console.log(pageState);
+
+	useEffect(() => {
+		document.addEventListener('scroll', onScrolling);
+		return () => {
+			document.removeEventListener('scroll', onScrolling);
+			setSpecificComponentState('page', {
+				searchValue: searchValue,
+				charactersOrder: charactersOrder,
+				randomOffset: randomOffset,
+				activeCharacter: activeCharacter,
+				currentOrderValue: currentOrderValue,
+				scrollPosition: scrollPosition.current
+			});
+		}
+	}, []);
+
+	useEffect(()=>{
+		mainPageStateStore.current = mainPageState;
+	});
 
 	useEffect(() => {
 		if(searchValueStore.current !== searchValue || randomOffsetStore.current !== randomOffset || charactersOrderStore.current !== charactersOrder || activeCharacterStore.current !== charactersOrder || currentOrderValueStore.current !== currentOrderValue) {
@@ -58,7 +85,8 @@ export const MainPage = () => {
 				randomOffset: randomOffset,
 				activeCharacter: activeCharacter,
 				currentOrderValue: currentOrderValue,
-			})
+				scrollPosition: scrollPosition.current
+			});
 		}
 	}, [ searchValue, charactersOrder, randomOffset, activeCharacter, currentOrderValue ]);
 	
@@ -77,6 +105,13 @@ export const MainPage = () => {
 	const onSearch = useCallback((name) => {
         setSearchValue(name);
     }, []);
+
+	const onListLoaded = useCallback(() => {
+		if(!itemsMounted.current) {
+			itemsMounted.current = true;
+			setTimeout(() => {window.scrollTo({top: scrollPosition.current, behavior:'instant'})}, 5);
+		}
+	}, []);
 
 	const switchRandomOffset = () => {
 		setRandomOffset((prevOffset) => (
@@ -141,6 +176,7 @@ export const MainPage = () => {
 								onOpenCharacter={ onOpenCharacter }
 								searchValue = { searchValue }
 								isRandomOffset = { randomOffset }
+								onListLoaded = { onListLoaded }
 								order = { charactersOrder } 
 								listState = {[ mainPageState?.list, (state) => {
 									setSpecificComponentState('list', state);
@@ -153,10 +189,12 @@ export const MainPage = () => {
 									onCloseMobileCharacterInfo={onCloseMobileCharacterInfo}/>
 							</ErrorBoundary>
 							
-							<SearchCharacters mobileSearchShowed={ mobileSearchShowed } 
+							<SearchCharacters 
+							mobileSearchShowed={ mobileSearchShowed } 
+							setCurrentSearchValue={ setCurrentSearchValue }
 							onSwichSearch={ onSwichSearch } 
 							onSearch={ onSearch } 
-							value={ searchValue }/>
+							value={ currentSearchValue || searchValue }/>
 						</AsideWrapper>
 					</CharactersContentWrapper>
 				</Container>

@@ -7,7 +7,7 @@ import { useMarvelService } from "../../services/ApiService/ApiService";
 import { WideButtonBottom } from "../CharactersList/stylesCharacterList";
 import { Section } from "../CharactersList/stylesCharacterList";
 
-export const ComicsList = memo(({searchValue, isRandomOffset, order, listState}) => {
+export const ComicsList = memo(({searchValue, onListLoaded, isRandomOffset, order, listState}) => {
     
     const { process, setProcess, getComicses, getComicsCount, searchComicsesByTitle } = useMarvelService();
     const { process: downloadProcess, setProcess: setDownloadProcess, getComicses: getAddComicses, searchComicsesByTitle: searchMore} = useMarvelService ();
@@ -24,6 +24,7 @@ export const ComicsList = memo(({searchValue, isRandomOffset, order, listState})
                 searchValue = { searchValue }
                 getMaxCount = { getComicsCount }
                 getItems = { getComicses }
+                onListLoaded = { onListLoaded }
                 getAddItems = { getAddComicses }
                 searchItems = { searchComicsesByTitle }
                 searchMore = { searchMore }

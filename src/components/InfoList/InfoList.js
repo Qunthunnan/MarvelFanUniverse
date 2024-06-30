@@ -19,6 +19,7 @@ export const InfoList = ({
     searchValue, 
     getMaxCount,
     getItems, 
+    onListLoaded,
     getAddItems, 
     searchItems, 
     searchMore, 
@@ -45,20 +46,13 @@ export const InfoList = ({
     const itemsStore = useRef(items);
 
     useEffect(() => {        
-      
         loadItems();
-
-        // return () => {
-        //     setListState( {
-        //             items: itemsStore.current,
-        //             offset: offset.current,
-        //             maxCount: maxCount.current,
-        //             searchCount: searchCount.current,
-        //         });
-        // }
     }, []);
 
     useEffect(() => {
+        if( onListLoaded )
+            onListLoaded();
+        
         if(items?.length > 0) {
             setListState( {
                 items: items,
@@ -239,7 +233,7 @@ export const InfoList = ({
 
     return (
         <ContentWrapperSC>
-            <ListSC>
+            <ListSC id='list'>
                 {setContent(process, View, {
                     items: items,
                     onOpenItem: onOpenItem,

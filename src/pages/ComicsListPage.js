@@ -16,10 +16,34 @@ export const ComicsListPage = () => {
 	const [comicsOrder, setcomicsOrder] = useState( comicsPageState?.page?.comicsOrder || '-modified');
 	const [currentOrderValue, setCurrentOrderValue] = useState(comicsPageState?.page?.currentOrderValue || 'random');
 
+	const [currentSearchValue, setCurrentSearchValue] = useState('');
+
 	const searchValueStore = useRef(searchValue);
 	const randomOffsetStore = useRef(randomOffset);
 	const comicsOrderStore = useRef(comicsOrder);
 	const currentOrderValueStore = useRef(currentOrderValue);
+	const comicsPageStateStore = useRef();
+	const scrollPosition = useRef(comicsPageState?.page?.scrollPosition || 0);
+
+	const itemsMounted = useRef(false);
+
+	useEffect(()=>{
+		comicsPageStateStore.current = comicsPageState;
+	});
+
+	useEffect(() => {
+		document.addEventListener('scroll', onScrolling);
+		return () => {
+			document.removeEventListener('scroll', onScrolling);
+			setSpecificComponentState('page', {
+				searchValue: searchValue,
+				comicsOrder: comicsOrder,
+				randomOffset: randomOffset,
+				currentOrderValue: currentOrderValue,
+				scrollPosition: scrollPosition.current
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		if(searchValueStore.current !== searchValue || randomOffsetStore.current !== randomOffset || comicsOrderStore.current !== comicsOrder  || currentOrderValueStore.current !== currentOrderValue) {
@@ -33,10 +57,15 @@ export const ComicsListPage = () => {
 				comicsOrder: comicsOrder,
 				randomOffset: randomOffset,
 				currentOrderValue: currentOrderValue,
+				scrollPosition: scrollPosition.current
 			})
 		}
 
 	}, [ searchValue, comicsOrder, randomOffset ]);
+
+	const onScrolling = (e) => {
+        scrollPosition.current = window.scrollY;
+    }
 
 	function setSpecificComponentState(component, state) {
 		console.log(`set component`);
@@ -45,7 +74,7 @@ export const ComicsListPage = () => {
 		console.log(state);
 
 		const newState = {}
-		Object.assign(newState, comicsPageState);
+		Object.assign(newState, comicsPageState || comicsPageStateStore.current);
 		newState[component] = state;
 		setSpecificPageState('comics', newState);
 	}	
@@ -56,6 +85,13 @@ export const ComicsListPage = () => {
     const onSearch = useCallback((value) => {
         setSearchValue(value);
     });
+
+	const onListLoaded = useCallback(() => {
+		if(!itemsMounted.current) {
+			itemsMounted.current = true;
+			setTimeout(() => {window.scrollTo({top: scrollPosition.current, behavior:'instant'})}, 5);
+		}
+	}, []);
 
     const switchRandomOffset = () => {
 		setRandomOffset((prevOffset) => (
@@ -98,12 +134,12 @@ export const ComicsListPage = () => {
     return ( 
     <>
         <Container>
-            <SearchComics onSearch= { onSearch } value={ searchValue }/>
+            <SearchComics onSearch= { onSearch } value={ currentSearchValue || searchValue } setCurrentSearchValue={ setCurrentSearchValue }/>
             <SortComicsWrapper>
 					<SortList orders={ orders } setOrder={setcomicsOrder} defaultValue={ currentOrderValue } setDefaultValue={setCurrentOrderValue}/>
 			</SortComicsWrapper>
             <ComicsWrapper>
-                <ComicsList isRandomOffset={randomOffset} order={comicsOrder} searchValue={searchValue} listState={[comicsPageState?.list, (state) => {
+                <ComicsList onListLoaded={onListLoaded} isRandomOffset={randomOffset} order={comicsOrder} searchValue={searchValue} listState={[comicsPageState?.list, (state) => {
 					setSpecificComponentState('list', state);
 				}]}/>
             </ComicsWrapper>
