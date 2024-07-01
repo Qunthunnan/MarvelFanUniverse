@@ -15,7 +15,7 @@ const DetailedWrapper = styled.section`
     a {
         margin: 20px 0 0 0;
         color: #000;
-        font-size: 18px;
+        font-size: 1rem;
         font-weight: 700;
         text-decoration: none;
     }

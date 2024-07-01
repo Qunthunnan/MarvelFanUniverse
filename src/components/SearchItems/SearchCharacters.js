@@ -19,9 +19,9 @@ export const SearchCharacters = ({ onSwichSearch, mobileSearchShowed, onSearch, 
             <InputWrapper>
                 <input onChange={ (e) => { 
                     if(setCurrentSearchValue)
-                        setCurrentSearchValue(e.value);
+                        setCurrentSearchValue(e.target.value);
                      onInput(e);
-                     } } placeholder="Enter name" value={name || value} type="text" name="characterName" id="characterName" />
+                     } } placeholder="Enter name" value={ name || value} type="text" name="characterName" id="characterName" />
                 <Button type="submit">FIND</Button>
             </InputWrapper>
             <Label htmlFor="characterName">{message}</Label>

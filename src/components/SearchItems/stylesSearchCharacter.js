@@ -4,9 +4,12 @@ import { vars } from "../style/Vars";
 
 const SearchWriper = styled(Aside)`
 @media (min-width: 320px) {
-    display: ${ ({$mobileActive}) => ( $mobileActive ? 'block' : 'none') };
-    position: relative;
-    order: 1;
+    display: block;
+    transform: ${ ({$mobileActive}) => ( $mobileActive ? 'translate(-100%, 51px)' : 'translate(-100%, -100svh)') };
+    transition: transform 300ms;
+    position: absolute;
+    top: 0;
+    left: 0;
     h2 {
         font-size: 18px;
         font-weight: 700;
@@ -26,9 +29,17 @@ const SearchWriper = styled(Aside)`
     }
 }
 
+@media (min-width: 576px) {
+    width: 100vw;
+    transform: ${ ({$mobileActive}) => ( $mobileActive ? 'translate(-100%, 72px)' : 'translate(-100%, -100svh)') };
+}
+
 @media (min-width: 768px) {
-    display: block;
-    order: 2;
+    width: 100%;
+    transform: none;
+    position: relative;
+    top: none;
+    left: none;
 }
 `;
 

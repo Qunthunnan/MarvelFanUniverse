@@ -33,6 +33,6 @@ const SortDetailedWrapper = styled.nav`
 @media (min-width: 576px) {
     margin: 30px 0 0 0;
 }
-` 
+`;
 
 export { SortSelect, SortMainWraper, SortComicsWrapper, SortDetailedWrapper }

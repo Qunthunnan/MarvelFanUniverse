@@ -4,8 +4,10 @@ import { vars } from "../style/Vars";
 const ComicsItem = styled.li`
     @media (min-width: 320px) {
         display: block;
-        aspect-ratio: 225 / 415;
         a {
+            display: block;
+            height: 100%;
+            width: 100%;
             text-decoration: none;
         }
         img {

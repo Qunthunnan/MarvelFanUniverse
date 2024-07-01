@@ -16,7 +16,7 @@ export default function ComicsListPage () {
 	const [comicsOrder, setcomicsOrder] = useState( comicsPageState?.page?.comicsOrder || '-focDate');
 	const [currentOrderValue, setCurrentOrderValue] = useState(comicsPageState?.page?.currentOrderValue || 'random');
 
-	const [currentSearchValue, setCurrentSearchValue] = useState('');
+	const [currentSearchValue, setCurrentSearchValue] = useState();
 
 	const searchValueStore = useRef(searchValue);
 	const randomOffsetStore = useRef(randomOffset);
@@ -132,7 +132,7 @@ export default function ComicsListPage () {
     return ( 
     <>
         <Container>
-            <SearchComics onSearch= { onSearch } value={ currentSearchValue || searchValue } setCurrentSearchValue={ setCurrentSearchValue }/>
+            <SearchComics onSearch= { onSearch } value={ currentSearchValue || currentSearchValue === '' ? currentSearchValue : searchValue } setCurrentSearchValue={ setCurrentSearchValue }/>
             <SortComicsWrapper>
 					<SortList orders={ orders } setOrder={setcomicsOrder} defaultValue={ currentOrderValue } setDefaultValue={setCurrentOrderValue}/>
 			</SortComicsWrapper>

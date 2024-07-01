@@ -1,18 +1,21 @@
 
 
 .char-info-fade-enter {
+  padding: 0 0 6px 0;
     opacity: 0;
     transform-origin: top;
     border-radius: 50%;
     transform: scaleY(0.8);
 }
 .char-info-fade-enter-active {
+  padding: 0 0 6px 0;
   opacity: 0;
   transform-origin: top;
   border-radius: 50%;
   transform: scaleY(0.8);
 }
 .char-info-fade-enter-done {
+  padding: 0 0 6px 0;
   opacity: 1;
   border-radius: 0;
   transform-origin: top;
@@ -21,6 +24,7 @@
 }
 
 .char-info-fade-exit {
+  padding: 0 0 6px 0;
   opacity: 0;
   transform-origin: top;
   border-radius: 50%;
@@ -28,12 +32,14 @@
 }
 
 .char-info-fade-exit-actve {
+  padding: 0 0 6px 0;
   opacity: 0;
   transform-origin: top;
   border-radius: 50%;
   transform: scaleY(0.8);
 }
 .char-info-fade-exit-done {
+  padding: 0 0 6px 0;
   opacity: 1;
   border-radius: 0;
   transform-origin: top;

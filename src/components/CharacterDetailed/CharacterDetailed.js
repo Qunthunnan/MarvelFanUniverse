@@ -47,7 +47,7 @@ function ComicsList ({comicsList, name, maxCount, onInput, inputValue, searchErr
         searchComicsByCharacterId: searchMore
      } = useMarvelService();
 
-    const [randomOffset, setRandomOffset] = useState(true);
+    const [randomOffset, setRandomOffset] = useState(false);
     const [comicsOrder, setcomicsOrder] = useState('-modified');
 
     // const switchRandomOffset = () => {

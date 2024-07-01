@@ -4,14 +4,15 @@ import { Aside } from "../style/Aside";
 
 const InfoWrapper = styled(Aside)`
 @media (min-width: 320px) {
-    order: 2;
-    display: ${ ({$mobileActive}) => ( $mobileActive ? 'unset' : 'none' ) };
+    order: 2; 
     position: relative;
-    height: 100%;
+    height: 70svh;
+    transform: ${ ({$mobileActive}) => ( $mobileActive ? 'translate(-100%, 43%)' : 'translate(-100%, 100svh)') };
     width: 100vw;
     overflow: auto;
+    transition: transform 300ms;
     h2 {
-        display: ${({$active}) => ( $active ? 'none' : 'unset' )};
+        display: ${ ({$active}) => ( $active ? 'none' : 'unset' )};
         font-size: 18px;
         font-weight: 700;
         text-align: center;
@@ -31,7 +32,8 @@ const InfoWrapper = styled(Aside)`
 
 @media (min-width: 576px) {
     height: 90vh;
-    width: 90vw;
+    transform: ${ ({$mobileActive}) => ( $mobileActive ? 'translate(-100%, 30%)' : 'translate(-100%, 100svh)') };
+    width: 100vw;
 }
 
 @media (min-width: 768px) {
@@ -40,7 +42,7 @@ const InfoWrapper = styled(Aside)`
     display: unset;
     height: unset;
     max-height: 67vh;
-    width: 300px;
+    width: 100%;
     order: 1;
 }
 

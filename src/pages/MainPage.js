@@ -15,7 +15,7 @@ export default function MainPage () {
 	const { main: mainPageState } = pageState;
 
     const [mobileSearchShowed, setMobileSearchShowed] = useState(false);
-	const [currentSearchValue, setCurrentSearchValue] = useState('');
+	const [currentSearchValue, setCurrentSearchValue] = useState();
 
 	const [activeCharacter, setActiveCharacter] = useState(mainPageState?.page?.activeCharacter);
 	const [randomOffset, setRandomOffset] = useState( typeof(mainPageState?.page?.randomOffset) === 'boolean' ? mainPageState?.page?.randomOffset : true );
@@ -193,7 +193,7 @@ export default function MainPage () {
 							setCurrentSearchValue={ setCurrentSearchValue }
 							onSwichSearch={ onSwichSearch } 
 							onSearch={ onSearch } 
-							value={ currentSearchValue || searchValue }/>
+							value={ currentSearchValue || currentSearchValue === '' ? currentSearchValue : searchValue }/>
 						</AsideWrapper>
 					</CharactersContentWrapper>
 				</Container>

@@ -31,8 +31,7 @@ export const ComicsList = memo(({searchValue, onListLoaded, isRandomOffset, orde
                 process = { process }
                 setProcess = { setProcess }
                 downloadProcess = { downloadProcess }
-                setDownloadProcess = { setDownloadProcess } 
-                tabIndexOnLi 
+                setDownloadProcess = { setDownloadProcess }  
                 isRandomOffset={ isRandomOffset }
                 order={ order }
                 listState={listState}

@@ -4,6 +4,8 @@ import { SearchWriper } from "./stylesSearchCharacter";
 const SearchComicsWriper = styled(SearchWriper)`
     @media (min-width: 320px) {
         display: block;
+        transform: none;
+        position: static;
         margin: 20px 0 0 0;
         width: 100%;
         padding: 15px;

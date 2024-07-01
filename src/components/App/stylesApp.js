@@ -52,18 +52,25 @@ const CharactersContentWrapper = styled.div`
 
 const AsideWrapper = styled.div`
 @media (min-width: 320px) {
-    display: flex;
     position: fixed;
-    max-height: 100%;
-    top: 85px;
-    left: 50%;
-    row-gap: 30px;
-    flex-direction: column;
-    transform: translateX(-50%);
+    height: 100svh;
+    top: 0;
+    z-index: 2;
+    transform: translateX(100%);
+}
+
+@media (min-width: 320px) {
+    left: 0;
+    top: 0;
 }
 
 @media (min-width: 768px) {
+    display: flex;
+    height: max-content;
+    flex-direction: column;
     position: sticky;
+    row-gap: 30px;
+    left: none;
     top: 100px;
     transform: none;
 }

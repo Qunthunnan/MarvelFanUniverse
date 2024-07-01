@@ -19,6 +19,10 @@ box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.3);
         color: #000;
         text-decoration: none;
     }
+    nav {
+        display: flex;
+        align-items: center;
+    }
 }
 
 @media (max-width: 576px) {
@@ -28,23 +32,22 @@ box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.3);
 `;
 
 const DirectorySpan = styled.span`
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0 5px 0 0;
-    transition: color 0.3s;
-    a {
-        color: #000;
-        text-decoration: none;
-    }
-    &:last-child {
-        margin: 0;
+    @media (min-width: 320px) {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin: 0 5px 0 0;
+        transition: color 0.3s;
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+        &:last-child {
+            margin: 0;
+        }
     }
 
-    @media (max-width: 576px) {
-        font-size: 18px;
-        &:last-child {
-            margin: 0 10px 0 0;
-        }
+    @media (min-width: 576px) {
+        font-size: 24px;
     }
 `;
 
