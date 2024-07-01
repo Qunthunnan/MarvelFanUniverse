@@ -1,32 +1,73 @@
+.list-fade-enter {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.list-fade-enter-active {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.list-fade-enter-done {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.list-fade-fade-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.list-fade-fade-exit-actve {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.list-fade-fade-exit-done {
+  opacity: 0;
+  transition: opacity 300ms, transform 300ms;
+  transform: scale(0.5);
+}
+
 .add-item-enter {
     opacity: 0;
+    overflow: hidden;
+    border-radius: 50%;
     transform: translateY(100px) scale(0.9);
-    transition: opacity 500ms, transform 500ms;
+    transition: opacity 500ms, border-radius 200ms, transform 500ms;
   }
   .add-item-enter-active {
     opacity: 0;
+    overflow: hidden;
+    border-radius: 50%;
     transform: translateY(100px) scale(0.9);
-    transition: opacity 500ms, transform 500ms;
+    transition: opacity 500ms, border-radius 200ms, transform 500ms;
   }
   .add-item-enter-done {
     opacity: 1;
+    overflow: hidden;
+    border-radius: 0;
     transform: translateY(0) scale(1);
-    transition: opacity 500ms, transform 500ms;
+    transition: opacity 500ms, border-radius 200ms, transform 500ms;
   }
 
   .add-item-fade-exit {
     opacity: 1;
-    transition: opacity 500ms, transform 500ms;
+    overflow: hidden;
+    border-radius: 0;
+    transition: opacity 500ms, border-radius 200ms, transform 500ms;
     transform: translateY(0) scale(1);
   }
 
   .add-item-fade-exit-actve {
     opacity: 0;
-    transition: opacity 500ms, transform 500ms;
+    overflow: hidden;
+    border-radius: 50%;
+    transition: opacity 500ms, border-radius 200ms, transform 500ms;
     transform: translateY(100px) scale(0.9);
   }
   .add-item-fade-exit-done {
     opacity: 0;
-    transition: opacity 500ms, transform 500ms;
+    overflow: hidden;
+    border-radius: 50%;
+    transition: opacity 500ms, border-radius 200ms, transform 500ms;
     transform: translateY(100px) scale(0.9);
   }

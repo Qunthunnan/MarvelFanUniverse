@@ -6,7 +6,7 @@ import { Wrapper, RandomCharacterInfo, InfoWrapper, ButtonsWrapper, RandomBaner 
 import { getRandNum } from "../../utils/randomValues";
 import { setContent } from "../../utils/setContent";
 import { isFindThumbnail } from "../../utils/isFindThumbnail";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
 import { Link } from "react-router-dom";
 import './transitions.css';
 
@@ -17,7 +17,7 @@ const View = ({character, animation, setAnimation}) => {
         description = description.slice(0, 188) + '...';
 
     if(!description || description.length === 0) 
-        description = <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>
+        description = <>The data source does not have detailed information about this character. Try visiting <a target="_blank" rel="noreferrer" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>
     
     useEffect(() => {
         setAnimation(true);

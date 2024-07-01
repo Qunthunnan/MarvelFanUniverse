@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Container } from "../components/style/Container";
 import { NotFoundPageWrapper } from "../components/style/NotFoundPage";
 
-export function NotFoundPage () {
+export default function NotFoundPage () {
     return (
         <Container>
             <NotFoundPageWrapper>

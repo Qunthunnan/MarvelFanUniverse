@@ -5,8 +5,8 @@ import { Directory } from "../components/Directory/Directory"
 import { Header } from "../components/Directory/stylesDirectory"
 import { Outlet, Link } from "react-router-dom";
 
-export const HeaderPage = () => {
-    const [directories, setDirectories] = useState([ {
+export default function HeaderPage () {
+    const [directories] = useState([ {
         directoryName: 'Characters',
         directoryLink: '/',
     }, 

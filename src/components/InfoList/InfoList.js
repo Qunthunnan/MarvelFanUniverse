@@ -3,16 +3,21 @@ import { getRandNum } from "../../utils/randomValues";
 import { vars } from "../style/Vars";
 import { setContent } from "../../utils/setContent";
 import { onFocusClick } from "../../utils/onFocusClick";
-import styled from "styled-components";
+import {styled} from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import './transitions.css';
 
+const li = styled.li``;
+const ul = styled.ul``;
+const div = styled.div``;
+const button = styled.button``;
+
 export const InfoList = ({ 
-    ItemSC = styled.li``,
+    ItemSC = li,
     ItemChildren, 
-    ListSC = styled.ul``,
-    LoadButtonSC = styled.button``,
-    ContentWrapperSC = styled.div``,
+    ListSC = ul,
+    LoadButtonSC = button,
+    ContentWrapperSC = div,
     targetsCount: { small, big }, 
     onOpenItem, 
     activeItem, 
@@ -45,6 +50,8 @@ export const InfoList = ({
     const prevSearchValue = useRef(searchValue);
     const itemsStore = useRef(items);
 
+    const listRef = useRef();
+
     useEffect(() => {        
         loadItems();
     }, []);
@@ -53,7 +60,7 @@ export const InfoList = ({
         if( onListLoaded )
             onListLoaded();
         
-        if(items?.length > 0) {
+        if(items?.length > 0 && setListState) {
             setListState( {
                 items: items,
                 offset: offset.current,
@@ -77,7 +84,6 @@ export const InfoList = ({
                 loadItems(true);
             }
         }
-
     }, [ searchValue ]);
 
     useEffect(() => {
@@ -233,16 +239,23 @@ export const InfoList = ({
 
     return (
         <ContentWrapperSC>
-            <ListSC id='list'>
-                {setContent(process, View, {
-                    items: items,
-                    onOpenItem: onOpenItem,
-                    activeItem: activeItem,
-                    ItemSC: ItemSC,
-                    ItemChildren: ItemChildren,
-                    tabIndexOnLi: tabIndexOnLi
-                })}
-            </ListSC>
+            <CSSTransition
+                nodeRef={listRef}
+                timeout={300}
+                classNames={'list-fade'}
+                in={ process === 'view' } >
+                <ListSC ref={listRef} id='list'>
+                    {setContent(process, View, {
+                        items: items,
+                        count: getTargetCount(),
+                        onOpenItem: onOpenItem,
+                        activeItem: activeItem,
+                        ItemSC: ItemSC,
+                        ItemChildren: ItemChildren,
+                        tabIndexOnLi: tabIndexOnLi
+                    })}
+                </ListSC>
+            </CSSTransition>
             { setContent( downloadProcess, LoadButtonSC, { children: 'Load more', onClick: searchValue ? onLoadMoreSearchResults : onLoadMore } ) }
         </ContentWrapperSC>
     );
@@ -251,19 +264,23 @@ export const InfoList = ({
 
 
 
-const View = memo(({items, onOpenItem, activeItem, ItemSC, ItemChildren, tabIndexOnLi}) => {
+const View = memo(({items, onOpenItem, activeItem, ItemSC, ItemChildren, tabIndexOnLi, count}) => {
     if(items.length === 0) {
         return (<p style={{color: vars.marvelRed, fontSize: '24px'}}>Data not found</p>)
     }
+    let animationOffset = 500;
     return(
         <TransitionGroup component={null}>
             { items.map((item, i) => {
                 const ref = createRef(null);
+                if((i >= items.length - count) && (items.length - count > 0)) {
+                    animationOffset+=50;
+                }
                 return (
                 <CSSTransition
                     key={i} 
                     nodeRef={ref}
-                    timeout={500}
+                    timeout={ animationOffset}
                     classNames={'add-item'}
                 >
                     <ItemSC

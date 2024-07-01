@@ -7,11 +7,11 @@ import { useMarvelService } from "../../services/ApiService/ApiService";
 import { InfoList } from "../InfoList/InfoList";
 
 
-export const ComicsDetailed = ({title, thumbnail, description, pageCount, prices, listData, maxCount, id }) => {
+export default function ComicsDetailed ({title, thumbnail, description, pageCount, prices, listData, maxCount, id }) {
     return (
         <DetailedWrapper>
             <ImgWrapper>
-                <Link to="/comics">Back to all</Link>
+                <Link to="/comics">To all comics</Link>
                 <img style={{ 
                 objectFit: isFindThumbnail(thumbnail.path) ? 'inherit' : 'cover',
                 objectPosition: isFindThumbnail(thumbnail.path) ? 'inherit' : 'left'
@@ -23,7 +23,7 @@ export const ComicsDetailed = ({title, thumbnail, description, pageCount, prices
             </ImgWrapper>
             <TextWrapper>
                 <h2>{title}</h2>
-                <p>{ description && description.length > 0 ? description : <>The data source does not have detailed information about this comics. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>}</p>
+                <p>{ description && description.length > 0 ? description : <>The data source does not have detailed information about this comics. Try visiting <a target="_blank" rel="noreferrer" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>}</p>
 
                 {pageCount && pageCount > 0 ? <p>{pageCount} pages</p> : null}
 
@@ -35,7 +35,7 @@ export const ComicsDetailed = ({title, thumbnail, description, pageCount, prices
                                />
             </TextWrapper>
             <AsideLink>
-                <Link to="/comics">Back to all</Link>
+                <Link to="/comics">To all comics</Link>
             </AsideLink>
         </DetailedWrapper>
     )
@@ -65,6 +65,7 @@ function CharactersList ({charactersList, maxCount, id}) {
                           LoadButtonSC={ LoadMoreBtn }
                           targetsCount= {{small: 20, big: 20}}
                           getItems = { (count, offset) => (getCharactersByComicsId(id, count, offset)) }
+                          getMaxCount={ () => (new Promise((resolve) => (resolve(maxCount)))) }
                           getAddItems = { (count, offset) => (getAddCharacters(id, count, offset)) }
                           searchItems= { (searchValue, count, offset ) => (searchCharactersByComicsId(id, searchValue, count, offset )) }
                           searchMore= { (searchValue, count, offset) => (searchMore(id, searchValue, count, offset)) }
@@ -72,15 +73,12 @@ function CharactersList ({charactersList, maxCount, id}) {
                           setProcess= { setProcess }
                           downloadProcess= { addProcess }
                           setDownloadProcess= { setAddProcess } 
-                          listContext= {[{
-                            comicsDetailed: {
+                          listState= {[{
                                 items: charactersList,
                                 offset: 0,
                                 maxCount: maxCount,
-                            }
-                          }, ()=>{}, 'comicsDetailed']}  />
+                          }]} />
             </CharactersListSC>
-
         )
     }
     return null

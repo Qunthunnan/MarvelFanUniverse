@@ -16,7 +16,6 @@ h2 {
 a {
     color: ${vars.marvelRed};
     font-size: 25px;
-    text-decoration: none;
 }
 `;
 

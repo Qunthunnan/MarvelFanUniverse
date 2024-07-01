@@ -1,27 +1,42 @@
+
+
 .char-info-fade-enter {
     opacity: 0;
-    transition: opacity 300ms, transform 300ms;
-  }
-  .char-info-fade-enter-active {
-    opacity: 0;
-    transition: opacity 300ms, transform 300ms;
-  }
-  .char-info-fade-enter-done {
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity 300ms, transform 300ms;
-  }
+    transform-origin: top;
+    border-radius: 50%;
+    transform: scaleY(0.8);
+}
+.char-info-fade-enter-active {
+  opacity: 0;
+  transform-origin: top;
+  border-radius: 50%;
+  transform: scaleY(0.8);
+}
+.char-info-fade-enter-done {
+  opacity: 1;
+  border-radius: 0;
+  transform-origin: top;
+  transform: scaleY(1);
+  transition: opacity 200ms, border-radius 200ms, transform 200ms;
+}
 
-  .char-info-fade-exit {
-    opacity: 0;
-    transition: opacity 300ms, transform 300ms;
-  }
+.char-info-fade-exit {
+  opacity: 0;
+  transform-origin: top;
+  border-radius: 50%;
+  transform: scaleY(0.8);
+}
 
-  .char-info-fade-exit-actve {
-    opacity: 0;
-    transition: opacity 300ms, transform 300ms;
-  }
-  .char-info-fade-exit-done {
-    opacity: 1;
-    transition: opacity 300ms, transform 300ms;
-  }
+.char-info-fade-exit-actve {
+  opacity: 0;
+  transform-origin: top;
+  border-radius: 50%;
+  transform: scaleY(0.8);
+}
+.char-info-fade-exit-done {
+  opacity: 1;
+  border-radius: 0;
+  transform-origin: top;
+  transform: scaleY(1);
+  transition: opacity 200ms, border-radius 200ms, transform 200ms;
+}

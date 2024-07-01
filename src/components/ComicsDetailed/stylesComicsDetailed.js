@@ -81,6 +81,7 @@ const DetailedWrapper = styled.section`
         display: none;
     }
     @media (min-width: 1200px) {
+        margin: 0 0 0 auto;
         display: block;
     }
     `;

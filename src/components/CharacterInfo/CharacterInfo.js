@@ -48,10 +48,10 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, id, com
         </ItemsList> 
     : <>
         <p>The data source does not have detailed information about comicses with this character.</p>
-        <p>Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p>
+        <p>Try visiting <a target="_blank" rel="noreferrer" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about this.</p>
     </> ;
 
-    const descriptionBlock = description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>;
+    const descriptionBlock = description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" rel="noreferrer" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>;
     const thumbnailPos = isFindThumbnail(thumbnail);
     const headRef = useRef();
 
@@ -63,13 +63,12 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, id, com
 
   
     return (
-        
         <CSSTransition 
-        ref={ headRef }
+        nodeRef={ headRef }
         in={ animation }
         classNames={ 'char-info-fade' }
-        timeout={ 100 }>
-            <div ref={headRef}>
+        timeout={ 200 }>
+            <div style={{overflow: 'hidden'}} ref={headRef}>
                 <HeadInfo>
                     <img height={150} width={150} style={{objectFit: thumbnailPos ? 'cover' : 'contain'}} src={thumbnail.path + '.' + thumbnail.extension} alt={"character" + name}/>
                     <SideHead>
@@ -85,12 +84,7 @@ const ContentWithCharacter = ({character: {name, thumbnail, description, id, com
                     {comicsList}
                 </div>
             </div>
-
-    
-
         </CSSTransition>
-
-    
     )
 
     function isFindThumbnail(thumbnail) {

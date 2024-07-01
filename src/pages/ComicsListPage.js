@@ -7,13 +7,13 @@ import { SortList } from "../components/SortList/SortList";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { usePagesContext } from "../hooks/usePagesContext";
 
-export const ComicsListPage = () => {
+export default function ComicsListPage () {
 	const {pageState, setSpecificPageState} = usePagesContext();
 	const { comics: comicsPageState } = pageState;
 
     const [searchValue, setSearchValue] = useState(comicsPageState?.page?.searchValue || '');
     const [randomOffset, setRandomOffset] = useState( typeof(comicsPageState?.page?.randomOffset) === 'boolean' ? comicsPageState?.page?.randomOffset : true );
-	const [comicsOrder, setcomicsOrder] = useState( comicsPageState?.page?.comicsOrder || '-modified');
+	const [comicsOrder, setcomicsOrder] = useState( comicsPageState?.page?.comicsOrder || '-focDate');
 	const [currentOrderValue, setCurrentOrderValue] = useState(comicsPageState?.page?.currentOrderValue || 'random');
 
 	const [currentSearchValue, setCurrentSearchValue] = useState('');
@@ -27,6 +27,14 @@ export const ComicsListPage = () => {
 
 	const itemsMounted = useRef(false);
 
+	const onScrolling = (e) => {
+		if(itemsMounted.current) {
+			setTimeout( ()=> {
+				scrollPosition.current = window.scrollY;
+			}, 6);
+		}
+    }
+
 	useEffect(()=>{
 		comicsPageStateStore.current = comicsPageState;
 	});
@@ -36,10 +44,10 @@ export const ComicsListPage = () => {
 		return () => {
 			document.removeEventListener('scroll', onScrolling);
 			setSpecificComponentState('page', {
-				searchValue: searchValue,
-				comicsOrder: comicsOrder,
-				randomOffset: randomOffset,
-				currentOrderValue: currentOrderValue,
+				searchValue: searchValueStore.current,
+				comicsOrder: comicsOrderStore.current,
+				randomOffset: randomOffsetStore.current,
+				currentOrderValue: currentOrderValueStore.current,
 				scrollPosition: scrollPosition.current
 			});
 		}
@@ -61,35 +69,25 @@ export const ComicsListPage = () => {
 			})
 		}
 
-	}, [ searchValue, comicsOrder, randomOffset ]);
-
-	const onScrolling = (e) => {
-        scrollPosition.current = window.scrollY;
-    }
+	}, [ searchValue, comicsOrder, randomOffset, currentOrderValue ]);
 
 	function setSpecificComponentState(component, state) {
-		console.log(`set component`);
-		console.log(component);
-		console.log('state');
-		console.log(state);
-
 		const newState = {}
-		Object.assign(newState, comicsPageState || comicsPageStateStore.current);
+		Object.assign(newState, comicsPageStateStore.current);
 		newState[component] = state;
 		setSpecificPageState('comics', newState);
-	}	
+	}
 
-	console.log(`page comics: `);
-	console.log(pageState);
-
-    const onSearch = useCallback((value) => {
+    const onSearch = (value) => {
         setSearchValue(value);
-    });
+    };
 
 	const onListLoaded = useCallback(() => {
 		if(!itemsMounted.current) {
 			itemsMounted.current = true;
-			setTimeout(() => {window.scrollTo({top: scrollPosition.current, behavior:'instant'})}, 5);
+			setTimeout( ()=> {
+				window.scrollTo({top: scrollPosition.current, behavior:'instant'});
+			}, 5);
 		}
 	}, []);
 
@@ -105,6 +103,16 @@ export const ComicsListPage = () => {
 
     const orders = [
 		{
+			name: 'New',
+			value: '-focDate',
+			action: offRandomOffset
+		},
+		{
+			name: 'Old',
+			value: 'focDate',
+			action: offRandomOffset,
+		},
+		{
 			name: 'Random',
 			value: 'random',
 			action: switchRandomOffset
@@ -119,16 +127,6 @@ export const ComicsListPage = () => {
 			value: '-title',
 			action: offRandomOffset
 		},
-		{
-			name: 'New',
-			value: '-focDate',
-			action: offRandomOffset
-		},
-		{
-			name: 'Old',
-			value: 'focDate',
-			action: offRandomOffset,
-		}
 	]
 
     return ( 

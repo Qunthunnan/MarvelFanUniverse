@@ -13,7 +13,8 @@ export function SortList ({orders, setOrder, setDefaultValue, defaultValue}) {
 
     function handleChange({target}) {
         setOrder(target.value === 'random' ? orders[0].value : target.value);
-        setDefaultValue(target.value);
+        if(setDefaultValue)
+            setDefaultValue(target.value);
         orders[target.selectedIndex].action();
     }
 }

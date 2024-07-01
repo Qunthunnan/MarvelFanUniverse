@@ -10,24 +10,24 @@ import { SortList } from '../SortList/SortList.js';
 import { useState } from 'react';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary.js';
 
-export const CharacterDetailed = ({ name, description, thumbnail, listData, maxCount, searchParams: {searchValue, inputValue, searchError, onInput, searchAction}, id}) => {
+export default function CharacterDetailed ({ name, description, thumbnail, listData, maxCount, searchParams: {searchValue, inputValue, searchError, onInput, searchAction}, id}) {
     
     return (
         <ErrorBoundary>
             <DetailedWrapper>
                 <ImgWrapper>
-                    <Link to="/">Back to all</Link>
+                    <Link to="/">To all characters</Link>
                     <img height={293} width={293} style={ { objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'contain' }} src={`${thumbnail.path}.${thumbnail.extension}`} alt={name} />
                 </ ImgWrapper>
 
                 <TextWrapper>
                     <h2>{name}</h2>
-                    <p>{ description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>}</p>
+                    <p>{ description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" rel="noreferrer" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>}</p>
 
                     <ComicsList comicsList={listData} name={name} maxCount={maxCount} onInput={ onInput } inputValue={ inputValue } searchValue = { searchValue } searchAction={searchAction} searchError = { searchError } id={ id } />
                 </TextWrapper>
                 <AsideLink>
-                    <Link to="/">Back to all</Link>
+                    <Link to="/">To all characters</Link>
                 </AsideLink>
             </DetailedWrapper>
         </ErrorBoundary>
@@ -50,12 +50,12 @@ function ComicsList ({comicsList, name, maxCount, onInput, inputValue, searchErr
     const [randomOffset, setRandomOffset] = useState(true);
     const [comicsOrder, setcomicsOrder] = useState('-modified');
 
-    const switchRandomOffset = () => {
-		console.log(randomOffset, comicsOrder);
-		setRandomOffset((prevOffset) => (
-			!prevOffset
-		));
-	}
+    // const switchRandomOffset = () => {
+	// 	console.log(randomOffset, comicsOrder);
+	// 	setRandomOffset((prevOffset) => (
+	// 		!prevOffset
+	// 	));
+	// }
 
 	const offRandomOffset = () => {
 		console.log(randomOffset, comicsOrder);
@@ -68,11 +68,6 @@ function ComicsList ({comicsList, name, maxCount, onInput, inputValue, searchErr
 			name: 'New',
 			value: '-onsaleDate',
 			action: offRandomOffset
-		},
-		{
-			name: 'Random',
-			value: '-onsaleDate',
-			action: switchRandomOffset
 		},
 		{
 			name: 'By title A↓',
@@ -106,7 +101,7 @@ function ComicsList ({comicsList, name, maxCount, onInput, inputValue, searchErr
                 }
                 
                 <SortDetailedWrapper>
-					<SortList orders={ orders } activeOrder={comicsOrder} setOrder={setcomicsOrder}/>
+					<SortList orders={ orders } defaultValue={'-onsaleDate'} setOrder={setcomicsOrder}/>
 			    </SortDetailedWrapper>
 
                 <InfoList ListSC= { ItemsList } 
@@ -114,6 +109,7 @@ function ComicsList ({comicsList, name, maxCount, onInput, inputValue, searchErr
                           ItemChildren={ ListItemChildren }
                           LoadButtonSC={ LoadMoreBtn }
                           targetsCount= {{small: 20, big: 20}}
+                          getMaxCount={ () => (new Promise((resolve) => (resolve(maxCount)))) }
                           searchValue= {searchValue}
                           getItems = { (count, offset, order) => (getComicsByCharacterId(id, count, offset, order)) }
                           getAddItems = { (count, offset) => (getAddComicses(id, count, offset)) }
@@ -123,14 +119,12 @@ function ComicsList ({comicsList, name, maxCount, onInput, inputValue, searchErr
                           setProcess= { setProcess }
                           downloadProcess= { addProcess }
                           setDownloadProcess= { setAddProcess } 
-                          listContext= {[{
-                            chatacterDetailed: {
+                          listState= { [ {
                                 items: comicsList,
                                 offset: 0,
                                 maxCount: maxCount,
                                 isRandomOffset: randomOffset,
-                            }
-                          }, ()=>{}, 'chatacterDetailed']} 
+                          } ] } 
                           isRandomOffset={ randomOffset }
                           order={ comicsOrder }
                           />

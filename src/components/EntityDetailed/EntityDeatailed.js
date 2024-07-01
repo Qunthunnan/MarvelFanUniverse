@@ -1,8 +1,8 @@
 import { setContent } from '../../utils/setContent';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useSearchItems } from '../../hooks/useSearchItems';
 
-export const EntityDetailed = ({id, processTools, Render}) => {
+export const EntityDetailed = ({id, processTools, Render, handleError}) => {
     
     const [data, setData] = useState();
     const [ process, setProcess, [getData, getDataList] ] = processTools;
@@ -61,12 +61,15 @@ export const EntityDetailed = ({id, processTools, Render}) => {
         })
         .then(() => {
             setProcess('view');
-        });
+        })
+        .catch((error) => {
+            handleError(error);
+        })
     }
 
     return (
         <Fragment key={id}>
-            { data ? setContent(process, Render, data) : setContent('loading', Render, data) }
+            { data || process === 'error' ? setContent(process, Render, data) : setContent('loading', Render, data) }
         </Fragment>
     )
 }

@@ -6,10 +6,10 @@ export function PageProvider ({children}) {
     const [ pageState, setPageState ] = useState({});
 
     function setSpecificPageState(page, state) {
-        console.log(`set page`);
-        console.log(page);
-        console.log(`state`);
-        console.log(state);
+        // console.log(`set page`);
+        // console.log(page);
+        // console.log(`state`);
+        // console.log(state);
         setPageState((prevState) => {
             const newState = {}
             Object.assign(newState, prevState);

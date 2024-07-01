@@ -1,17 +1,10 @@
-import { Fragment, useCallback, useEffect, memo, useMemo, useRef } from "react";
+import { Fragment, useEffect, memo, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { vars } from "../style/Vars";
 import { DirectorySpan } from "./stylesDirectory";
 
 export const Directory = memo( ({ list }) => {
-
     useEffect(()=>{
-        // console.log(`Directory render`);
-        // console.log(list);
-    });
-
-    useEffect(()=>{
-        // console.log('Directory did mount');
     }, []);
     const nodeRef = useRef();
 

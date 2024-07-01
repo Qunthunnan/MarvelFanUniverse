@@ -10,7 +10,7 @@ import { SortList } from "../components/SortList/SortList";
 import { SortMainWraper } from "../components/SortList/stylesSortList";
 import { usePagesContext } from "../hooks/usePagesContext";
 
-export const MainPage = () => {
+export default function MainPage () {
 	const {pageState, setSpecificPageState} = usePagesContext();
 	const { main: mainPageState } = pageState;
 
@@ -34,34 +34,30 @@ export const MainPage = () => {
 	const itemsMounted = useRef(false);
 
 	function setSpecificComponentState(component, state) {
-		console.log(`set component`);
-		console.log(component);
-		console.log('state');
-		console.log(state);
-		
 		const newState = {}
-		Object.assign(newState, mainPageState || mainPageStateStore.current);
+		Object.assign(newState, mainPageStateStore.current);
 		newState[component] = state;
 		setSpecificPageState('main', newState);
 	}
 
 	const onScrolling = (e) => {
-        scrollPosition.current = window.scrollY;
+		if(itemsMounted.current) {
+			setTimeout( ()=> {
+				scrollPosition.current = window.scrollY;
+			}, 6);
+		}
     }
-
-	console.log(`page main: `);
-	console.log(pageState);
 
 	useEffect(() => {
 		document.addEventListener('scroll', onScrolling);
 		return () => {
 			document.removeEventListener('scroll', onScrolling);
 			setSpecificComponentState('page', {
-				searchValue: searchValue,
-				charactersOrder: charactersOrder,
-				randomOffset: randomOffset,
-				activeCharacter: activeCharacter,
-				currentOrderValue: currentOrderValue,
+				searchValue: searchValueStore.current,
+				charactersOrder: charactersOrderStore.current,
+				randomOffset: randomOffsetStore.current,
+				activeCharacter: activeCharacterStore.current,
+				currentOrderValue: currentOrderValueStore.current,
 				scrollPosition: scrollPosition.current
 			});
 		}
@@ -88,6 +84,7 @@ export const MainPage = () => {
 				scrollPosition: scrollPosition.current
 			});
 		}
+		
 	}, [ searchValue, charactersOrder, randomOffset, activeCharacter, currentOrderValue ]);
 	
 	const onCloseMobileCharacterInfo = useCallback(() => {
@@ -109,7 +106,9 @@ export const MainPage = () => {
 	const onListLoaded = useCallback(() => {
 		if(!itemsMounted.current) {
 			itemsMounted.current = true;
-			setTimeout(() => {window.scrollTo({top: scrollPosition.current, behavior:'instant'})}, 5);
+			setTimeout( ()=> {
+				window.scrollTo({top: scrollPosition.current, behavior:'instant'});
+			}, 5);
 		}
 	}, []);
 
@@ -155,9 +154,9 @@ export const MainPage = () => {
     return ( 
 			<MainDiv $bg={ true }>
 				<Container>
-					{/* <ErrorBoundary>
+					<ErrorBoundary>
 						<RandomCharacter />
-					</ErrorBoundary> */}
+					</ErrorBoundary>
 
 					<MobileMenuButtons >
 						<svg onClick={ onSwichSearch } xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">

@@ -39,7 +39,7 @@ const InfoWrapper = styled(Aside)`
     transform: none;
     display: unset;
     height: unset;
-    max-height: 80vh;
+    max-height: 67vh;
     width: 300px;
     order: 1;
 }
