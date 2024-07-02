@@ -7,7 +7,7 @@ const InfoWrapper = styled(Aside)`
     order: 2; 
     position: relative;
     height: 70svh;
-    transform: ${ ({$mobileActive}) => ( $mobileActive ? 'translate(-100%, 43%)' : 'translate(-100%, 100svh)') };
+    transform: ${ ({$mobileActive}) => ( $mobileActive ? 'translate(-100%, 40svh)' : 'translate(-100%, 150svh)') };
     width: 100vw;
     overflow: auto;
     transition: transform 300ms;

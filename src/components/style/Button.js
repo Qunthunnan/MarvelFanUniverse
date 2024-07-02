@@ -18,6 +18,8 @@ const Button = styled.a`
     width: ${ ({width}) => (width ? width : '101px')  };
     margin: ${ ({margin}) => (margin ? margin : '0')  };
     background-color: ${ ({color}) => (color ? color : vars.marvelRed)   };
+    transition: 0.3s background-color box-shadow;
+    position: relative;
     a {
         color: inherit;
         text-decoration: inherit;
@@ -29,6 +31,10 @@ const Button = styled.a`
         outline-color: #000;
         outline-style: solid;
     }
+    &:active {
+        background-color: ${vars.marvelGray};
+    }
 `;
+
 
 export {Button};

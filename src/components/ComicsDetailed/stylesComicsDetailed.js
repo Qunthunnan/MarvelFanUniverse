@@ -64,11 +64,21 @@ const DetailedWrapper = styled.section`
     `;
 
     const ImgWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    a {
-        margin: 0 0 25px 0;
+    @media (min-width: 320px) {
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        padding: 0 5svw;
+        a {
+            margin: 0 0 25px 0;
+        }
     }
+
+    @media (min-width: 576px) {
+        align-self: normal;
+        padding: 0;
+    }
+
     @media (min-width: 1200px) {
         a {
             display: none;

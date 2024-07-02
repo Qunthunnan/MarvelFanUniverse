@@ -7,30 +7,51 @@ import { Link } from 'react-router-dom';
 import SearchIcon from '../SearchIcon/SearchIcon.js';
 import { SortDetailedWrapper } from '../SortList/stylesSortList.js';
 import { SortList } from '../SortList/SortList.js';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary.js';
+import { CSSTransition } from 'react-transition-group';
+import { Helmet } from 'react-helmet';
+import '../style/detailed-transition.css';
 
 export default function CharacterDetailed ({ name, description, thumbnail, listData, maxCount, searchParams: {searchValue, inputValue, searchError, onInput, searchAction}, id}) {
-    
+    const [animation, setAnimation] = useState(false);
+    const wrapperRef = useRef();
+
+    useEffect(() => {
+        setTimeout(setAnimation(true), 50);
+    }, [])
     return (
-        <ErrorBoundary>
-            <DetailedWrapper>
-                <ImgWrapper>
-                    <Link to="/">To all characters</Link>
-                    <img height={293} width={293} style={ { objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'contain' }} src={`${thumbnail.path}.${thumbnail.extension}`} alt={name} />
-                </ ImgWrapper>
+        <>
+            <Helmet>
+                <title>{ name } on Marvel Fan Universe</title>
+                <meta name="description" content={ description && description.length > 0 ? description : `Learn more about ${name} on the Marvel Fan Universe` } />
+                <meta property="og:image" content={thumbnail}/>
+            </Helmet>
+            <ErrorBoundary>
+                    <CSSTransition
+                        nodeRef={wrapperRef}
+                        classNames={'detailed-fade'}
+                        timeout={300}
+                        in={ animation }>
+                        <DetailedWrapper style={ { opacity: animation ? null : 0 } } ref={wrapperRef}>
+                            <ImgWrapper>
+                                <Link to="/">To all characters</Link>
+                                <img height={293} width={293} style={ { objectFit: isFindThumbnail(thumbnail.path) ? 'cover' : 'contain' }} src={`${thumbnail.path}.${thumbnail.extension}`} alt={name} />
+                            </ ImgWrapper>
 
-                <TextWrapper>
-                    <h2>{name}</h2>
-                    <p>{ description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" rel="noreferrer" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>}</p>
+                            <TextWrapper>
+                                <h2>{name}</h2>
+                                <p>{ description && description.length > 0 ? description : <>The data source does not have detailed information about this character. Try visiting <a target="_blank" rel="noreferrer" href="https://www.marvel.com/">https://www.marvel.com/</a> to learn more about him.</>}</p>
 
-                    <ComicsList comicsList={listData} name={name} maxCount={maxCount} onInput={ onInput } inputValue={ inputValue } searchValue = { searchValue } searchAction={searchAction} searchError = { searchError } id={ id } />
-                </TextWrapper>
-                <AsideLink>
-                    <Link to="/">To all characters</Link>
-                </AsideLink>
-            </DetailedWrapper>
-        </ErrorBoundary>
+                                <ComicsList comicsList={listData} name={name} maxCount={maxCount} onInput={ onInput } inputValue={ inputValue } searchValue = { searchValue } searchAction={searchAction} searchError = { searchError } id={ id } />
+                            </TextWrapper>
+                            <AsideLink>
+                                <Link to="/">To all characters</Link>
+                            </AsideLink>
+                        </DetailedWrapper>
+                    </CSSTransition>
+            </ErrorBoundary>
+        </>
     )
 }
 
